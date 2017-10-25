@@ -1,0 +1,29 @@
+{
+  "error": {
+    "code": "GetTaxError",
+    "message": "Using JAAS",
+    "target": "Unknown",
+    "details": [
+      {
+        "code": "GetTaxError",
+        "number": 300,
+        "message": "Using JAAS",
+        "description": "\n    Address: 48810 Angel View, Apt. 328, Port Nathan, KY 77103-8264 US\n    AddressCode: DEST2\n    AddressType: \n    BoundaryId: 0\n    CarrierRoute: \n    County: \n    FipsCode: \n    GeocodeType: NotGeocoded\n    PostNet: \n    Reason: KY is SST state, but Account is non-CSP\n    ValidateStatus: InvalidCity\n    TaxRegionId: 0\n",
+        "faultCode": "GetTaxError",
+        "helpLink": "http://developer.avalara.com/avatax/errors/GetTaxError",
+        "refersTo": "Addresses[0] - TaxDate: 2017-09-28 00:00:00Z",
+        "severity": "Success"
+      },
+      {
+        "code": "GetTaxError",
+        "number": 300,
+        "message": "Unable to determine the taxing jurisdictions.",
+        "description": "48810 Angel Vw Apt 328, Port Nathan, KY 77103-8264 US (AddressLocationType: ShipFrom)",
+        "faultCode": "GetTaxError",
+        "helpLink": "http://developer.avalara.com/avatax/errors/GetTaxError",
+        "refersTo": "Addresses[0]",
+        "severity": "Error"
+      }
+    ]
+  }
+}

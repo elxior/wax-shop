@@ -1,0 +1,19 @@
+{
+  "error": {
+    "code": "GetTaxError",
+    "message": "Invalid or missing state/province code (BK).",
+    "target": "Unknown",
+    "details": [
+      {
+        "code": "GetTaxError",
+        "number": 300,
+        "message": "Invalid or missing state/province code (BK).",
+        "description": "BK is not a known state or province.",
+        "faultCode": "GetTaxError",
+        "helpLink": "http://developer.avalara.com/avatax/errors/GetTaxError",
+        "refersTo": "Addresses[0]",
+        "severity": "Error"
+      }
+    ]
+  }
+}
