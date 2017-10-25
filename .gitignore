@@ -1,0 +1,7 @@
+.DS_Store
+/nbproject/private/
+/.idea
+/vendor
+/modules/**/node_modules
+.sass-cache
+
