@@ -1,0 +1,10 @@
+<?php
+
+namespace App\Shop\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class WishList extends Model
+{
+    protected $table = 'wishlists';
+}

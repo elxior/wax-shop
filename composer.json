@@ -1,0 +1,14 @@
+{
+    "name": "oohology/wax-shop",
+    "description": "E-Commerce for Wax - https://www.oohology.com",
+    "authors": [
+        {
+            "name": "OOHology",
+            "email": "hello@oohology.com"
+        }
+    ],
+    "type": "library",
+    "license": "proprietary",
+    "minimum-stability": "dev",
+    "require": {}
+}
