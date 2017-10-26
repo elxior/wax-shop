@@ -5,9 +5,9 @@ namespace Tests\Shop\Shipping;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Services\ShopService;
-use Tests\WaxAppTestCase;
+use Tests\Shop\ShopBaseTestCase;
 
-class ShippingTest extends WaxAppTestCase
+class ShippingTest extends ShopBaseTestCase
 {
     /* @var ShopService $shop */
     protected $shopService;

@@ -2,16 +2,16 @@
 
 namespace Tests\Shop;
 
-use App\Models\User\Address;
-use Wax\Shop\Models\Order;
-use Wax\Shop\Models\Product;
-use Wax\Shop\Services\ShopService;
 use App\User;
 use Faker\Factory;
 use Illuminate\Support\Facades\Auth;
-use Tests\WaxAppTestCase;
+use Tests\Shop\ShopBaseTestCase;
+use Wax\Core\Eloquent\Models\User\Address;
+use Wax\Shop\Models\Order;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Services\ShopService;
 
-class SessionMigrationListenerTest extends WaxAppTestCase
+class SessionMigrationListenerTest extends ShopBaseTestCase
 {
     /* @var ShopService */
     protected $shopService;

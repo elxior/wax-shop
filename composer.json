@@ -17,15 +17,19 @@
         {
             "type": "vcs",
             "url": "https://gitlab.com/oohology/wax-cms.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/oohology/AvaTax-REST-V2-PHP-SDK"
         }
-
     ],
     "require": {
         "php": ">=7.1.0",
         "laravel/framework": "5.4.*",
         "doctrine/dbal": "^2.5",
         "oohology/wax-cms": "dev-feature/shop-update-prep as 0.10.x-dev",
-        "oohology/wax-app": "dev-feature/integration-test-base-test-case"
+        "oohology/wax-app": "dev-feature/integration-test-base-test-case",
+        "avalara/avataxclient": "dev-visibility"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

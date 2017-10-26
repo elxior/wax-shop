@@ -14,6 +14,7 @@ class ShopBaseTestCase extends WaxAppTestCase
         $this->app->register(ShopServiceProvider::class);
 
         \Route::getRoutes()->refreshNameLookups();
+
         //\Route::getRoutes()->refreshActionLookups();
 
         $migrator = $this->app->make('migrator');

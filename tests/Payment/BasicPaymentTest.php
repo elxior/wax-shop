@@ -5,9 +5,9 @@ namespace Tests\Shop\Payment;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Services\ShopService;
-use Tests\WaxAppTestCase;
+use Tests\Shop\ShopBaseTestCase;
 
-class BasicPaymentTest extends WaxAppTestCase
+class BasicPaymentTest extends ShopBaseTestCase
 {
     /* @var ShopService $shop */
     protected $shopService;

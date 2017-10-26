@@ -27,7 +27,7 @@ class CreateTaxTable extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable();
 
-            $table->index(["zone"], 'tax_zone');
+            //$table->index(["zone"], 'tax_zone');
         });
     }
 

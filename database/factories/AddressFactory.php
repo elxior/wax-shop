@@ -1,6 +1,6 @@
 <?php
 
-$factory->define(\App\Models\User\Address::class, function (Faker\Generator $faker) {
+$factory->define(Wax\Core\Eloquent\Models\User\Address::class, function (Faker\Generator $faker) {
     return [
         'user_id' => 0,
         'firstname' => $faker->firstName,

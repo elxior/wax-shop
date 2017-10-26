@@ -11,9 +11,9 @@ use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Support\Facades\Auth;
 use Tests\Shop\Traits\SeedsProducts;
-use Tests\WaxAppTestCase;
+use Tests\Shop\ShopBaseTestCase;
 
-class ShopServiceTest extends WaxAppTestCase
+class ShopServiceTest extends ShopBaseTestCase
 {
     use SeedsProducts;
 

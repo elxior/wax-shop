@@ -5,9 +5,9 @@ namespace Tests\Shop;
 use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Services\ShopService;
 use Tests\Shop\Traits\SeedsProducts;
-use Tests\WaxAppTestCase;
+use Tests\Shop\ShopBaseTestCase;
 
-class OrderMetaTest extends WaxAppTestCase
+class OrderMetaTest extends ShopBaseTestCase
 {
     use SeedsProducts;
 

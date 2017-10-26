@@ -8,9 +8,9 @@ use Wax\Shop\Models\Product;
 use Wax\Shop\Services\ShopService;
 use Faker\Factory;
 use Tests\Shop\Traits\SetsShippingAddress;
-use Tests\WaxAppTestCase;
+use Tests\Shop\ShopBaseTestCase;
 
-class TaxDriverTestCase extends WaxAppTestCase
+class TaxDriverTestCase extends ShopBaseTestCase
 {
     use SetsShippingAddress;
 

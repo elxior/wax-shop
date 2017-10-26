@@ -10,9 +10,9 @@ use Wax\Shop\Models\Product;
 use Wax\Shop\Models\Tax;
 use Faker\Factory;
 use Tests\Shop\Traits\SetsShippingAddress;
-use Tests\WaxAppTestCase;
+use Tests\Shop\ShopBaseTestCase;
 
-class InvalidationTest extends WaxAppTestCase
+class InvalidationTest extends ShopBaseTestCase
 {
     use SetsShippingAddress;
 

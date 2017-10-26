@@ -8,9 +8,9 @@ use Wax\Shop\Models\Product;
 use Wax\Shop\Services\ShopService;
 use Carbon\Carbon;
 use Tests\Shop\Traits\SeedsProducts;
-use Tests\WaxAppTestCase;
+use Tests\Shop\ShopBaseTestCase;
 
-class CouponTest extends WaxAppTestCase
+class CouponTest extends ShopBaseTestCase
 {
     use SeedsProducts;
 

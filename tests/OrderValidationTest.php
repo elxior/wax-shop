@@ -7,9 +7,9 @@ use Wax\Shop\Models\Product;
 use Wax\Shop\Drivers\Tax\DbDriver;
 use Wax\Shop\Services\ShopService;
 use Tests\Shop\Traits\SetsShippingAddress;
-use Tests\WaxAppTestCase;
+use Tests\Shop\ShopBaseTestCase;
 
-class OrderValidationTest extends WaxAppTestCase
+class OrderValidationTest extends ShopBaseTestCase
 {
     use SetsShippingAddress;
 
