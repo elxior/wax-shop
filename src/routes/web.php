@@ -35,6 +35,4 @@ Route::group(['prefix' => 'shop'], function () {
     Route::get('/checkout-complete', function () {
         return view('modules.Shop.pages.checkout-complete');
     });
-
 });
-

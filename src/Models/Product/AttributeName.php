@@ -8,5 +8,4 @@ class AttributeName extends Model
 {
 
     protected $table = 'product_attribute_names';
-
 }
