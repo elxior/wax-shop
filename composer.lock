@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e57f2731587f44bc22e01268cad0d95b",
+    "content-hash": "d8c1b429570d5a36e2bee10d47f5d27e",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1638,16 +1638,16 @@
         },
         {
             "name": "oohology/wax-app",
-            "version": "dev-master",
+            "version": "dev-feature/integration-test-base-test-case",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.com:oohology/wax-app.git",
-                "reference": "36e3685ead631342581975e23422150683863422"
+                "reference": "bf408047dca8999cef6964da2fbe917859f1141d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/oohology%2Fwax-app/repository/archive.zip?sha=36e3685ead631342581975e23422150683863422",
-                "reference": "36e3685ead631342581975e23422150683863422",
+                "url": "https://gitlab.com/api/v4/projects/oohology%2Fwax-app/repository/archive.zip?sha=bf408047dca8999cef6964da2fbe917859f1141d",
+                "reference": "bf408047dca8999cef6964da2fbe917859f1141d",
                 "shasum": ""
             },
             "require": {
@@ -1669,11 +1669,7 @@
                     "database"
                 ],
                 "psr-4": {
-                    "App\\": "app/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
+                    "App\\": "app/",
                     "Tests\\": "tests/"
                 }
             },
@@ -1701,7 +1697,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-09-08T21:06:52+00:00"
+            "time": "2017-10-26T16:39:46+00:00"
         },
         {
             "name": "oohology/wax-cms",
@@ -3406,6 +3402,56 @@
                 "instantiate"
             ],
             "time": "2017-09-19T12:41:22+00:00"
+        },
+        {
+            "name": "fzaninotto/faker",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fzaninotto/Faker.git",
+                "reference": "2cba1de0fadd53bbd80db6962a27b85b25b35d26"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/2cba1de0fadd53bbd80db6962a27b85b25b35d26",
+                "reference": "2cba1de0fadd53bbd80db6962a27b85b25b35d26",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.3 || ^7.0"
+            },
+            "require-dev": {
+                "ext-intl": "*",
+                "phpunit/phpunit": "^4.0 || ^5.0",
+                "squizlabs/php_codesniffer": "^1.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Faker\\": "src/Faker/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "time": "2017-10-24T12:28:33+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
