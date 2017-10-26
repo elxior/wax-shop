@@ -10,6 +10,12 @@
     ],
     "license": "proprietary",
     "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://gitlab.com/oohology/wax-app.git"
+        }
+    ],
     "require": {
         "php": ">=7.1.0",
         "laravel/framework": "5.4.*",
