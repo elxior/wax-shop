@@ -9,8 +9,4 @@
         <!-- or to disable the whole sniff -->
         <!-- <exclude name="Squiz.Functions.MultiLineFunctionDeclaration"/> -->
     </rule>
-    <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
-        <exclude-pattern>*/database/*</exclude-pattern>
-        <exclude-pattern>*/config/*</exclude-pattern>
-    </rule>
 </ruleset>
