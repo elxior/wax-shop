@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Shop\Models\Order;
+namespace Wax\Shop\Models\Order;
 
-use App\Shop\Contracts\Tax\TaxDriverContract;
-use App\Shop\Events\OrderChanged\CartContentsChangedEvent;
-use App\Shop\Events\OrderChanged\ShippingAddressChangedEvent;
-use App\Shop\Events\OrderChanged\ShippingServiceChangedEvent;
-use App\Shop\Exceptions\ValidationException;
-use App\Shop\Facades\ShopServiceFacade;
-use App\Shop\Models\Order;
-use App\Shop\Models\Product;
-use App\Shop\Support\Tax\Address;
-use App\Shop\Support\Tax\LineItem;
-use App\Shop\Support\Tax\Request;
-use App\Shop\Support\Tax\Shipping;
-use App\Shop\Validators\CreateOrderItemValidator;
-use App\Shop\Validators\OrderItemQuantityValidator;
+use Wax\Shop\Contracts\Tax\TaxDriverContract;
+use Wax\Shop\Events\OrderChanged\CartContentsChangedEvent;
+use Wax\Shop\Events\OrderChanged\ShippingAddressChangedEvent;
+use Wax\Shop\Events\OrderChanged\ShippingServiceChangedEvent;
+use Wax\Shop\Exceptions\ValidationException;
+use Wax\Shop\Facades\ShopServiceFacade;
+use Wax\Shop\Models\Order;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Support\Tax\Address;
+use Wax\Shop\Support\Tax\LineItem;
+use Wax\Shop\Support\Tax\Request;
+use Wax\Shop\Support\Tax\Shipping;
+use Wax\Shop\Validators\CreateOrderItemValidator;
+use Wax\Shop\Validators\OrderItemQuantityValidator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 

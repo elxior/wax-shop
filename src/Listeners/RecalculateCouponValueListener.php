@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Shop\Listeners;
+namespace Wax\Shop\Listeners;
 
-use App\Shop\Contracts\OrderChangedEventContract;
+use Wax\Shop\Contracts\OrderChangedEventContract;
 
 class RecalculateCouponValueListener
 {

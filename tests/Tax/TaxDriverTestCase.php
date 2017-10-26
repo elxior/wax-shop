@@ -2,10 +2,10 @@
 
 namespace Tests\Shop\Tax;
 
-use App\Shop\Exceptions\Tax\AddressException;
-use App\Shop\Models\Order\ShippingRate;
-use App\Shop\Models\Product;
-use App\Shop\Services\ShopService;
+use Wax\Shop\Exceptions\Tax\AddressException;
+use Wax\Shop\Models\Order\ShippingRate;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Services\ShopService;
 use Faker\Factory;
 use Tests\Shop\Traits\SetsShippingAddress;
 use Tests\WaxAppTestCase;

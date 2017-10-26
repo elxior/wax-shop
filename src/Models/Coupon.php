@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Shop\Models;
+namespace Wax\Shop\Models;
 
-use App\Shop\Scopes\ExpiredScope;
-use App\Shop\Traits\ValidatesCoupons;
+use Wax\Shop\Scopes\ExpiredScope;
+use Wax\Shop\Traits\ValidatesCoupons;
 use Illuminate\Database\Eloquent\Model;
 
 /**

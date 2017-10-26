@@ -2,7 +2,7 @@
 
 namespace Tests\Shop\Tax;
 
-use App\Shop\Support\Tax\LineItem;
+use Wax\Shop\Support\Tax\LineItem;
 use Faker\Factory;
 use Tests\TestCase;
 

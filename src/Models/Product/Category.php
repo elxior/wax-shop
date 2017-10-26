@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Shop\Models\Product;
+namespace Wax\Shop\Models\Product;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Shop\Models\Product;
+use Wax\Shop\Models\Product;
 use Wax\Core\Eloquent\Traits\HasDynamicCasts;
 
 class Category extends Model

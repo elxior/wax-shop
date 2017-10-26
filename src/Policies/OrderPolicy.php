@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Shop\Policies;
+namespace Wax\Shop\Policies;
 
-use App\Shop\Models\Order;
+use Wax\Shop\Models\Order;
 use App\User;
 
 class OrderPolicy

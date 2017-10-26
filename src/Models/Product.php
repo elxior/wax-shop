@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Shop\Models;
+namespace Wax\Shop\Models;
 
-use App\Contracts\CanMakeEntitiesContract;
+//use App\Contracts\CanMakeEntitiesContract;
 use App\Localization\Currency;
-use App\Shop\Models\Product\Category;
-use App\Shop\Models\Product\Image;
-use App\Shop\Models\Product\Option;
-use App\Shop\Models\Product\OptionModifier;
-use App\Shop\Models\Product\OptionValue;
+use Wax\Shop\Models\Product\Category;
+use Wax\Shop\Models\Product\Image;
+use Wax\Shop\Models\Product\Option;
+use Wax\Shop\Models\Product\OptionModifier;
+use Wax\Shop\Models\Product\OptionValue;
 use App\Wax\Lang;
-use App\Shop\Scopes\ActiveScope;
-use App\Traits\CanMakeEntities;
+use Wax\Shop\Scopes\ActiveScope;
+//use App\Traits\CanMakeEntities;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -35,9 +35,10 @@ use Illuminate\Database\Eloquent\Builder;
  * @property float $weight Shipping weight of the item. Unit of measure (Lbs./Oz.) depends on shop config.
  *
  */
-class Product extends Model implements CanMakeEntitiesContract
+class Product extends Model
+    //implements CanMakeEntitiesContract
 {
-    use CanMakeEntities;
+    //use CanMakeEntities;
 
     // model stuff
     protected $table = 'products';
@@ -95,7 +96,7 @@ class Product extends Model implements CanMakeEntitiesContract
 
     public function images()
     {
-        return $this->hasMany('App\Shop\Models\Product\Image')->orderBy('cms_sort_id');
+        return $this->hasMany('Wax\Shop\Models\Product\Image')->orderBy('cms_sort_id');
     }
 
     public function getDefaultImageAttribute()
@@ -111,7 +112,7 @@ class Product extends Model implements CanMakeEntitiesContract
 
     public function category()
     {
-        return $this->belongsTo('App\Shop\Models\Product\Category', 'category_id');
+        return $this->belongsTo('Wax\Shop\Models\Product\Category', 'category_id');
     }
 
     public function getEffectiveInventoryAttribute()
@@ -128,7 +129,7 @@ class Product extends Model implements CanMakeEntitiesContract
 
     public function attrs()
     {
-        return $this->hasMany('App\Shop\Models\Product\Attribute')->orderBy('cms_sort_id');
+        return $this->hasMany('Wax\Shop\Models\Product\Attribute')->orderBy('cms_sort_id');
     }
 
     public function getMetaTitleAttribute()

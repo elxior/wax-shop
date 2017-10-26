@@ -2,7 +2,7 @@
 
 use Carbon\Carbon;
 
-$factory->define(\App\Shop\Models\Order\Payment::class, function (Faker\Generator $faker) {
+$factory->define(\Wax\Shop\Models\Order\Payment::class, function (Faker\Generator $faker) {
     return [
         'order_id' => 0,
 

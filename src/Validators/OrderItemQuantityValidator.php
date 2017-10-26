@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Shop\Validators;
+namespace Wax\Shop\Validators;
 
-use App\Shop\Facades\ShopServiceFacade;
-use App\Shop\Models\Order\Item;
+use Wax\Shop\Facades\ShopServiceFacade;
+use Wax\Shop\Models\Order\Item;
 use Illuminate\Support\MessageBag;
 
 class OrderItemQuantityValidator extends AbstractValidator

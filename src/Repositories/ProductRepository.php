@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Shop\Repositories;
+namespace Wax\Shop\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use Wax\Core\Repositories\BaseFilterableRepository;

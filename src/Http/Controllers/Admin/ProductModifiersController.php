@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Shop\Http\Controllers\Admin;
+namespace Wax\Shop\Http\Controllers\Admin;
 
-use App\Shop\Models\Product;
-use App\Shop\Models\Product\OptionModifier;
-use App\Shop\Services\ShopService;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Models\Product\OptionModifier;
+use Wax\Shop\Services\ShopService;
 use App\Wax\Admin\Cms\CmsAdmin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;

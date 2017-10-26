@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Shop\Events;
+namespace Wax\Shop\Events;
 
-use App\Shop\Models\Product;
+use Wax\Shop\Models\Product;
 
 class PurchaseProductEvent
 {

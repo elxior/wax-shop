@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Shop\Filters;
+namespace Wax\Shop\Filters;
 
-use App\Shop\Models\Product;
-use App\Shop\Models\Product\Category;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Models\Product\Category;
 use Illuminate\Database\Eloquent\Model;
 use Wax\Core\Filters\Filter;
 use Wax\Core\Filters\FilterOption;

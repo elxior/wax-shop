@@ -2,12 +2,12 @@
 
 namespace Tests\Shop\Tax;
 
-use App\Shop\Drivers\Tax\DbDriver;
-use App\Shop\Facades\ShopServiceFacade;
-use App\Shop\Models\Coupon;
-use App\Shop\Models\Order\ShippingRate;
-use App\Shop\Models\Product;
-use App\Shop\Models\Tax;
+use Wax\Shop\Drivers\Tax\DbDriver;
+use Wax\Shop\Facades\ShopServiceFacade;
+use Wax\Shop\Models\Coupon;
+use Wax\Shop\Models\Order\ShippingRate;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Models\Tax;
 use Faker\Factory;
 use Tests\Shop\Traits\SetsShippingAddress;
 use Tests\WaxAppTestCase;
@@ -57,7 +57,7 @@ class InvalidationTest extends WaxAppTestCase
         $this->assertNull($order->default_shipment->tax_amount);
         $this->assertEquals(20, $order->default_shipment->total);
     }
-    
+
     public function testUpdateOrderItemQuantityInvalidatesTax()
     {
         ShopServiceFacade::addOrderItem(
@@ -80,7 +80,7 @@ class InvalidationTest extends WaxAppTestCase
         $this->assertNull($order->default_shipment->tax_amount);
         $this->assertEquals(20, $order->default_shipment->total);
     }
-    
+
     public function testDeleteOrderItemInvalidatesTax()
     {
         ShopServiceFacade::addOrderItem(
@@ -152,7 +152,7 @@ class InvalidationTest extends WaxAppTestCase
         $this->assertNull($order->default_shipment->tax_amount);
         $this->assertEquals(20, $order->default_shipment->total);
     }
-    
+
     public function testApplyCouponInvalidatesTax()
     {
         $coupon = factory(Coupon::class)

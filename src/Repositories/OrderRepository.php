@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Shop\Repositories;
+namespace Wax\Shop\Repositories;
 
-use App\Shop\Events\OrderChanged\CouponChangedEvent;
-use App\Shop\Models\Order;
+use Wax\Shop\Events\OrderChanged\CouponChangedEvent;
+use Wax\Shop\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Shop\Models\Product;
+namespace Wax\Shop\Models\Product;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +14,7 @@ class Attribute extends Model
 
     public function nameRelation()
     {
-        return $this->belongsTo('App\Shop\Models\Product\AttributeName', 'name_id');
+        return $this->belongsTo('Wax\Shop\Models\Product\AttributeName', 'name_id');
     }
 
     public function getNameAttribute()
@@ -24,7 +24,7 @@ class Attribute extends Model
 
     public function valueRelation()
     {
-        return $this->belongsTo('App\Shop\Models\Product\AttributeValue', 'value_id');
+        return $this->belongsTo('Wax\Shop\Models\Product\AttributeValue', 'value_id');
     }
 
     public function getValueAttribute()

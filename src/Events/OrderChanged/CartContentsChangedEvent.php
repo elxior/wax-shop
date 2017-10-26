@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Shop\Events\OrderChanged;
+namespace Wax\Shop\Events\OrderChanged;
 
 class CartContentsChangedEvent extends OrderChangedEvent
 {

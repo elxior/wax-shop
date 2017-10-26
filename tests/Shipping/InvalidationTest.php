@@ -2,10 +2,10 @@
 
 namespace Tests\Shop\Shipping;
 
-use App\Shop\Facades\ShopServiceFacade;
+use Wax\Shop\Facades\ShopServiceFacade;
 
-use App\Shop\Models\Order\ShippingRate;
-use App\Shop\Models\Product;
+use Wax\Shop\Models\Order\ShippingRate;
+use Wax\Shop\Models\Product;
 use Faker\Factory;
 use Tests\Shop\Traits\SetsShippingAddress;
 use Tests\WaxAppTestCase;
@@ -64,7 +64,7 @@ class InvalidationTest extends WaxAppTestCase
 
         $this->assertEquals(0, $order->default_shipment->rates->count());
     }
-    
+
     public function testUpdateOrderItemQuantityInvalidatesShipping()
     {
         ShopServiceFacade::addOrderItem(
@@ -103,7 +103,7 @@ class InvalidationTest extends WaxAppTestCase
 
         $this->assertEquals(0, $order->default_shipment->rates->count());
     }
-    
+
     public function testDeleteOrderItemInvalidatesShipping()
     {
         ShopServiceFacade::addOrderItem(

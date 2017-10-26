@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Shop\Http\Controllers;
+namespace Wax\Shop\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Shop\Repositories\OrderRepository;
-use App\Shop\Services\ShopService;
+use Wax\Shop\Repositories\OrderRepository;
+use Wax\Shop\Services\ShopService;
 use Illuminate\Http\Request;
 
 class CartApiController extends Controller

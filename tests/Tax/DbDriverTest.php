@@ -2,10 +2,10 @@
 
 namespace Tests\Shop\Tax;
 
-use App\Shop\Models\Order\ShippingRate;
-use App\Shop\Models\Product;
-use App\Shop\Models\Tax;
-use App\Shop\Drivers\Tax\DbDriver;
+use Wax\Shop\Models\Order\ShippingRate;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Models\Tax;
+use Wax\Shop\Drivers\Tax\DbDriver;
 
 class DbDriverTest extends TaxDriverTestCase
 {

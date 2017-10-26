@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Shop\Validators;
+namespace Wax\Shop\Validators;
 
-use App\Shop\Exceptions\ValidationException;
+use Wax\Shop\Exceptions\ValidationException;
 use Illuminate\Contracts\Support\MessageProvider;
 use Illuminate\Support\MessageBag;
 

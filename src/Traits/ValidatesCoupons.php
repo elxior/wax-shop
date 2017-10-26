@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Shop\Traits;
+namespace Wax\Shop\Traits;
 
-use App\Shop\Models\Order;
+use Wax\Shop\Models\Order;
 use Illuminate\Database\Eloquent\Model;
 
 trait ValidatesCoupons

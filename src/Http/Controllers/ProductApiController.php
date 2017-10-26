@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Shop\Http\Controllers;
+namespace Wax\Shop\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Shop\Models\Product;
-use App\Shop\Repositories\ProductRepository;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 

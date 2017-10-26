@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Shop\Exceptions;
+namespace Wax\Shop\Exceptions;
 
 use Illuminate\Contracts\Support\MessageProvider;
 

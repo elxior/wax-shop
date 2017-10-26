@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Shop\Models\Order;
+namespace Wax\Shop\Models\Order;
 
-use App\Shop\Models\Order;
+use Wax\Shop\Models\Order;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 

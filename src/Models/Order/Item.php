@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Shop\Models\Order;
+namespace Wax\Shop\Models\Order;
 
-use App\Shop\Models\Product;
-use App\Shop\Models\Product\OptionModifier;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Models\Product\OptionModifier;
 use Illuminate\Database\Eloquent\Model;
 
 /**

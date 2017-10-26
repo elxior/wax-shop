@@ -3,9 +3,9 @@
 namespace Tests\Shop;
 
 use App\Models\User\Address;
-use App\Shop\Models\Order;
-use App\Shop\Models\Product;
-use App\Shop\Services\ShopService;
+use Wax\Shop\Models\Order;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Services\ShopService;
 use App\User;
 use Faker\Factory;
 use Illuminate\Support\Facades\Auth;

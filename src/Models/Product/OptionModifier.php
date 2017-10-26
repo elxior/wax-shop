@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Shop\Models\Product;
+namespace Wax\Shop\Models\Product;
 
-use App\Shop\Models\Product;
+use Wax\Shop\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
 /**

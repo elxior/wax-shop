@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Shop\Models\Order;
+namespace Wax\Shop\Models\Order;
 
 use Illuminate\Database\Eloquent\Model;
 

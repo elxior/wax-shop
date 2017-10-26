@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Shop\Facades;
+namespace Wax\Shop\Facades;
 
-use App\Shop\Services\ShopService;
+use Wax\Shop\Services\ShopService;
 use Illuminate\Support\Facades\Facade;
 
 /**

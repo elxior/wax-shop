@@ -1,7 +1,7 @@
 <?php
 
 
-$factory->define(\App\Shop\Models\Order\ShippingRate::class, function (Faker\Generator $faker) {
+$factory->define(\Wax\Shop\Models\Order\ShippingRate::class, function (Faker\Generator $faker) {
     return [
         'shipment_id' => 0,
         'carrier' => $faker->company(),

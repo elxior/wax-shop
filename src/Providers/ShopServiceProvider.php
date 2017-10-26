@@ -1,27 +1,28 @@
 <?php
 
-namespace App\Shop\Providers;
+namespace Wax\Shop\Providers;
 
-use App\Shop\Contracts\OrderChangedEventContract;
-use App\Shop\Contracts\Tax\TaxDriverContract;
-use App\Shop\Events\OrderChanged\CartContentsChangedEvent;
-use App\Shop\Events\OrderChanged\ShippingAddressChangedEvent;
-use App\Shop\Events\OrderChanged\ShippingServiceChangedEvent;
-use App\Shop\Filters\CatalogFilterAggregator;
-use App\Shop\Http\Controllers\CatalogController;
-use App\Shop\Listeners\InvalidateOrderShippingListener;
-use App\Shop\Listeners\InvalidateOrderTaxListener;
-use App\Shop\Listeners\LoginListener;
-use App\Shop\Listeners\RecalculateCouponValueListener;
-use App\Shop\Listeners\SessionMigrationListener;
-use App\Shop\Models\Order\Item;
-use App\Shop\Models\Product;
-use App\Shop\Observers\OrderItemObserver;
-use App\Shop\Repositories\ProductRepository;
-use App\Shop\Services\ShopService;
+use Wax\Shop\Contracts\OrderChangedEventContract;
+use Wax\Shop\Contracts\Tax\TaxDriverContract;
+use Wax\Shop\Events\OrderChanged\CartContentsChangedEvent;
+use Wax\Shop\Events\OrderChanged\ShippingAddressChangedEvent;
+use Wax\Shop\Events\OrderChanged\ShippingServiceChangedEvent;
+use Wax\Shop\Filters\CatalogFilterAggregator;
+use Wax\Shop\Http\Controllers\CatalogController;
+use Wax\Shop\Listeners\InvalidateOrderShippingListener;
+use Wax\Shop\Listeners\InvalidateOrderTaxListener;
+use Wax\Shop\Listeners\LoginListener;
+use Wax\Shop\Listeners\RecalculateCouponValueListener;
+use Wax\Shop\Listeners\SessionMigrationListener;
+use Wax\Shop\Models\Order\Item;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Observers\OrderItemObserver;
+use Wax\Shop\Repositories\ProductRepository;
+use Wax\Shop\Services\ShopService;
 use Avalara\AvaTaxClient;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
@@ -34,6 +35,8 @@ class ShopServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        $this->app->make(EloquentFactory::class)->load(__DIR__.'/../../database/factories');
+
         $this->registerConfig();
 
         $this->app->bind(
@@ -68,32 +71,33 @@ class ShopServiceProvider extends ServiceProvider
         $this->app->when(ProductRepository::class)
             ->needs(FilterAggregatorContract::class)
             ->give(CatalogFilterAggregator::class);
-
-        Route::middleware('web')
-            ->namespace('App\Shop\Http\Controllers')
-            ->attribute('as', 'shop::')
-            ->group(app_path('Shop/routes/web.php'));
     }
 
     public function boot()
     {
+        Route::middleware('web')
+            ->namespace('Wax\Shop\Http\Controllers')
+            ->attribute('as', 'shop::')
+            ->group(__DIR__.'/../../routes/web.php');
+
         $this->registerListeners();
 
-        Gate::define('get-order', 'App\Shop\Policies\OrderPolicy@get');
+        Gate::define('get-order', 'Wax\Shop\Policies\OrderPolicy@get');
 
-        Item::observe(OrderItemObserver::class);
-
-        $this->loadViewsFrom(app_path('Shop/resources/views/'), 'shop');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations/');
+        $this->loadViewsFrom(__DIR__.'/../../resources/views/', 'shop');
     }
 
     protected function registerConfig()
     {
-        $this->mergeConfigFrom(app_path('Shop/config/shop.php'), 'wax.shop');
-        $this->mergeConfigFrom(app_path('Shop/config/tax.php'), 'wax.shop.tax');
+        $this->mergeConfigFrom(__DIR__.'/../../config/shop.php', 'wax.shop');
+        $this->mergeConfigFrom(__DIR__.'/../../config/tax.php', 'wax.shop.tax');
     }
 
     public function registerListeners()
     {
+        Item::observe(OrderItemObserver::class);
+
         Event::listen(SessionMigrationEvent::class, SessionMigrationListener::class);
         Event::listen(Login::class, LoginListener::class);
 

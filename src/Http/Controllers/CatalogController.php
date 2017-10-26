@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Shop\Http\Controllers;
+namespace Wax\Shop\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Wax\Core\Contracts\FilterableRepositoryContract;

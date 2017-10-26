@@ -2,13 +2,13 @@
 
 namespace Tests\Shop;
 
-use App\Shop\Models\Order;
+use Wax\Shop\Models\Order;
 use App\User;
 use Carbon\Carbon;
 use Tests\Shop\Traits\SeedsProducts;
-use Tests\WaxAppTestCase;
+use Tests\Shop\ShopBaseTestCase;
 
-class CartApiTest extends WaxAppTestCase
+class CartApiTest extends ShopBaseTestCase
 {
     use SeedsProducts;
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Shop\Drivers\Tax;
+namespace Wax\Shop\Drivers\Tax;
 
-use App\Shop\Contracts\Tax\TaxDriverContract;
-use App\Shop\Exceptions\Tax\AddressException;
-use App\Shop\Exceptions\Tax\ApiException;
-use App\Shop\Support\Tax\LineItem;
-use App\Shop\Support\Tax\Request;
-use App\Shop\Support\Tax\Response;
+use Wax\Shop\Contracts\Tax\TaxDriverContract;
+use Wax\Shop\Exceptions\Tax\AddressException;
+use Wax\Shop\Exceptions\Tax\ApiException;
+use Wax\Shop\Support\Tax\LineItem;
+use Wax\Shop\Support\Tax\Request;
+use Wax\Shop\Support\Tax\Response;
 use Avalara\AvaTaxClient;
 use Avalara\DocumentType;
 use Avalara\TransactionBuilder;

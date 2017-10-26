@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Shop\Listeners;
+namespace Wax\Shop\Listeners;
 
 use App\HubSpot\HubSpot;
-use App\Shop\Events\PurchasedCourse;
+use Wax\Shop\Events\PurchasedCourse;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class PurchasedCourseListener implements ShouldQueue

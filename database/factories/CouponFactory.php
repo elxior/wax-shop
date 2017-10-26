@@ -2,7 +2,7 @@
 
 use Carbon\Carbon;
 
-$factory->define(\App\Shop\Models\Coupon::class, function (Faker\Generator $faker) {
+$factory->define(\Wax\Shop\Models\Coupon::class, function (Faker\Generator $faker) {
     return [
         'title' => $faker->catchPhrase(),
         'code' => $faker->bothify('????####'),

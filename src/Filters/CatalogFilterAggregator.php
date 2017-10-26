@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Shop\Filters;
+namespace Wax\Shop\Filters;
 
 use Wax\Core\Filters\FilterAggregator;
 

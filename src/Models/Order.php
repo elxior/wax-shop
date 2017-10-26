@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Shop\Models;
+namespace Wax\Shop\Models;
 
-use App\Shop\Events\OrderChanged\CouponChangedEvent;
-use App\Shop\Models\Order\Item;
-use App\Shop\Models\Order\Coupon as OrderCoupon;
-use App\Shop\Models\Order\Payment;
-use App\Shop\Models\Order\Shipment;
-use App\Shop\Validators\OrderItemQuantityValidator;
+use Wax\Shop\Events\OrderChanged\CouponChangedEvent;
+use Wax\Shop\Models\Order\Item;
+use Wax\Shop\Models\Order\Coupon as OrderCoupon;
+use Wax\Shop\Models\Order\Payment;
+use Wax\Shop\Models\Order\Shipment;
+use Wax\Shop\Validators\OrderItemQuantityValidator;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;

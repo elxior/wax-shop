@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Shop\Models\Product;
+namespace Wax\Shop\Models\Product;
 
 use Illuminate\Database\Eloquent\Model;
 use Wax\Core\Eloquent\Traits\HasDynamicCasts;

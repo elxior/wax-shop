@@ -1,13 +1,13 @@
 <?php
 
 
-$factory->define(App\Shop\Models\Product\Option::class, function (Faker\Generator $faker) {
+$factory->define(Wax\Shop\Models\Product\Option::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->unique()->word()
     ];
 });
 
-$factory->define(App\Shop\Models\Product\OptionValue::class, function (Faker\Generator $faker) {
+$factory->define(Wax\Shop\Models\Product\OptionValue::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->unique()->word(),
 

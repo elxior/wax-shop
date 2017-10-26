@@ -2,10 +2,10 @@
 
 namespace Tests\Shop;
 
-use App\Shop\Exceptions\ValidationException;
-use App\Shop\Facades\ShopServiceFacade;
-use App\Shop\Models\Order;
-use App\Shop\Services\ShopService;
+use Wax\Shop\Exceptions\ValidationException;
+use Wax\Shop\Facades\ShopServiceFacade;
+use Wax\Shop\Models\Order;
+use Wax\Shop\Services\ShopService;
 use App\User;
 use Carbon\Carbon;
 use Faker\Factory;

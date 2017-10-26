@@ -2,10 +2,10 @@
 
 namespace Tests\Shop\Traits;
 
-use App\Shop\Models\Product;
-use App\Shop\Models\Product\Option;
-use App\Shop\Models\Product\OptionValue;
-use App\Shop\Services\ShopService;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Models\Product\Option;
+use Wax\Shop\Models\Product\OptionValue;
+use Wax\Shop\Services\ShopService;
 
 trait SeedsProducts
 {

@@ -2,10 +2,10 @@
 
 namespace Tests\Shop;
 
-use App\Shop\Models\Coupon;
-use App\Shop\Models\Order\ShippingRate;
-use App\Shop\Models\Product;
-use App\Shop\Services\ShopService;
+use Wax\Shop\Models\Coupon;
+use Wax\Shop\Models\Order\ShippingRate;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Services\ShopService;
 use Carbon\Carbon;
 use Tests\Shop\Traits\SeedsProducts;
 use Tests\WaxAppTestCase;

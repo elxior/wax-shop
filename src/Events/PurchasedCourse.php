@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Shop\Events;
+namespace Wax\Shop\Events;
 
 use App\Courseware\Models\Course;
 use App\User;

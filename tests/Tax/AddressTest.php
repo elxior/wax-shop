@@ -2,7 +2,7 @@
 
 namespace Tests\Shop\Tax;
 
-use App\Shop\Support\Tax\Address;
+use Wax\Shop\Support\Tax\Address;
 use Exception;
 use Faker\Factory;
 use Tests\TestCase;

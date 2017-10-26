@@ -1,6 +1,6 @@
 <?php
 
-$factory->define(App\Shop\Models\Product::class, function (Faker\Generator $faker) {
+$factory->define(Wax\Shop\Models\Product::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->catchPhrase(),
         'model' => $faker->numerify('product-####'),
@@ -15,7 +15,7 @@ $factory->define(App\Shop\Models\Product::class, function (Faker\Generator $fake
     ];
 });
 
-$factory->state(App\Shop\Models\Product::class, 'one_per_user', function () {
+$factory->state(Wax\Shop\Models\Product::class, 'one_per_user', function () {
     return [
         'one_per_user' => 1,
     ] ;

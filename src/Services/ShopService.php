@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Shop\Services;
+namespace Wax\Shop\Services;
 
-use App\Shop\Models\Order;
-use App\Shop\Models\Order\ShippingRate;
-use App\Shop\Repositories\OrderRepository;
+use Wax\Shop\Models\Order;
+use Wax\Shop\Models\Order\ShippingRate;
+use Wax\Shop\Repositories\OrderRepository;
 use Illuminate\Support\Facades\Auth;
 
 class ShopService

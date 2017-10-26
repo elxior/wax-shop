@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Shop\Validators;
+namespace Wax\Shop\Validators;
 
-use App\Shop\Facades\ShopServiceFacade;
-use App\Shop\Models\Product;
-use App\Shop\Models\Product\OptionModifier;
+use Wax\Shop\Facades\ShopServiceFacade;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Models\Product\OptionModifier;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\MessageBag;
 

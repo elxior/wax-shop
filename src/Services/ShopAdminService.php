@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Shop\Services;
+namespace Wax\Shop\Services;
 
-use App\Shop\Models\Product\Category;
+use Wax\Shop\Models\Product\Category;
 use Illuminate\Support\Facades\DB;
 
 class ShopAdminService

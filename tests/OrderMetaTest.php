@@ -2,8 +2,8 @@
 
 namespace Tests\Shop;
 
-use App\Shop\Exceptions\ValidationException;
-use App\Shop\Services\ShopService;
+use Wax\Shop\Exceptions\ValidationException;
+use Wax\Shop\Services\ShopService;
 use Tests\Shop\Traits\SeedsProducts;
 use Tests\WaxAppTestCase;
 

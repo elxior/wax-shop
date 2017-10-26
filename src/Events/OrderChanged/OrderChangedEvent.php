@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Shop\Events\OrderChanged;
+namespace Wax\Shop\Events\OrderChanged;
 
-use App\Shop\Contracts\OrderChangedEventContract;
-use App\Shop\Models\Order;
+use Wax\Shop\Contracts\OrderChangedEventContract;
+use Wax\Shop\Models\Order;
 
 /**
  * OrderChangedEvent represents various types of changes to the active order, such as adding items to the cart,

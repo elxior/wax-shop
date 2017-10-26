@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Shop\Drivers\Tax;
+namespace Wax\Shop\Drivers\Tax;
 
-use App\Shop\Contracts\Tax\TaxDriverContract;
-use App\Shop\Models\Tax;
-use App\Shop\Support\Tax\LineItem;
-use App\Shop\Support\Tax\Request;
-use App\Shop\Support\Tax\Response;
+use Wax\Shop\Contracts\Tax\TaxDriverContract;
+use Wax\Shop\Models\Tax;
+use Wax\Shop\Support\Tax\LineItem;
+use Wax\Shop\Support\Tax\Request;
+use Wax\Shop\Support\Tax\Response;
 
 class DbDriver implements TaxDriverContract
 {

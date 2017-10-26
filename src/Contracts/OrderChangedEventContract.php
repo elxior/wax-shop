@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Shop\Contracts;
+namespace Wax\Shop\Contracts;
 
-use App\Shop\Models\Order;
+use Wax\Shop\Models\Order;
 
 interface OrderChangedEventContract
 {

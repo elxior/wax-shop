@@ -2,9 +2,9 @@
 
 namespace Tests\Shop\Payment;
 
-use App\Shop\Models\Order\Payment;
-use App\Shop\Models\Product;
-use App\Shop\Services\ShopService;
+use Wax\Shop\Models\Order\Payment;
+use Wax\Shop\Models\Product;
+use Wax\Shop\Services\ShopService;
 use Tests\WaxAppTestCase;
 
 class BasicPaymentTest extends WaxAppTestCase

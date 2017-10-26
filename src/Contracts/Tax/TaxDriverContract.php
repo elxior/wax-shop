@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Shop\Contracts\Tax;
+namespace Wax\Shop\Contracts\Tax;
 
-use App\Shop\Support\Tax\Request;
-use App\Shop\Support\Tax\Response;
+use Wax\Shop\Support\Tax\Request;
+use Wax\Shop\Support\Tax\Response;
 
 interface TaxDriverContract
 {

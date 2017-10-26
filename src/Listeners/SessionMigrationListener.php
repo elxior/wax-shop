@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Shop\Listeners;
+namespace Wax\Shop\Listeners;
 
-use App\Shop\Models\Order;
+use Wax\Shop\Models\Order;
 use Wax\Core\Events\SessionMigrationEvent;
 
 class SessionMigrationListener

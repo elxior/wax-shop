@@ -9,7 +9,6 @@
         }
     ],
     "license": "proprietary",
-    "minimum-stability": "dev",
     "repositories": [
         {
             "type": "vcs",
@@ -38,7 +37,8 @@
     "autoload": {
         "psr-4": {
             "Wax\\Shop\\": "src",
-            "Tests\\Shop\\": "tests"
+            "Tests\\Shop\\": "tests",
+            "Tests\\": "vendor/oohology/wax-app/tests/"
         }
     }
 }

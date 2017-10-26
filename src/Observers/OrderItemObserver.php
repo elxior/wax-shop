@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Shop\Observers;
+namespace Wax\Shop\Observers;
 
-use App\Shop\Models\Order\Item;
+use Wax\Shop\Models\Order\Item;
 
 class OrderItemObserver
 {

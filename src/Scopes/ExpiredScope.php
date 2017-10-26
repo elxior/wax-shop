@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Shop\Scopes;
+namespace Wax\Shop\Scopes;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Scope;
