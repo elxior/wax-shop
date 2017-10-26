@@ -10,8 +10,12 @@ class LineItem
     protected $quantity = 1;
     protected $taxable = true;
 
-    public function __construct(string $itemCode = null, float $unitPrice = null, int $quantity = null, bool $taxable = null)
-    {
+    public function __construct(
+        string $itemCode = null,
+        float $unitPrice = null,
+        int $quantity = null,
+        bool $taxable = null
+    ) {
         if (!is_null($itemCode)) {
             $this->setItemCode($itemCode);
         }
