@@ -8,5 +8,4 @@ class AttributeValue extends Model
 {
 
     protected $table = 'product_attribute_values';
-
 }

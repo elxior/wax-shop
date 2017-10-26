@@ -45,7 +45,4 @@ class CartApiController extends Controller
 
         return response()->json($this->shopService->getActiveOrder());
     }
-
-
-
 }

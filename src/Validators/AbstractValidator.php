@@ -76,5 +76,4 @@ abstract class AbstractValidator implements MessageProvider
     {
         return $this->messages();
     }
-
 }

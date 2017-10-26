@@ -31,5 +31,4 @@ class Attribute extends Model
     {
         return $this->valueRelation->value;
     }
-
 }

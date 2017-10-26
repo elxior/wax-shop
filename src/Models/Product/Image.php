@@ -15,5 +15,4 @@ class Image extends Model
     protected $visible = ['image', 'default', 'caption'];
 
     public $timestamps = false;
-
 }
