@@ -2,13 +2,12 @@
 
 namespace Tests\Shop\Shipping;
 
-use Wax\Shop\Facades\ShopServiceFacade;
-
-use Wax\Shop\Models\Order\ShippingRate;
-use Wax\Shop\Models\Product;
 use Faker\Factory;
 use Tests\Shop\Traits\SetsShippingAddress;
 use Tests\Shop\ShopBaseTestCase;
+use Wax\Shop\Facades\ShopServiceFacade;
+use Wax\Shop\Models\Order\ShippingRate;
+use Wax\Shop\Models\Product;
 
 class InvalidationTest extends ShopBaseTestCase
 {

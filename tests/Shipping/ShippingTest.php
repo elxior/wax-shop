@@ -2,10 +2,10 @@
 
 namespace Tests\Shop\Shipping;
 
+use Tests\Shop\ShopBaseTestCase;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Services\ShopService;
-use Tests\Shop\ShopBaseTestCase;
 
 class ShippingTest extends ShopBaseTestCase
 {

@@ -2,12 +2,12 @@
 
 namespace Tests\Shop;
 
+use Tests\Shop\Traits\SetsShippingAddress;
+use Tests\Shop\ShopBaseTestCase;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Drivers\Tax\DbDriver;
 use Wax\Shop\Services\ShopService;
-use Tests\Shop\Traits\SetsShippingAddress;
-use Tests\Shop\ShopBaseTestCase;
 
 class OrderValidationTest extends ShopBaseTestCase
 {

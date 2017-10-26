@@ -2,11 +2,11 @@
 
 namespace Tests\Shop;
 
-use Wax\Shop\Models\Order;
 use App\User;
 use Carbon\Carbon;
 use Tests\Shop\Traits\SeedsProducts;
 use Tests\Shop\ShopBaseTestCase;
+use Wax\Shop\Models\Order;
 
 class CartApiTest extends ShopBaseTestCase
 {

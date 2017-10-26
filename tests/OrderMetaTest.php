@@ -2,10 +2,10 @@
 
 namespace Tests\Shop;
 
-use Wax\Shop\Exceptions\ValidationException;
-use Wax\Shop\Services\ShopService;
 use Tests\Shop\Traits\SeedsProducts;
 use Tests\Shop\ShopBaseTestCase;
+use Wax\Shop\Exceptions\ValidationException;
+use Wax\Shop\Services\ShopService;
 
 class OrderMetaTest extends ShopBaseTestCase
 {

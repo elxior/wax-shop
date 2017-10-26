@@ -2,9 +2,9 @@
 
 namespace Tests\Shop\Tax;
 
-use Wax\Shop\Support\Tax\Shipping;
 use Faker\Factory;
 use Tests\TestCase;
+use Wax\Shop\Support\Tax\Shipping;
 
 class ShippingTest extends TestCase
 {

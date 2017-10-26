@@ -2,8 +2,8 @@
 
 namespace Tests\Shop\Traits;
 
-use Wax\Shop\Facades\ShopServiceFacade;
 use Faker\Factory;
+use Wax\Shop\Facades\ShopServiceFacade;
 
 trait SetsShippingAddress
 {

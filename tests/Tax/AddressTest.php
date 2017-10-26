@@ -2,10 +2,10 @@
 
 namespace Tests\Shop\Tax;
 
-use Wax\Shop\Support\Tax\Address;
 use Exception;
 use Faker\Factory;
 use Tests\TestCase;
+use Wax\Shop\Support\Tax\Address;
 
 class AddressTest extends TestCase
 {

@@ -2,16 +2,16 @@
 
 namespace Tests\Shop;
 
-use Wax\Shop\Exceptions\ValidationException;
-use Wax\Shop\Facades\ShopServiceFacade;
-use Wax\Shop\Models\Order;
-use Wax\Shop\Services\ShopService;
 use App\User;
 use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Support\Facades\Auth;
 use Tests\Shop\Traits\SeedsProducts;
 use Tests\Shop\ShopBaseTestCase;
+use Wax\Shop\Exceptions\ValidationException;
+use Wax\Shop\Facades\ShopServiceFacade;
+use Wax\Shop\Models\Order;
+use Wax\Shop\Services\ShopService;
 
 class ShopServiceTest extends ShopBaseTestCase
 {

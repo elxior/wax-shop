@@ -2,9 +2,9 @@
 
 namespace Tests\Shop\Tax;
 
-use Wax\Shop\Support\Tax\LineItem;
 use Faker\Factory;
 use Tests\TestCase;
+use Wax\Shop\Support\Tax\LineItem;
 
 class LineItemTest extends TestCase
 {
