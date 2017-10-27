@@ -1759,12 +1759,12 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.com:oohology/wax-cms.git",
-                "reference": "746219f4cf7ca329df2c9f185e0a9d618ed4d52f"
+                "reference": "78276bb99240863bd963490a138af492cf854298"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v3/projects/oohology%2Fwax-cms/repository/archive.zip?sha=746219f4cf7ca329df2c9f185e0a9d618ed4d52f",
-                "reference": "746219f4cf7ca329df2c9f185e0a9d618ed4d52f",
+                "url": "https://gitlab.com/api/v3/projects/oohology%2Fwax-cms/repository/archive.zip?sha=78276bb99240863bd963490a138af492cf854298",
+                "reference": "78276bb99240863bd963490a138af492cf854298",
                 "shasum": ""
             },
             "require": {
@@ -1822,7 +1822,7 @@
                 }
             ],
             "description": "WAX Cms system built on the Laravel Framework",
-            "time": "2017-10-26 23:25:17"
+            "time": "2017-10-27 16:01:32"
         },
         {
             "name": "paragonie/random_compat",
