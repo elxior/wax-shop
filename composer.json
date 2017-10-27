@@ -28,7 +28,6 @@
         "laravel/framework": "5.4.*",
         "doctrine/dbal": "^2.5",
         "oohology/wax-cms": "dev-feature/shop-update-prep as 0.10.x-dev",
-        "oohology/wax-app": "dev-feature/integration-test-base-test-case",
         "avalara/avataxclient": "dev-visibility"
     },
     "require-dev": {
@@ -36,7 +35,8 @@
         "mockery/mockery": "~0.9.1",
         "phpunit/phpunit": "~5.0",
         "squizlabs/php_codesniffer": "^2.3",
-        "predis/predis": "~1.0"
+        "predis/predis": "~1.0",
+        "oohology/wax-app": "dev-feature/integration-test-base-test-case"
     },
     "autoload": {
         "psr-4": {
