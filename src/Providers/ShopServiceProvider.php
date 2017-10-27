@@ -2,6 +2,7 @@
 
 namespace Wax\Shop\Providers;
 
+use Wax\Admin\Cms\Cms;
 use Wax\Shop\Contracts\OrderChangedEventContract;
 use Wax\Shop\Contracts\Tax\TaxDriverContract;
 use Wax\Shop\Events\OrderChanged\CartContentsChangedEvent;
@@ -75,6 +76,8 @@ class ShopServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        Cms::registerStructurePath(__DIR__.'/../../resources/structures');
+
         Route::middleware('web')
             ->namespace('Wax\Shop\Http\Controllers')
             ->attribute('as', 'shop::')
