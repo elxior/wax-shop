@@ -17,7 +17,7 @@ class ShopServiceTest extends ShopBaseTestCase
 {
     use SeedsProducts;
 
-    /* @var \App\Shop\Services\ShopService */
+    /* @var \Wax\Shop\Services\ShopService */
     protected $shopService;
 
     /* @var \Faker\Generator */
