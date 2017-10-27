@@ -56,6 +56,85 @@ class CartApiTest extends ShopBaseTestCase
         $response->assertStatus(422);
     }
 
+    public function testUpdateItemQuantity()
+    {
+        $product = $this->products['basic'];
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)
+            ->json('POST', route('shop::api.cart.store'), [
+                'product_id' => $product->id,
+                'quantity' => 1
+            ]);
+
+        $response->assertStatus(200);
+        $responseData = $response->decodeResponseJson();
+        $this->assertEquals($product->id, $responseData['items'][0]['product_id']);
+        $this->assertEquals(1, $responseData['items'][0]['quantity']);
+        $this->assertGreaterThan(0, $responseData['items'][0]['id']);
+
+        $response = $this->actingAs($user)
+            ->json(
+                'PATCH',
+                route('shop::api.cart.update', ['id' => $responseData['items'][0]['id']]),
+                ['quantity' => 2]
+            );
+
+        $response->assertStatus(200);
+        $responseData = $response->decodeResponseJson();
+        $this->assertEquals($product->id, $responseData['items'][0]['product_id']);
+        $this->assertEquals(2, $responseData['items'][0]['quantity']);
+    }
+
+    public function testUpdateItemQuantityInvalidId()
+    {
+        $response = $this->json(
+            'PATCH',
+            route('shop::api.cart.update', ['id' => 777]),
+            ['quantity' => 2]
+        );
+        $response->assertStatus(422);
+    }
+
+    public function testDeleteItem()
+    {
+        $product = $this->products['basic'];
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)
+            ->json('POST', route('shop::api.cart.store'), [
+                'product_id' => $product->id,
+                'quantity' => 1
+            ]);
+
+        $response->assertStatus(200);
+        $responseData = $response->decodeResponseJson();
+        $this->assertEquals($product->id, $responseData['items'][0]['product_id']);
+        $this->assertEquals(1, $responseData['items'][0]['quantity']);
+        $this->assertGreaterThan(0, $responseData['items'][0]['id']);
+
+        $response = $this->actingAs($user)
+            ->json(
+                'DELETE',
+                route('shop::api.cart.destroy', ['id' => $responseData['items'][0]['id']])
+            );
+
+        $response->assertStatus(200);
+        $responseJson = $response->decodeResponseJson();
+        $this->assertEmpty($responseJson['items']);
+    }
+
+    public function testDeleteItemInvalidId()
+    {
+        $response = $this->json(
+            'DELETE',
+            route('shop::api.cart.destroy', ['id' => 777])
+        );
+        $response->assertStatus(422);
+    }
+
     public function testAddProductWithOptions()
     {
         $product = $this->products['withOptions'];

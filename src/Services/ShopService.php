@@ -5,6 +5,7 @@ namespace Wax\Shop\Services;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Repositories\OrderRepository;
+use Wax\Shop\Validators\OrderItemQuantityValidator;
 use Illuminate\Support\Facades\Auth;
 
 class ShopService
@@ -33,37 +34,23 @@ class ShopService
 
     public function addOrderItem(int $productId, int $quantity = 1, array $options = [], array $customizations = [])
     {
-        return $this->getActiveOrder()
+        $this->getActiveOrder()
             ->default_shipment
             ->addItem($productId, $quantity, $options, $customizations);
     }
 
     public function updateOrderItemQuantity(int $itemId, int $quantity)
     {
-        $item = $this->getActiveOrder()
-            ->items
-            ->where('id', $itemId)
-            ->first();
-
-        if (is_null($item)) {
-            return false;
-        }
-
-        return $item->shipment->updateItemQuantity($itemId, $quantity);
+        $this->getActiveOrder()
+            ->default_shipment
+            ->updateItemQuantity($itemId, $quantity);
     }
 
-    public function deleteOrderItem(int $itemId): bool
+    public function deleteOrderItem(int $itemId)
     {
-        $item = $this->getActiveOrder()
-            ->items
-            ->where('id', $itemId)
-            ->first();
-
-        if (is_null($item)) {
-            return false;
-        }
-
-        return $item->shipment->deleteItem($itemId);
+        $this->getActiveOrder()
+            ->default_shipment
+            ->deleteItem($itemId);
     }
 
     public function orderHasProduct(int $productId, array $options = null, array $customizations = null): bool

@@ -39,9 +39,19 @@ class CartApiController extends Controller
         return response()->json($this->shopService->getActiveOrder());
     }
 
+    public function update(int $id, Request $request)
+    {
+        $this->shopService->updateOrderItemQuantity(
+            $id,
+            $request->input('quantity')
+        );
+
+        return response()->json($this->shopService->getActiveOrder());
+    }
+
     public function destroy($itemId)
     {
-        $this->shopService->deleteOrderItem($itemId) || abort(400);
+        $this->shopService->deleteOrderItem($itemId);
 
         return response()->json($this->shopService->getActiveOrder());
     }

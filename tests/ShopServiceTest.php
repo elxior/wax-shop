@@ -112,7 +112,8 @@ class ShopServiceTest extends ShopBaseTestCase
 
     public function testDeleteInvalidCartItem()
     {
-        $this->assertEquals($this->shopService->deleteOrderItem(777), false);
+        $this->expectException(ValidationException::class);
+        $this->shopService->deleteOrderItem(777);
     }
 
     public function testCartHasItem()

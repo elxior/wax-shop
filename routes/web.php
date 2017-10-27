@@ -3,10 +3,6 @@
 use App\WindowData\Http\Middleware\CatalogDataMiddleware;
 use Illuminate\Support\Facades\Route;
 
-/**
- * Note: routes are separated into this file in anticipation of moving to a wax-cms package
- */
-
 Route::get('/admin/shop/product-modifiers/{product}', 'Admin\ProductModifiersController@show')
     ->middleware('auth.panel')
     ->name('admin.productModifiers');
@@ -21,6 +17,7 @@ Route::group(['prefix' => 'shop'], function () {
     Route::group(['prefix' => 'api'], function () {
         Route::get('cart', 'CartApiController@index')->name('api.cart.index');
         Route::post('cart', 'CartApiController@store')->name('api.cart.store');
+        Route::patch('cart/{id}', 'CartApiController@update')->name('api.cart.update');
         Route::delete('cart/{id}', 'CartApiController@destroy')->name('api.cart.destroy');
     });
 

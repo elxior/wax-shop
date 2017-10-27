@@ -15,6 +15,7 @@ use Wax\Shop\Support\Tax\LineItem;
 use Wax\Shop\Support\Tax\Request;
 use Wax\Shop\Support\Tax\Shipping;
 use Wax\Shop\Validators\CreateOrderItemValidator;
+use Wax\Shop\Validators\DeleteOrderItemValidator;
 use Wax\Shop\Validators\OrderItemQuantityValidator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -197,18 +198,18 @@ class Shipment extends Model
 
     public function deleteItem(int $itemId)
     {
-        $item = $this->items->where('id', $itemId)->first();
-        if (!$item) {
-            return false;
-        }
+        (new DeleteOrderItemValidator($itemId))
+            ->validate();
+
+        $item = $this->items
+            ->where('id', $itemId)
+            ->first();
 
         if ($item->delete() !== true) {
-            return false;
+            throw new \Exception('Unknown error deleting order item');
         }
 
         event(new CartContentsChangedEvent($this->order->fresh()));
-
-        return true;
     }
 
     /**
