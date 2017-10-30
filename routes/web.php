@@ -1,6 +1,5 @@
 <?php
 
-use App\WindowData\Http\Middleware\CatalogDataMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/admin/shop/product-modifiers/{product}', 'Admin\ProductModifiersController@show')
@@ -10,7 +9,7 @@ Route::put('/admin/shop/product-modifiers/{product}', 'Admin\ProductModifiersCon
     ->middleware('auth.panel');
 
 Route::group(['prefix' => 'shop'], function () {
-    Route::get('/', 'CatalogController@index')->middleware(CatalogDataMiddleware::class)->name('catalogIndex');
+    Route::get('/', 'CatalogController@index')->name('catalogIndex');
     Route::get('{slug}', 'CatalogController@show')->name('productDetail');
 
 
