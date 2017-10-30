@@ -26,7 +26,7 @@ class Category extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(config('wax.shop.models.product'));
     }
 
     public function getUrlAttribute()

@@ -152,7 +152,7 @@ class Product extends Model
      */
     public function relatedProducts()
     {
-        return $this->belongsToMany(Product::class, 'product_related', 'product_id', 'related_id');
+        return $this->belongsToMany(config('wax.shop.models.product'), 'product_related', 'product_id', 'related_id');
     }
 
 

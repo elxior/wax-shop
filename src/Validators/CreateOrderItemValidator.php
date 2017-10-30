@@ -7,6 +7,7 @@ use Wax\Shop\Models\Product;
 use Wax\Shop\Models\Product\OptionModifier;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\MessageBag;
+use Wax\Shop\Repositories\ProductRepository;
 
 class CreateOrderItemValidator extends AbstractValidator
 {
@@ -27,7 +28,7 @@ class CreateOrderItemValidator extends AbstractValidator
     {
         $this->messages = new MessageBag;
 
-        $product = Product::find($this->productId);
+        $product = app()->make(ProductRepository::class)->get($this->productId);
 
         if (is_null($product)) {
             $this->errors()->add('product_id', 'Invalid Product');

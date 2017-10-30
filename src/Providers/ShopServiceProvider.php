@@ -67,7 +67,7 @@ class ShopServiceProvider extends ServiceProvider
 
         $this->app->when(ProductRepository::class)
             ->needs(Model::class)
-            ->give(Product::class);
+            ->give(config('wax.shop.models.product'));
 
         $this->app->when(ProductRepository::class)
             ->needs(FilterAggregatorContract::class)
