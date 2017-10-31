@@ -16,7 +16,6 @@ use Wax\Shop\Listeners\LoginListener;
 use Wax\Shop\Listeners\RecalculateCouponValueListener;
 use Wax\Shop\Listeners\SessionMigrationListener;
 use Wax\Shop\Models\Order\Item;
-use Wax\Shop\Models\Product;
 use Wax\Shop\Observers\OrderItemObserver;
 use Wax\Shop\Repositories\ProductRepository;
 use Wax\Shop\Services\ShopService;
