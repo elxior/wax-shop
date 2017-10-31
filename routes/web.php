@@ -10,7 +10,6 @@ Route::put('/admin/shop/product-modifiers/{product}', 'Admin\ProductModifiersCon
 
 Route::group(['prefix' => 'shop'], function () {
     Route::get('/', 'CatalogController@index')->name('catalogIndex');
-    Route::get('{slug}', 'CatalogController@show')->name('productDetail');
 
 
     Route::group(['prefix' => 'api'], function () {
@@ -31,4 +30,6 @@ Route::group(['prefix' => 'shop'], function () {
     Route::get('/checkout-complete', function () {
         return view('modules.Shop.pages.checkout-complete');
     });
+
+    Route::get('{slug}', 'CatalogController@show')->name('productDetail');
 });
