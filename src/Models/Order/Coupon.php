@@ -37,6 +37,9 @@ class Coupon extends Model
     protected $casts = [
         'expired_at' => 'datetime',
     ];
+    protected $hidden = [
+        'order',
+    ];
 
     protected static function boot()
     {

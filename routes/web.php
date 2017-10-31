@@ -17,6 +17,9 @@ Route::group(['prefix' => 'shop'], function () {
         Route::post('cart', 'CartApiController@store')->name('api.cart.store');
         Route::patch('cart/{id}', 'CartApiController@update')->name('api.cart.update');
         Route::delete('cart/{id}', 'CartApiController@destroy')->name('api.cart.destroy');
+
+        Route::post('coupon', 'CouponApiController@store')->name('api.coupon.store');
+        Route::delete('coupon', 'CouponApiController@destroy')->name('api.coupon.destroy');
     });
 
     Route::get('/cart', function () {

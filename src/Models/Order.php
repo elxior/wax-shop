@@ -303,6 +303,19 @@ class Order extends Model
         return true;
     }
 
+    public function removeCoupon()
+    {
+        if (!$this->coupon) {
+            return;
+        }
+
+        $this->coupon->delete();
+        $this->calculateCouponValue();
+        $this->refresh();
+
+        event(new CouponChangedEvent($this));
+    }
+
     public function calculateCouponValue()
     {
         // make sure coupon relation is up to date

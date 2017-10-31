@@ -18,11 +18,8 @@ class OrderRepository
             ->first() ?? $this->create();
 
         if ($order->coupon && !$order->coupon->validate()) {
-            $order->coupon->delete();
-            $order->calculateCouponValue();
+            $order->removeCoupon();
             $order->refresh();
-
-            event(new CouponChangedEvent($order));
         }
 
         return $order;

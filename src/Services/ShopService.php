@@ -79,6 +79,11 @@ class ShopService
         return $this->getActiveOrder()->applyCoupon($code);
     }
 
+    public function removeCoupon()
+    {
+        $this->getActiveOrder()->removeCoupon();
+    }
+
     public function setShippingService(ShippingRate $rate)
     {
         return $this->getActiveOrder()
