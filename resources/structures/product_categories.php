@@ -1,6 +1,6 @@
 <?php
 
-use App\Shop\Services\ShopAdminService;
+use Wax\Shop\Services\ShopAdminService;
 use Illuminate\Support\Facades\Auth;
 use Wax\Core\Structures\Builder;
 use Wax\Core\Support\ConfigurationDatabase;

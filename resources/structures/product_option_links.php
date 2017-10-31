@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
             'search_fields' => array('product_id', 'option_id'),
         ),
         'predelete' => function ($id, &$cms) {
-            $shop = app()->make('App\Shop\Services\ShopAdminService');
+            $shop = app()->make('Wax\Shop\Services\ShopAdminService');
             return $shop->deleteProductOptionLink($id);
         },
         'presave' => function ($id, &$cms) {
@@ -36,11 +36,11 @@ use Illuminate\Support\Facades\DB;
                 return true;
             }
 
-            $shop = app()->make('App\Shop\Services\ShopAdminService');
+            $shop = app()->make('Wax\Shop\Services\ShopAdminService');
             return $shop->addProductOptionLink($oldLinkId);
         },
         'postsave' => function ($id, &$cms) {
-            $shop = app()->make('App\Shop\Services\ShopAdminService');
+            $shop = app()->make('Wax\Shop\Services\ShopAdminService');
             return $shop->addProductOptionLink($id);
         }
     );

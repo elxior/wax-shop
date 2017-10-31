@@ -207,7 +207,7 @@ use Wax\Core\Structures\Builder;
         'display_name' => 'Modifiers',
         'render' => function () {
             $html = '<div style="text-align: center;">';
-            $html .= "<input type=\"button\" class=\"cancelLeavePageAlert\" value=\"Edit 'Product Option' modifiers\" onclick=\"cancelLeavePageAlert(); $('#cmsEditForm').attr('action', '?action=field_method&field=modifiers&method=edit'); $('#cmsEditForm').submit();\" />";
+            $html .= "<input type=\"button\" class=\"cancelLeavePageAlert\" value=\"Edit 'Product Option' modifiers\" onclick=\"$('#cmsEditForm').attr('action', '?action=field_method&field=modifiers&method=edit'); $('#cmsEditForm').submit();\" />";
             $html .= '<p><em>note: any pending changes will be saved before continuing</em></p>';
             $html .= '</div>';
             return $html;
