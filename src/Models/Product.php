@@ -53,7 +53,7 @@ class Product extends Model
         'name',
         'description',
         'short_description',
-        'formattedPrice',
+        'price',
         'featured',
         'category',
         'defaultImage',
@@ -63,7 +63,6 @@ class Product extends Model
     protected $appends = [
         'url',
         'defaultImage',
-        'formattedPrice',
     ];
 
     public function __construct($attributes = array())
@@ -76,12 +75,6 @@ class Product extends Model
         parent::boot();
 
         static::addGlobalScope(new ActiveScope);
-    }
-
-
-    public function getFormattedPriceAttribute()
-    {
-        return Currency::format($this->price);
     }
 
     public function scopeFeatured(Builder $query)
