@@ -58,4 +58,27 @@ class BundleTest extends ShopBaseTestCase
         $this->assertEquals($cartTotal, $order->gross_total);
         $this->assertEquals($cartTotal - $discountTotal, $order->total);
     }
+
+    public function testCartItemsSuggestsBundles()
+    {
+        $product1 = factory(Product::class)->create();
+        $product2 = factory(Product::class)->create();
+
+        $this->assertEmpty($product1->bundles);
+        $this->assertEmpty($product2->bundles);
+
+        $bundle = Bundle::create([
+            'name' => 'Test Bundle',
+            'percent' => 10,
+        ]);
+        $bundle->products()->saveMany([$product1, $product2]);
+
+        $this->shopService->addOrderItem($product1->id);
+
+        $order = $this->shopService->getActiveOrder();
+
+        $item = $order->items->first();
+        $this->assertNotEmpty($item->bundles);
+        $this->assertEquals(2, $item->bundles->first()->products->count());
+    }
 }

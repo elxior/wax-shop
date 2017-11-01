@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property Product $product The product associated with the cart item.
  * @property Shipment $shipment The shipment which contains this item.
+ * @property \Wax\Shop\Models\Bundle[] $bundle The AVAILABLE bundles for this product. (not the active bundles)
  * @property ItemCustomization[] $customizations User provided customization, such as a gift card note or monogram.
  * @property ItemOption[] $options The selected options for the item, e.g. color.
  * @property OptionModifier|null $modifier A combination of options can have an associated
@@ -68,11 +69,21 @@ class Item extends Model
         'short_description',
         'url',
         'category',
+        'bundles',
     ];
 
     public function product()
     {
         return $this->belongsTo(config('wax.shop.models.product'));
+    }
+
+    /**
+     * Note: These are the available bundles, not active bundles
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function bundles()
+    {
+        return $this->belongsToMany(\Wax\Shop\Models\Bundle::class, 'product_bundle_links', 'product_id');
     }
 
     public function shipment()
