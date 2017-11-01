@@ -3,13 +3,13 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProductBundlesTable extends Migration
+class CreateOrderBundlesTable extends Migration
 {
     /**
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'product_bundles';
+    public $set_schema_table = 'order_bundles';
 
     /**
      * Run the migrations.
@@ -21,8 +21,10 @@ class CreateProductBundlesTable extends Migration
     {
         Schema::create($this->set_schema_table, function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('order_id');
             $table->string('name');
             $table->unsignedInteger('percent');
+            $table->decimal('calculated_value', 15, 4)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable();
         });

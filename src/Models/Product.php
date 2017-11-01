@@ -82,6 +82,11 @@ class Product extends Model
         return $query->where('featured', '=', 1);
     }
 
+    public function bundles()
+    {
+        return $this->belongsToMany(Bundle::class, 'product_bundle_links');
+    }
+
     public function getUrlAttribute()
     {
         return route('shop::productDetail', ['slug' => $this->url_slug]);
