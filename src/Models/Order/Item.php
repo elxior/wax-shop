@@ -39,6 +39,7 @@ class Item extends Model
 
     protected $with = [
         'options',
+        'bundles',
     ];
 
     protected $hidden = [
@@ -69,7 +70,6 @@ class Item extends Model
         'short_description',
         'url',
         'category',
-        'bundles',
     ];
 
     public function product()

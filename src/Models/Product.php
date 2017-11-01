@@ -63,6 +63,7 @@ class Product extends Model
     protected $appends = [
         'url',
         'defaultImage',
+        'bundles',
     ];
 
     public function __construct($attributes = array())
