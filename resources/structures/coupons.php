@@ -9,9 +9,9 @@ $structure = [
     'fields' => [],
     'notes' =>
                 '<ul>'.
-                '<li style="display: inline; list-style-type: none; padding-right: 20px;"><a href="/admin/coupon_generate.php">&bull; Bulk <strong>Generate</strong> Coupon Codes</a></li>'.
-                '<li style="display: inline; list-style-type: none; padding-right: 20px;"><a href="/admin/coupon_import.php">&bull; Bulk <strong>Load</strong> Coupons From CSV</a></li>'.
-                '<li style="display: inline; list-style-type: none; padding-right: 20px;"><a href="/admin/coupon_export.php">&bull; Bulk <strong>Export</strong> Coupons To CSV</a></li>'.
+                '<li style="display: inline; list-style-type: none; padding-right: 20px;"><a href="' . URL::to('admin/cms/coupons/bulk/generate') . '">&bull; Bulk <strong>Generate</strong> Coupon Codes</a></li>'.
+                '<li style="display: inline; list-style-type: none; padding-right: 20px;"><a href="' . URL::to('admin/cms/coupons/bulk/import') . '">&bull; Bulk <strong>Load</strong> Coupons From CSV</a></li>'.
+                '<li style="display: inline; list-style-type: none; padding-right: 20px;"><a href="' . URL::to('admin/cms/coupons/bulk/export') . '">&bull; Bulk <strong>Export</strong> Coupons To CSV</a></li>'.
                 '</ul>',
     'settings' => [
         'page_title' => 'Coupons',

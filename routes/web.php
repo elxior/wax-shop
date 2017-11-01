@@ -36,3 +36,17 @@ Route::group(['prefix' => 'shop'], function () {
 
     Route::get('{slug}', 'CatalogController@show')->name('productDetail');
 });
+
+Route::group(['prefix' => 'admin/cms/coupons/bulk'], function() {
+    Route::get('generate', function () {
+        return view('shop::pages.admin.coupons.bulk_generate');
+    });
+
+    Route::get('export', function () {
+        return view('shop::pages.admin.coupons.bulk_export');
+    });
+
+    Route::get('import', function () {
+        return view('shop::pages.admin.coupons.bulk_import');
+    });
+});
