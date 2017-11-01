@@ -63,6 +63,7 @@ class Product extends Model
     protected $appends = [
         'url',
         'defaultImage',
+        'bundles',
     ];
 
     public function __construct($attributes = array())
@@ -80,6 +81,11 @@ class Product extends Model
     public function scopeFeatured(Builder $query)
     {
         return $query->where('featured', '=', 1);
+    }
+
+    public function bundles()
+    {
+        return $this->belongsToMany(Bundle::class, 'product_bundle_links');
     }
 
     public function getUrlAttribute()

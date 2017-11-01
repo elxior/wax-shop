@@ -10,11 +10,13 @@ use Wax\Shop\Events\OrderChanged\ShippingAddressChangedEvent;
 use Wax\Shop\Events\OrderChanged\ShippingServiceChangedEvent;
 use Wax\Shop\Filters\CatalogFilterAggregator;
 use Wax\Shop\Http\Controllers\CatalogController;
+use Wax\Shop\Listeners\ApplyProductBundleListener;
 use Wax\Shop\Listeners\InvalidateOrderShippingListener;
 use Wax\Shop\Listeners\InvalidateOrderTaxListener;
 use Wax\Shop\Listeners\LoginListener;
-use Wax\Shop\Listeners\RecalculateCouponValueListener;
+use Wax\Shop\Listeners\RecalculateDiscountsListener;
 use Wax\Shop\Listeners\SessionMigrationListener;
+use Wax\Shop\Models\Order\Bundle;
 use Wax\Shop\Models\Order\Item;
 use Wax\Shop\Observers\OrderItemObserver;
 use Wax\Shop\Repositories\ProductRepository;
@@ -100,21 +102,28 @@ class ShopServiceProvider extends ServiceProvider
 
     public function registerListeners()
     {
+        // clean up the nested relations when an Order Item changes
         Item::observe(OrderItemObserver::class);
+        Bundle::observe(OrderBundleObserver::class);
+
 
         Event::listen(SessionMigrationEvent::class, SessionMigrationListener::class);
         Event::listen(Login::class, LoginListener::class);
 
-        Event::listen(CartContentsChangedEvent::class, InvalidateOrderShippingListener::class);
-        Event::listen(ShippingAddressChangedEvent::class, InvalidateOrderShippingListener::class);
+        Event::listen(
+            [
+                CartContentsChangedEvent::class,
+                ShippingAddressChangedEvent::class,
+            ],
+            InvalidateOrderShippingListener::class
+        );
 
         Event::listen(
             [
                 CartContentsChangedEvent::class,
-                //ShippingAddressChangedEvent::class,
                 ShippingServiceChangedEvent::class,
             ],
-            RecalculateCouponValueListener::class
+            RecalculateDiscountsListener::class
         );
 
         Event::listen(OrderChangedEventContract::class, InvalidateOrderTaxListener::class);
