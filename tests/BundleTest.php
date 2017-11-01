@@ -42,7 +42,20 @@ class BundleTest extends ShopBaseTestCase
         $this->shopService->addOrderItem($product2->id);
 
         $order = $this->shopService->getActiveOrder();
-        $this->assertGreaterThan(0, $order->bundle_value);
-        $this->assertGreaterThan(0, $order->discount_amount);
+
+        $product1Discount = round($product1->price *.1, 2);
+        $product2Discount = round($product2->price *.1, 2);
+
+        $cartTotal = $product1->price + $product2->price;
+        $discountTotal = $product1Discount + $product2Discount;
+
+        $this->assertEquals($product1Discount, $order->items[0]->discount_amount);
+        $this->assertEquals($product2Discount, $order->items[1]->discount_amount);
+
+        $this->assertEquals($discountTotal, $order->bundle_value);
+        $this->assertEquals($discountTotal, $order->discount_amount);
+
+        $this->assertEquals($cartTotal, $order->gross_total);
+        $this->assertEquals($cartTotal - $discountTotal, $order->total);
     }
 }
