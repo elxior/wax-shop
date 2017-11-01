@@ -1,6 +1,7 @@
 <?php
 
 use App\Localization\Currency;
+use Carbon\Carbon;
 
 $structure = [
     'table' => 'coupons',
@@ -23,17 +24,18 @@ $structure = [
         'order_direction' => ['asc'],
         'search_fields' => ['code', 'title'],
     ],
-    'presave' => function ($id, &$cms) {
-        die('coupons presave');
-        Db::query('delete from coupons where exp_date < unix_timestamp(now()) and id <> ' . $id);
+    'presave' => function ($id) {
+        DB::table('coupons')
+            ->where('expired_at', '<', Carbon::today()->toDateString() . ' 23:59:59')
+            ->where('id', '<>', $id)
+            ->delete();
 
-        if ($cms->data->field('dollars') > 0 && $cms->data->field('percent') > 0) {
-            $cms->error[] = 'You may set only one of "Dollars Off" or "Percent Off"';
+        if ($this->data->field('dollars') > 0 && $this->data->field('percent') > 0) {
+            $this->setError('You may set only one of "Dollars Off" or "Percent Off"');
             return false;
         }
 
-        $cms->data->field('code', strtoupper($cms->data->field('code')));
-        $cms->data->field('exp_date', $cms->data->field('exp_date') + 86399); // good through 23:59:59 of the selected day
+        $this->data->field('code', strtoupper($this->data->field('code')));
 
         return true;
     }
