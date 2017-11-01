@@ -4,6 +4,7 @@ namespace Wax\Shop\Models;
 
 use Wax\Shop\Events\OrderChanged\CouponChangedEvent;
 use Wax\Shop\Models\Order\Item;
+use Wax\Shop\Models\Order\Bundle as OrderBundle;
 use Wax\Shop\Models\Order\Coupon as OrderCoupon;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\Shipment;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 /**
+ * @property Collection|OrderCoupon[] $bundles Bundle discounts applied to the order.
  * @property OrderCoupon|null $coupon The coupon applied to the order.
  * @property Collection|Shipment[] $shipments All shipments associated with the order.
  * @property Shipment|null $default_shipment Shortcut to a primary shipment.
@@ -47,6 +49,8 @@ use Illuminate\Support\Facades\Session;
  * @property float $tax_subtotal Total of a shipment tax amounts.
  * @property float $gross_total Total price for the order. Cart subtotal + shipping + tax.
  * @property float $coupon_value Total value of coupons applied to the order.
+ * @property float $bundle_value Total value of bundle discounts applied to the order.
+ * @property float $discount_amount Combined total discount for coupons and bundles
  * @property float $total Total price for the order after coupons are applied.
  *
  * @property float $payment_total Total amount of applied payments (can be Authorized or Captured)
@@ -128,6 +132,11 @@ class Order extends Model
     public function scopeArchived(Builder $query)
     {
         return $query->whereNotNull('archived_at');
+    }
+
+    public function bundles()
+    {
+        return $this->hasMany(OrderBundle::class);
     }
 
     public function coupon()
@@ -228,6 +237,16 @@ class Order extends Model
         return $this->coupon->calculated_value ?? 0;
     }
 
+    public function getBundleValueAttribute()
+    {
+        return $this->bundles->sum('calculated_value');
+    }
+
+    public function getDiscountAmountAttribute()
+    {
+        return $this->coupon_value + $this->bundle_value;
+    }
+
     public function getGrossTotalAttribute()
     {
         return $this->shipments->sum('gross_total');
@@ -281,7 +300,6 @@ class Order extends Model
 
         if ($this->coupon) {
             $this->coupon->delete();
-            $this->resetDiscounts();
         }
 
         $this->coupon()->create([
@@ -295,10 +313,7 @@ class Order extends Model
             'include_shipping' => $coupon->include_shipping,
         ]);
 
-        $this->refresh();
-        $this->coupon->calculateValue();
-
-        event(new CouponChangedEvent($this->fresh()));
+        $this->calculateDiscounts();
 
         return true;
     }
@@ -310,25 +325,62 @@ class Order extends Model
         }
 
         $this->coupon->delete();
-        $this->calculateCouponValue();
-        $this->refresh();
 
-        event(new CouponChangedEvent($this));
+        $this->calculateDiscounts();
     }
 
-    public function calculateCouponValue()
+    public function calculateDiscounts()
     {
-        // make sure coupon relation is up to date
+        // make sure coupon / bundle relations are up to date
         $this->refresh();
+
+        $this->resetDiscounts();
+
+        $this->applyBundleDiscounts();
 
         if ($this->coupon) {
             $this->coupon->calculateValue();
-        } else {
-            $this->resetDiscounts();
         }
+
+        $this->refresh();
+        event(new CouponChangedEvent($this));
     }
 
-    public function resetDiscounts()
+    protected function applyBundleDiscounts()
+    {
+        // trigger individual deletes so the 'deleting' event is caught
+        $this->bundles->each->delete();
+
+        $orderProductIds = $this->items->pluck('product_id');
+
+        $bundles = Bundle::whereHas('products', function ($query) use ($orderProductIds) {
+            $query->whereIn('products.id', $orderProductIds);
+        })->orderBy('percent')->get();
+
+        $bundles->filter(function ($bundle) use ($orderProductIds) {
+            return $bundle->products->count() == $orderProductIds->intersect($bundle->products->pluck('id'))->count();
+        })->each(function ($bundle) {
+            $items = $this->items->wherein('product_id', $bundle->products->pluck('id'));
+            $orderBundle = $this->bundles()->create([
+                'name' => $bundle->name,
+                'percent' => $bundle->percent,
+            ]);
+            $orderBundle->items()->saveMany($items);
+
+            $items->each(function ($item) use ($orderBundle) {
+                $item->discount_amount = round($item->gross_subtotal * $orderBundle->percent / 100, 2);
+                $item->save();
+            });
+
+            $orderBundle->refresh();
+            $orderBundle->calculated_value = $orderBundle->items->sum('discount_amount');
+            $orderBundle->save();
+
+            $this->refresh();
+        });
+    }
+
+    protected function resetDiscounts()
     {
         $this->shipments->each(function ($shipment) {
             $shipment->shipping_discount_amount = null;
@@ -336,6 +388,7 @@ class Order extends Model
         });
 
         $this->items->each(function ($item) {
+            $item->discountable = null;
             $item->discount_amount = null;
             $item->save();
         });

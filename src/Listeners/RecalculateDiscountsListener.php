@@ -4,10 +4,10 @@ namespace Wax\Shop\Listeners;
 
 use Wax\Shop\Contracts\OrderChangedEventContract;
 
-class RecalculateCouponValueListener
+class RecalculateDiscountsListener
 {
     public function handle(OrderChangedEventContract $event)
     {
-        $event->getOrder()->calculateCouponValue();
+        $event->getOrder()->calculateDiscounts();
     }
 }

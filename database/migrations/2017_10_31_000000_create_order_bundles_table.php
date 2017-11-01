@@ -3,17 +3,17 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProductHandlerLinksTable extends Migration
+class CreateOrderBundlesTable extends Migration
 {
     /**
      * Schema table name to migrate
      * @var string
      */
-    public $set_schema_table = 'product_handler_links';
+    public $set_schema_table = 'order_bundles';
 
     /**
      * Run the migrations.
-     * @table product_handler_links
+     * @table coupons
      *
      * @return void
      */
@@ -21,14 +21,12 @@ class CreateProductHandlerLinksTable extends Migration
     {
         Schema::create($this->set_schema_table, function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('product_id');
-            $table->unsignedInteger('handler_id');
+            $table->unsignedInteger('order_id');
+            $table->string('name');
+            $table->unsignedInteger('percent');
+            $table->decimal('calculated_value', 15, 4)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable();
-
-            $table->index(["product_id"], 'product_handler_links_product_id');
-
-            $table->index(["handler_id"], 'product_handler_links_handler_id');
         });
     }
 
