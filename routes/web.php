@@ -40,13 +40,13 @@ Route::group(['prefix' => 'shop'], function () {
 Route::group(['prefix' => 'admin/cms/coupons/bulk'], function() {
     Route::get('generate', function () {
         return view('shop::pages.admin.coupons.bulk_generate');
-    });
+    })->middleware('auth.panel');
 
     Route::get('export', function () {
         return view('shop::pages.admin.coupons.bulk_export');
-    });
+    })->middleware('auth.panel');
 
     Route::get('import', function () {
         return view('shop::pages.admin.coupons.bulk_import');
-    });
+    })->middleware('auth.panel');
 });
