@@ -26,38 +26,43 @@ class CouponController
         $dollars = $request->get('dollars');
         $minimum = $request->get('minimum');
         $expired_at = $request->get('expired_at');
-        $inputDate = $request->get('exp_date');
         $oneTime = (int)$request->get('one_time');
 
-        if($title == '') {
+        if ($title == '') {
             $error_msg[] = 'Please enter a Title.';
         }
-        if($dollars == 0 && $percent == 0) {
+
+        if ($dollars == 0 && $percent == 0) {
             $error_msg[] = 'Please set either "Dollars Off" or "Percent Off".';
         }
-        if($dollars> 0 && $percent > 0) {
+
+        if ($dollars> 0 && $percent > 0) {
             $error_msg[] = 'You may set only one of "Dollars Off" or "Percent Off".';
         }
-        if($qty == 0) {
+
+        if ($qty == 0) {
             $error_msg[] = 'Please enter a Quantity.';
         }
-        if(empty($error_msg)) {
+
+        if (empty($error_msg)) {
             // pull current Codes
             $currentCodes = Coupon::select('code')->get()->toArray();
             $chars = 'BC2DF3GH4JK6MP7QR8TV9WXY';
             $numChars = strlen($chars) - 1;
             $newCodes = [];
-            for($n = 1; $n <= $qty; $n++) {
+            for ($n = 1; $n <= $qty; $n++) {
                 $newCode = '';
-                for($c = 1; $c <= 8; $c++) {
+                for ($c = 1; $c <= 8; $c++) {
                     $r = rand(0, $numChars);
                     $newCode .= substr($chars, $r, 1);
                 }
-                if(in_array($newCode, $currentCodes)) {
+
+                if (in_array($newCode, $currentCodes)) {
                     $n--;
                 } else {
                     $newCodes[] = $newCode;
                 }
+
             }
 
             foreach ($newCodes as $code)
@@ -111,8 +116,9 @@ class CouponController
      */
     private function csvToArray($filename)
     {
-        if (!file_exists($filename) || !is_readable($filename))
+        if (!file_exists($filename) || !is_readable($filename)) {
             return false;
+        }
 
         $header = null;
         $data = array();
