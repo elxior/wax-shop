@@ -3,6 +3,7 @@
 namespace Wax\Shop\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Redirect;
 use Wax\Shop\Models\Coupon;
 
@@ -87,12 +88,47 @@ class CouponController
      */
     public function bulkImportCoupons(Request $request)
     {
+        $path = $request->file('file')->getRealPath();
+        $data = $this->csvToArray($path);
+
+        foreach ($data as $record) {
+            foreach ($record as $key => $val) {
+                if ($val == 'NULL' || empty($val)) {
+                    unset($record[$key]);
+                }
+            }
+
+            Coupon::insert($record);
+        }
+
         return Redirect::to('admin/cms/coupons');
+    }
+
+    private function csvToArray($filename)
+    {
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        $header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            while (($row = fgetcsv($handle, 1000, ",", '"')) !== false)
+            {
+                if (!$header)
+                    $header = $row;
+                else
+                    $data[] = array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+
+        return $data;
     }
 
     /**
      * Export multiple coupons
-     * Can pass the title to only get those coupons
+     * Can pass the title to only get those couponsh
      *
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
