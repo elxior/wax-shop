@@ -28,7 +28,8 @@
         "laravel/framework": "5.4.*",
         "doctrine/dbal": "^2.5",
         "oohology/wax-cms": "dev-feature/shop-update-prep as 0.10.x-dev",
-        "avalara/avataxclient": "dev-visibility"
+        "avalara/avataxclient": "dev-visibility",
+        "barryvdh/laravel-omnipay": "0.2.*@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
