@@ -44,11 +44,7 @@ Route::group(['prefix' => 'admin/cms/coupons/bulk', 'middleware' => 'auth.panel'
 
     Route::post('generate', 'Admin\CouponController@bulkGenerateCoupons')->name('coupons.bulk.generate');
 
-    Route::get('export', function () {
-        return view('shop::pages.admin.coupons.bulk_export');
-    });
-
-    Route::post('export', 'Admin\CouponController@bulkExportCoupons')->name('coupons.bulk.export');
+    Route::get('export', 'Admin\CouponController@bulkExportCoupons')->name('coupons.bulk.export');
 
     Route::get('import', function () {
         return view('shop::pages.admin.coupons.bulk_import');

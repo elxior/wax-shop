@@ -20,20 +20,6 @@ class CouponController
      */
     public function bulkGenerateCoupons(Request $request)
     {
-        /*
-         * Array
-        (
-            [_token] => LeRTpmSdxSSKYsRXUbXqJy8HYCSaw48EJui9lkLY
-            [title] => Bulk Generated Coupons
-            [percent] => 50
-            [dollars] => 0.00
-            [minimum_order] => 0.00
-            [quantity] => 5
-            [expired_at] => 2017-12-01 12:00:00
-            [one_time] => 1
-            [action] => Generate
-        )
-         */
         $title = $request->get('title');
         $qty = (int)$request->get('quantity');
         $percent = $request->get('percent');
@@ -106,12 +92,54 @@ class CouponController
 
     /**
      * Export multiple coupons
+     * Can pass the title to only get those coupons
      *
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function bulkExportCoupons(Request $request)
     {
-        return Redirect::to('admin/cms/coupons');
+        $selectedFields = [
+            'code',
+            'expired_at',
+            'title',
+            'dollars',
+            'percent',
+            'minimum_order',
+            'one_time',
+            'include_shipping',
+            'created_at',
+            'updated_at',
+        ];
+
+        if (!empty($request->get('title'))) {
+            $data = Coupon::select($selectedFields)->where('title', $request->get('title'))->get()->toArray();
+        } else {
+            $data = Coupon::select($selectedFields)->get()->toArray();
+        }
+
+        if ($data === false || count($data) <= 0) {
+            return Redirect::to('admin/cms/coupons');
+        }
+
+        if (!is_dir(storage_path('coupons'))) {
+            mkdir(storage_path('coupons'));
+        }
+
+        $fileName = storage_path('coupons/coupons_export.csv');
+
+        $out = fopen($fileName, 'w');
+        if ($out === false) {
+            return Redirect::to('admin/cms/coupons');
+        }
+
+        fputcsv($out, array_keys($data[1]));
+        foreach($data as $line)
+        {
+            fputcsv($out, $line);
+        }
+        fclose($out);
+
+        return response()->download($fileName)->deleteFileAfterSend(true);
     }
 }
