@@ -3,7 +3,6 @@
 namespace Wax\Shop\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Redirect;
 use Wax\Shop\Models\Coupon;
 
@@ -104,6 +103,12 @@ class CouponController
         return Redirect::to('admin/cms/coupons');
     }
 
+    /**
+     * Method for converting CSV to an array
+     *
+     * @param $filename
+     * @return array|bool
+     */
     private function csvToArray($filename)
     {
         if (!file_exists($filename) || !is_readable($filename))
