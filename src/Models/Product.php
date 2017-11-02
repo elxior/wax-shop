@@ -2,7 +2,6 @@
 
 namespace Wax\Shop\Models;
 
-use App\Localization\Currency;
 use Wax\Shop\Models\Product\Category;
 use Wax\Shop\Models\Product\Image;
 use Wax\Shop\Models\Product\Option;
@@ -58,7 +57,6 @@ class Product extends Model
     protected $appends = [
         'url',
         'defaultImage',
-        'bundles',
     ];
 
     public function __construct($attributes = array())

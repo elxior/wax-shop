@@ -39,7 +39,6 @@ class Item extends Model
 
     protected $with = [
         'options',
-        'bundles',
     ];
 
     protected $hidden = [
@@ -54,7 +53,6 @@ class Item extends Model
         'shipping_flat_rate',
         'shipping_enable_rate_lookup',
         'shipping_disable_free_shipping',
-
     ];
 
     protected $appends = [
@@ -70,6 +68,7 @@ class Item extends Model
         'short_description',
         'url',
         'category',
+        'bundles',
     ];
 
     public function product()
@@ -77,13 +76,9 @@ class Item extends Model
         return $this->belongsTo(config('wax.shop.models.product'));
     }
 
-    /**
-     * Note: These are the available bundles, not active bundles
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function bundles()
+    public function getBundlesAttribute()
     {
-        return $this->belongsToMany(\Wax\Shop\Models\Bundle::class, 'product_bundle_links', 'product_id');
+        return $this->product->bundles;
     }
 
     public function shipment()
