@@ -62,11 +62,9 @@ class CouponController
                 } else {
                     $newCodes[] = $newCode;
                 }
-
             }
 
-            foreach ($newCodes as $code)
-            {
+            foreach ($newCodes as $code) {
                 $newCoupon = new Coupon;
                 $newCoupon->percent = $percent;
                 $newCoupon->title = $title;
@@ -122,14 +120,13 @@ class CouponController
 
         $header = null;
         $data = array();
-        if (($handle = fopen($filename, 'r')) !== false)
-        {
-            while (($row = fgetcsv($handle, 1000, ",", '"')) !== false)
-            {
-                if (!$header)
+        if (($handle = fopen($filename, 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, ",", '"')) !== false) {
+                if (!$header) {
                     $header = $row;
-                else
+                } else {
                     $data[] = array_combine($header, $row);
+                }
             }
             fclose($handle);
         }
@@ -181,8 +178,7 @@ class CouponController
         }
 
         fputcsv($out, array_keys($data[1]));
-        foreach($data as $line)
-        {
+        foreach ($data as $line) {
             fputcsv($out, $line);
         }
         fclose($out);
