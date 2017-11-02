@@ -51,8 +51,8 @@ class Product extends Model
         'featured',
         'category',
         'defaultImage',
+        'bundles',
     ];
-
 
     protected $appends = [
         'url',

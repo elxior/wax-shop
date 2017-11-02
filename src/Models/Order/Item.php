@@ -39,6 +39,7 @@ class Item extends Model
 
     protected $with = [
         'options',
+        'product.bundles.products'
     ];
 
     protected $hidden = [
