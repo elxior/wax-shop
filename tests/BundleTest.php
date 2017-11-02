@@ -4,6 +4,7 @@ namespace Tests\Shop;
 
 use Wax\Shop\Models\Bundle;
 use Wax\Shop\Models\Product;
+use Wax\Shop\Repositories\ProductRepository;
 use Wax\Shop\Services\ShopService;
 
 class BundleTest extends ShopBaseTestCase
@@ -59,7 +60,7 @@ class BundleTest extends ShopBaseTestCase
         $this->assertEquals($cartTotal - $discountTotal, $order->total);
     }
 
-    public function testCartItemsSuggestsBundles()
+    public function testOrderItemsSuggestBundles()
     {
         $product1 = factory(Product::class)->create();
         $product2 = factory(Product::class)->create();
@@ -80,5 +81,58 @@ class BundleTest extends ShopBaseTestCase
         $item = $order->items->first();
         $this->assertNotEmpty($item->bundles);
         $this->assertEquals(2, $item->bundles->first()->products->count());
+    }
+
+    public function testCartApiSuggestsBundles()
+    {
+        $product1 = factory(Product::class)->create();
+        $product2 = factory(Product::class)->create();
+
+        $bundle = Bundle::create([
+            'name' => 'Test Bundle',
+            'percent' => 10,
+        ]);
+        $bundle->products()->saveMany([$product1, $product2]);
+
+        $response = $this->json('POST', route('shop::api.cart.store'), [
+            'product_id' => $product1->id,
+            'quantity' => 1
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'items' => [
+                    0 => [
+                        'id' => $product1->id,
+                        'bundles' => [
+                            0 => [
+                                'id' => $bundle->id,
+                                'products' => [
+                                    0 => ['id' => $product1->id],
+                                    1 => ['id' => $product2->id],
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+    }
+
+    public function testRepoGetSuggestsBundles()
+    {
+        $product1 = factory(Product::class)->create();
+        $product2 = factory(Product::class)->create();
+
+        $bundle = Bundle::create([
+            'name' => 'Test Bundle',
+            'percent' => 10,
+        ]);
+        $bundle->products()->saveMany([$product1, $product2]);
+
+        $repo = app()->make(ProductRepository::class);
+        $product = $repo->get($product1->id);
+
+        $this->assertNotEmpty($product->bundles);
+        $this->assertEquals(2, $product->bundles->first()->products->count());
     }
 }
