@@ -71,7 +71,7 @@
                 "source": "https://github.com/avadev/AvaTax-REST-V2-PHP-SDK",
                 "issues": "https://github.com/avadev/AvaTax-REST-V2-PHP-SDK/issues"
             },
-            "time": "2017-09-28 20:00:10"
+            "time": "2017-09-28T20:00:10+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -1405,12 +1405,12 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.com:oohology/wax-cms.git",
-                "reference": "deb90d4f562f84710c92aad19814678c29eaeeee"
+                "reference": "279169b40e92f902c87d176841918339f5d974d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v3/projects/oohology%2Fwax-cms/repository/archive.zip?sha=deb90d4f562f84710c92aad19814678c29eaeeee",
-                "reference": "deb90d4f562f84710c92aad19814678c29eaeeee",
+                "url": "https://gitlab.com/api/v4/projects/oohology%2Fwax-cms/repository/archive.zip?sha=279169b40e92f902c87d176841918339f5d974d3",
+                "reference": "279169b40e92f902c87d176841918339f5d974d3",
                 "shasum": ""
             },
             "require": {
@@ -1468,7 +1468,7 @@
                 }
             ],
             "description": "WAX Cms system built on the Laravel Framework",
-            "time": "2017-10-31 17:42:21"
+            "time": "2017-11-03T20:09:41+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -3466,7 +3466,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v3/projects/oohology%2Fwax-app/repository/archive.zip?sha=966e148247515eaf91be08e50c5c24ee7fc43ffb",
+                "url": "https://gitlab.com/api/v4/projects/oohology%2Fwax-app/repository/archive.zip?sha=966e148247515eaf91be08e50c5c24ee7fc43ffb",
                 "reference": "966e148247515eaf91be08e50c5c24ee7fc43ffb",
                 "shasum": ""
             },
@@ -3517,7 +3517,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-10-26 23:06:35"
+            "time": "2017-10-26T23:06:35+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
