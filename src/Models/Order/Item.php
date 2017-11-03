@@ -2,6 +2,7 @@
 
 namespace Wax\Shop\Models\Order;
 
+use Wax\Core\Eloquent\Traits\HasDynamicCasts;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Models\Product\OptionModifier;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Item extends Model
 {
+    use HasDynamicCasts;
+
     protected $table = 'order_items';
     protected $fillable = [
         'product_id',
@@ -54,6 +57,10 @@ class Item extends Model
         'shipping_flat_rate',
         'shipping_enable_rate_lookup',
         'shipping_disable_free_shipping',
+    ];
+
+    protected $casts = [
+        'discount_amount' => 'currency',
     ];
 
     protected $appends = [
