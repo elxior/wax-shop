@@ -92,6 +92,11 @@ class ShopServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../../resources/views/', 'shop');
 
         $this->app->make('Illuminate\Database\Eloquent\Factory')->load(__DIR__ . '/../../database/factories');
+
+        // add example CSV to project
+        $this->publishes([
+            __DIR__ . '/../../resources/coupons/example_coupon_import.csv' => public_path('res/uploads/shop/coupons/example_coupon_import.csv')
+        ], 'public');
     }
 
     protected function registerConfig()
