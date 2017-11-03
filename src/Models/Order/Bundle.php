@@ -19,7 +19,7 @@ class Bundle extends Model
         'items',
     ];
     protected $with = [
-        'items'
+        //'items'
     ];
 
     public function items()

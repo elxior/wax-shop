@@ -66,7 +66,7 @@ use Illuminate\Support\Facades\Session;
 class Order extends Model
 {
     protected $table = 'orders';
-    protected $with = ['shipments', 'payments', 'coupon'];
+    protected $with = ['shipments', 'payments', 'coupon', 'bundles'];
     protected $appends = [
         'default_shipment',
         'items',
@@ -348,9 +348,6 @@ class Order extends Model
 
     protected function applyBundleDiscounts()
     {
-        // trigger individual deletes so the 'deleting' event is caught
-        $this->bundles->each->delete();
-
         $orderProductIds = $this->items->pluck('product_id');
 
         $bundles = Bundle::whereHas('products', function ($query) use ($orderProductIds) {
@@ -369,6 +366,7 @@ class Order extends Model
 
             $items->each(function ($item) use ($orderBundle) {
                 $item->discount_amount = round($item->gross_subtotal * $orderBundle->percent / 100, 2);
+                $item->bundle_id = $orderBundle->id;
                 $item->save();
             });
 
@@ -382,6 +380,9 @@ class Order extends Model
 
     protected function resetDiscounts()
     {
+        // trigger individual deletes so the 'deleting' event is caught
+        $this->bundles->each->delete();
+
         $this->shipments->each(function ($shipment) {
             $shipment->shipping_discount_amount = null;
             $shipment->save();
@@ -390,6 +391,7 @@ class Order extends Model
         $this->items->each(function ($item) {
             $item->discountable = null;
             $item->discount_amount = null;
+            $item->bundle_id = null;
             $item->save();
         });
 
@@ -397,6 +399,8 @@ class Order extends Model
             $this->coupon->calculated_value = null;
             $this->coupon->save();
         }
+
+        $this->refresh();
     }
 
     public function validateTax() : bool
