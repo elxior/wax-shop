@@ -92,8 +92,9 @@ class CouponController
 
                 $newCoupon->save();
             }
+        } else {
+            return view('shop::pages.admin.coupons.bulk_generate', ['error_msg' => $error_msg]);
         }
-
 
         return Redirect::to('admin/cms/coupons');
     }

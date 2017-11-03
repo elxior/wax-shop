@@ -13,8 +13,14 @@
             <form enctype="multipart/form-data" action="{{ URL::route('shop::coupons::generate') }}" method="post">
                 {{ csrf_field() }}
                 <div class="cms-col-wide">
-                    <div style="color: #ff0000; font-weight: bold;">
-                    </div>
+                    @if (!empty($error_msg))
+                        @foreach ($error_msg as $msg)
+                        <div style="color: #ff0000; font-weight: bold;">
+                            {{ $msg }}
+                        </div>
+                        @endforeach
+                        <br>
+                    @endif
 
                     <div style="color: green; font-weight: bold;">
                     </div>
