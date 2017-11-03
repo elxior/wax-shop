@@ -10,7 +10,7 @@
             Bulk Import Coupons
         </div>
         <div class="edit_body group">
-            <form enctype="multipart/form-data" action="{{ URL::route('shop::coupons.bulk.import') }}" method="post">
+            <form enctype="multipart/form-data" action="{{ URL::route('shop::coupons::import') }}" method="post">
                 {{ csrf_field() }}
                 <div class="cms-col-wide">
                     <div style="color: #ff0000; font-weight: bold;">
