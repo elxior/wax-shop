@@ -2,8 +2,7 @@
 
 namespace Wax\Shop\Models;
 
-//use App\Contracts\CanMakeEntitiesContract;
-use App\Localization\Currency;
+use Wax\Core\Eloquent\Traits\HasDynamicCasts;
 use Wax\Shop\Models\Product\Category;
 use Wax\Shop\Models\Product\Image;
 use Wax\Shop\Models\Product\Option;
@@ -11,7 +10,6 @@ use Wax\Shop\Models\Product\OptionModifier;
 use Wax\Shop\Models\Product\OptionValue;
 use App\Wax\Lang;
 use Wax\Shop\Scopes\ActiveScope;
-//use App\Traits\CanMakeEntities;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,9 +34,8 @@ use Illuminate\Database\Eloquent\Builder;
  *
  */
 class Product extends Model
-    //implements CanMakeEntitiesContract
 {
-    //use CanMakeEntities;
+    use HasDynamicCasts;
 
     // model stuff
     protected $table = 'products';
@@ -57,13 +54,16 @@ class Product extends Model
         'featured',
         'category',
         'defaultImage',
+        'bundles',
     ];
 
+    protected $casts = [
+        'price' => 'currency'
+    ];
 
     protected $appends = [
         'url',
         'defaultImage',
-        'bundles',
     ];
 
     public function __construct($attributes = array())

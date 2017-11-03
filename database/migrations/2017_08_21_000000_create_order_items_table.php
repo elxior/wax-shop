@@ -41,6 +41,7 @@ class CreateOrderItemsTable extends Migration
             $table->boolean('taxable')->nullable();
             $table->boolean('discountable')->nullable();
             $table->decimal('discount_amount', 15, 4)->nullable();
+            $table->unsignedInteger('bundle_id')->nullable();
         });
     }
 
