@@ -96,7 +96,7 @@ $structure['fields'][] = [
     'display_name' => 'Expiration Date',
     'type' => 'sqltimestamp',
     'validate' => true,
-    'notes' => 'Coupon is valid through 11:59 pm on the expiration date.',
+    'notes' => '',
     'nullable' => true,
 ];
 

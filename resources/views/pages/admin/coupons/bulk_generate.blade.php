@@ -29,7 +29,7 @@
                         <div class="field-heading"><label class="cmsFieldLabel" for="title">Title</label></div>
                         <div class="body-container">
                             <div class="inputContainer" id="inputContainer_title">
-                                <input type="text" name="title" id="title" value="">
+                                <input type="text" name="title" id="title" value="{{ $title or '' }}">
                             </div>
                         </div>
                         <div style="clear: both;"></div>
@@ -44,7 +44,7 @@
                                             <label for="percent">
                                                 Percent Off
                                             </label>
-                                            <input type="number" name="percent" id="percent" value="0" min="0" max="50" step="1">
+                                            <input type="number" name="percent" id="percent" value="{{ $percent or '0' }}" min="0" max="50" step="1">
                                             <div class="cms_notes"></div>
                                         </div>
 
@@ -54,7 +54,7 @@
                                             <label for="dollars">
                                                 Dollars Off
                                             </label>
-                                            <input type="number" name="dollars" id="dollars" value="0.00" min="0" step="0.01">
+                                            <input type="number" name="dollars" id="dollars" value="{{ $dollars or '0.00' }}" min="0" step="0.01">
                                             <div class="cms_notes"></div>
                                         </div>
 
@@ -64,7 +64,7 @@
                                             <label for="minimum_order">
                                                 Minimum Order
                                             </label>
-                                            <input type="number" name="minimum_order" id="minimum_order" value="0.00" min="0" step="0.01">
+                                            <input type="number" name="minimum_order" id="minimum_order" value="{{ $minimum_order or '0.00' }}" min="0" step="0.01">
                                             <div class="cms_notes"></div>
                                         </div>
 
@@ -83,7 +83,7 @@
                                     <td class="field-container">
                                         <div class="inputContainer" id="inputContainer_code">
                                             <label for="quantity">Quantity</label>
-                                            <input type="text" name="quantity" id="quantity" style="width: 50px;">
+                                            <input type="text" name="quantity" id="quantity" style="width: 50px;" value="{{ $quantity or '' }}">
                                             <div class="cms_notes">
                                                 <em>Number of codes to generate</em>
                                             </div>
@@ -94,7 +94,7 @@
                                             <label for="expired_at">
                                                 Expiration Date
                                             </label>
-                                            <input type="text" name="expired_at" id="expired_at" value="2017-12-01 12:00:00" style="max-width: 250px;" class="flatpickr-input active">
+                                            <input type="text" name="expired_at" id="expired_at" value="{{ $expired_at or '' }}" style="max-width: 250px;" class="flatpickr-input active">
 
                                             <script type="text/javascript">
                                                 $(function(){
@@ -104,7 +104,6 @@
                                                     });
                                                 });
                                             </script>
-                                            <div class="cms_notes">Coupon is valid through 11:59 pm on the expiration date.</div>
                                         </div>
 
                                     </td>

@@ -82,6 +82,7 @@ class CouponController
 
             foreach ($newCodes as $code) {
                 $newCoupon = new Coupon;
+
                 $newCoupon->percent = $percent;
                 $newCoupon->title = $title;
                 $newCoupon->expired_at = $expired_at;
@@ -93,7 +94,15 @@ class CouponController
                 $newCoupon->save();
             }
         } else {
-            return view('shop::pages.admin.coupons.bulk_generate', ['error_msg' => $error_msg]);
+            return view('shop::pages.admin.coupons.bulk_generate', [
+                'error_msg' => $error_msg,
+                'title' => $title,
+                'dollars' => $dollars,
+                'expired_at' => $expired_at,
+                'minimum_order' => $minimum,
+                'percent' => $percent,
+                'quantity' => $qty,
+            ]);
         }
 
         return Redirect::to('admin/cms/coupons');
