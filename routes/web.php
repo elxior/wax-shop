@@ -38,17 +38,11 @@ Route::group(['prefix' => 'shop'], function () {
 });
 
 Route::group(['prefix' => 'admin/cms/coupons/bulk', 'middleware' => 'auth.panel'], function() {
-    Route::get('generate', function () {
-        return view('shop::pages.admin.coupons.bulk_generate');
-    });
-
+    Route::get('generate', 'Admin\CouponController@showGenerateForm')->name('coupons.bulk.generate.form');
     Route::post('generate', 'Admin\CouponController@bulkGenerateCoupons')->name('coupons.bulk.generate');
 
     Route::get('export', 'Admin\CouponController@bulkExportCoupons')->name('coupons.bulk.export');
 
-    Route::get('import', function () {
-        return view('shop::pages.admin.coupons.bulk_import');
-    });
-
+    Route::get('import', 'Admin\CouponController@showImportForm')->name('coupons.bulk.import.form');
     Route::post('import', 'Admin\CouponController@bulkImportCoupons')->name('coupons.bulk.import');
 });

@@ -13,6 +13,22 @@ use Wax\Shop\Models\Coupon;
 class CouponController
 {
     /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showGenerateForm()
+    {
+        return view('shop::pages.admin.coupons.bulk_generate');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showImportForm()
+    {
+        return view('shop::pages.admin.coupons.bulk_import');
+    }
+
+    /**
      * Generate multiple coupons from given data
      *
      * @param Request $request
