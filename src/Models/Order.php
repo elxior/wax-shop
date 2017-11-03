@@ -82,6 +82,8 @@ class Order extends Model
         'tax_subtotal',
         'gross_total',
         'coupon_value',
+        'bundle_value',
+        'discount_amount',
         'total',
     ];
 

@@ -173,6 +173,11 @@ class BundleTest extends ShopBaseTestCase
                 'quantity' => 1
             ]);
 
+        $product1Discount = round($product1->price *.1, 2);
+        $product2Discount = round($product2->price *.1, 2);
+
+        $discountTotal = round($product1Discount + $product2Discount, 2);
+
         $response->assertStatus(200)
             ->assertJson([
                 'bundles' => [
@@ -182,12 +187,16 @@ class BundleTest extends ShopBaseTestCase
                     0 => [
                         'id' => $product1->id,
                         'bundle_id' => 1,
+                        'discount_amount' => $product1Discount,
                     ],
                     1 => [
                         'id' => $product2->id,
                         'bundle_id' => 1,
+                        'discount_amount' => $product2Discount,
                     ]
-                ]
+                ],
+                'bundle_value' => $discountTotal,
+                'discount_amount' => $discountTotal,
             ]);
     }
 }
