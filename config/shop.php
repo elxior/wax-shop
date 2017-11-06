@@ -18,5 +18,15 @@ return [
     ],
     'models' => [
         'product' => Wax\Shop\Models\Product::class,
+    ],
+    'payment' => [
+        'drivers' => [
+            'authorizenet_cim' => [
+                'api_login_id' => env('AUTHORIZE_NET_API_LOGIN_ID'),
+                'transaction_key' => env('AUTHORIZE_NET_TRANSACTION_KEY'),
+                'test_mode' => env('AUTHORIZE_NET_TEST_MODE', false),
+                'developer_mode' => env('AUTHORIZE_NET_DEVELOPER_MODE', true),
+            ]
+        ]
     ]
 ];
