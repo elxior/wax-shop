@@ -12,5 +12,4 @@ class AuthorizeNetCimDriver
     {
         //$this->gateway = Omnipay::
     }
-
 }
