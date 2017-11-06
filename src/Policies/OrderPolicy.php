@@ -17,11 +17,6 @@ class OrderPolicy
             return true;
         }
 
-        $privilege = $authRepo->getPrivilege('Superuser');
-        if ($authRepo->userHasPrivilege($user, $privilege)) {
-            return true;
-        }
-
         return $user->id === $order->user_id;
     }
 }
