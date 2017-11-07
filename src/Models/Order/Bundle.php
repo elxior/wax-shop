@@ -4,6 +4,7 @@ namespace Wax\Shop\Models\Order;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Wax\Core\Eloquent\Traits\HasDynamicCasts;
 
 /**
  * @property string $name
@@ -12,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Bundle extends Model
 {
+    use HasDynamicCasts;
+
     protected $table = 'order_bundles';
     protected $fillable = [
         'name',
@@ -19,7 +22,10 @@ class Bundle extends Model
         'items',
     ];
     protected $with = [
-        'items'
+        //'items'
+    ];
+    protected $casts = [
+        'calculated_value' => 'currency'
     ];
 
     public function items()

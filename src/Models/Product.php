@@ -2,6 +2,7 @@
 
 namespace Wax\Shop\Models;
 
+use Wax\Core\Eloquent\Traits\HasDynamicCasts;
 use Wax\Shop\Models\Product\Category;
 use Wax\Shop\Models\Product\Image;
 use Wax\Shop\Models\Product\Option;
@@ -34,6 +35,8 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class Product extends Model
 {
+    use HasDynamicCasts;
+
     // model stuff
     protected $table = 'products';
     protected $with = [
@@ -52,6 +55,10 @@ class Product extends Model
         'category',
         'defaultImage',
         'bundles',
+    ];
+
+    protected $casts = [
+        'price' => 'currency'
     ];
 
     protected $appends = [
