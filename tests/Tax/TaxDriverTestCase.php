@@ -5,16 +5,16 @@ namespace Tests\Shop\Tax;
 use Faker\Factory;
 use Tests\Shop\Traits\SetsShippingAddress;
 use Tests\Shop\ShopBaseTestCase;
-use Wax\Shop\Exceptions\Tax\AddressException;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Services\ShopService;
+use Wax\Shop\Tax\Exceptions\AddressException;
 
 class TaxDriverTestCase extends ShopBaseTestCase
 {
     use SetsShippingAddress;
 
-    /* @var \App\Shop\Services\ShopService */
+    /* @var \Wax\Shop\Services\ShopService */
     protected $shopService;
 
     /* @var \Faker\Generator */

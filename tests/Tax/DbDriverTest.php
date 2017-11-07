@@ -5,7 +5,7 @@ namespace Tests\Shop\Tax;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Models\Tax;
-use Wax\Shop\Drivers\Tax\DbDriver;
+use Wax\Shop\Tax\Drivers\DbDriver;
 
 class DbDriverTest extends TaxDriverTestCase
 {

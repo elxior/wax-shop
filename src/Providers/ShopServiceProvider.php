@@ -2,25 +2,6 @@
 
 namespace Wax\Shop\Providers;
 
-use Wax\Admin\Cms\Cms;
-use Wax\Shop\Contracts\OrderChangedEventContract;
-use Wax\Shop\Contracts\Tax\TaxDriverContract;
-use Wax\Shop\Events\OrderChanged\CartContentsChangedEvent;
-use Wax\Shop\Events\OrderChanged\ShippingAddressChangedEvent;
-use Wax\Shop\Events\OrderChanged\ShippingServiceChangedEvent;
-use Wax\Shop\Filters\CatalogFilterAggregator;
-use Wax\Shop\Http\Controllers\CatalogController;
-use Wax\Shop\Listeners\ApplyProductBundleListener;
-use Wax\Shop\Listeners\InvalidateOrderShippingListener;
-use Wax\Shop\Listeners\InvalidateOrderTaxListener;
-use Wax\Shop\Listeners\LoginListener;
-use Wax\Shop\Listeners\RecalculateDiscountsListener;
-use Wax\Shop\Listeners\SessionMigrationListener;
-use Wax\Shop\Models\Order\Bundle;
-use Wax\Shop\Models\Order\Item;
-use Wax\Shop\Observers\OrderItemObserver;
-use Wax\Shop\Repositories\ProductRepository;
-use Wax\Shop\Services\ShopService;
 use Avalara\AvaTaxClient;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Database\Eloquent\Model;
@@ -32,6 +13,25 @@ use Illuminate\Support\ServiceProvider;
 use Wax\Core\Contracts\FilterAggregatorContract;
 use Wax\Core\Contracts\FilterableRepositoryContract;
 use Wax\Core\Events\SessionMigrationEvent;
+use Wax\Admin\Cms\Cms;
+use Wax\Shop\Contracts\OrderChangedEventContract;
+use Wax\Shop\Events\OrderChanged\CartContentsChangedEvent;
+use Wax\Shop\Events\OrderChanged\ShippingAddressChangedEvent;
+use Wax\Shop\Events\OrderChanged\ShippingServiceChangedEvent;
+use Wax\Shop\Filters\CatalogFilterAggregator;
+use Wax\Shop\Http\Controllers\CatalogController;
+use Wax\Shop\Listeners\InvalidateOrderShippingListener;
+use Wax\Shop\Listeners\InvalidateOrderTaxListener;
+use Wax\Shop\Listeners\LoginListener;
+use Wax\Shop\Listeners\RecalculateDiscountsListener;
+use Wax\Shop\Listeners\SessionMigrationListener;
+use Wax\Shop\Models\Order\Bundle;
+use Wax\Shop\Models\Order\Item;
+use Wax\Shop\Observers\OrderBundleObserver;
+use Wax\Shop\Observers\OrderItemObserver;
+use Wax\Shop\Repositories\ProductRepository;
+use Wax\Shop\Services\ShopService;
+use Wax\Shop\Tax\Contracts\TaxDriverContract;
 
 class ShopServiceProvider extends ServiceProvider
 {

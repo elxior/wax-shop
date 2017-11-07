@@ -1,16 +1,16 @@
 <?php
 
-namespace Wax\Shop\Drivers\Tax;
+namespace Wax\Shop\Tax\Drivers;
 
-use Wax\Shop\Contracts\Tax\TaxDriverContract;
-use Wax\Shop\Exceptions\Tax\AddressException;
-use Wax\Shop\Exceptions\Tax\ApiException;
-use Wax\Shop\Support\Tax\LineItem;
-use Wax\Shop\Support\Tax\Request;
-use Wax\Shop\Support\Tax\Response;
 use Avalara\AvaTaxClient;
 use Avalara\DocumentType;
 use Avalara\TransactionBuilder;
+use Wax\Shop\Tax\Contracts\TaxDriverContract;
+use Wax\Shop\Tax\Exceptions\AddressException;
+use Wax\Shop\Tax\Exceptions\ApiException;
+use Wax\Shop\Tax\Support\LineItem;
+use Wax\Shop\Tax\Support\Request;
+use Wax\Shop\Tax\Support\Response;
 
 /**
  * Tax driver for the AvaTax service by Avalara. Requires the AvaTax SDK, available via Composer.

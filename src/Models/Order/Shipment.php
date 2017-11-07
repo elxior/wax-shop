@@ -2,7 +2,6 @@
 
 namespace Wax\Shop\Models\Order;
 
-use Wax\Shop\Contracts\Tax\TaxDriverContract;
 use Wax\Shop\Events\OrderChanged\CartContentsChangedEvent;
 use Wax\Shop\Events\OrderChanged\ShippingAddressChangedEvent;
 use Wax\Shop\Events\OrderChanged\ShippingServiceChangedEvent;
@@ -10,10 +9,11 @@ use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Facades\ShopServiceFacade;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Product;
-use Wax\Shop\Support\Tax\Address;
-use Wax\Shop\Support\Tax\LineItem;
-use Wax\Shop\Support\Tax\Request;
-use Wax\Shop\Support\Tax\Shipping;
+use Wax\Shop\Tax\Contracts\TaxDriverContract;
+use Wax\Shop\Tax\Support\Address;
+use Wax\Shop\Tax\Support\LineItem;
+use Wax\Shop\Tax\Support\Request;
+use Wax\Shop\Tax\Support\Shipping;
 use Wax\Shop\Validators\CreateOrderItemValidator;
 use Wax\Shop\Validators\DeleteOrderItemValidator;
 use Wax\Shop\Validators\OrderItemQuantityValidator;

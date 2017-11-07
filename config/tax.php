@@ -1,6 +1,6 @@
 <?php
 return [
-    'driver' => \Wax\Shop\Drivers\Tax\DbDriver::class,
+    'driver' => \Wax\Shop\Tax\Drivers\DbDriver::class,
 
     'avalara' => [
         'account_id' => env('AVALARA_ACCOUNT_ID', 'xxx'),

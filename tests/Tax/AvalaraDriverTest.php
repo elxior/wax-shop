@@ -3,10 +3,10 @@
 namespace Tests\Shop\Tax;
 
 use Avalara\AvaTaxClient;
-use Wax\Shop\Drivers\Tax\AvalaraDriver;
-use Wax\Shop\Exceptions\Tax\AddressException;
-use Wax\Shop\Exceptions\Tax\ApiException;
 use Wax\Shop\Models\Product;
+use Wax\Shop\Tax\Drivers\AvalaraDriver;
+use Wax\Shop\Tax\Exceptions\AddressException;
+use Wax\Shop\Tax\Exceptions\ApiException;
 
 class AvalaraDriverTest extends TaxDriverTestCase
 {

@@ -5,10 +5,10 @@ namespace Tests\Shop\Tax;
 use Faker\Factory;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
-use Wax\Shop\Support\Tax\Address;
-use Wax\Shop\Support\Tax\LineItem;
-use Wax\Shop\Support\Tax\Request;
-use Wax\Shop\Support\Tax\Shipping;
+use Wax\Shop\Tax\Support\Address;
+use Wax\Shop\Tax\Support\LineItem;
+use Wax\Shop\Tax\Support\Request;
+use Wax\Shop\Tax\Support\Shipping;
 
 class RequestTest extends TestCase
 {

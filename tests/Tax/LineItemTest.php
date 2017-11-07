@@ -4,7 +4,7 @@ namespace Tests\Shop\Tax;
 
 use Faker\Factory;
 use Tests\TestCase;
-use Wax\Shop\Support\Tax\LineItem;
+use Wax\Shop\Tax\Support\LineItem;
 
 class LineItemTest extends TestCase
 {

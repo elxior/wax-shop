@@ -4,7 +4,7 @@ namespace Tests\Shop\Tax;
 
 use Faker\Factory;
 use Tests\TestCase;
-use Wax\Shop\Support\Tax\Response;
+use Wax\Shop\Tax\Support\Response;
 
 class ResponseTest extends TestCase
 {

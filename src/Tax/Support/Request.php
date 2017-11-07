@@ -1,6 +1,6 @@
 <?php
 
-namespace Wax\Shop\Support\Tax;
+namespace Wax\Shop\Tax\Support;
 
 use Exception;
 use Illuminate\Support\Collection;

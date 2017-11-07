@@ -1,12 +1,13 @@
 <?php
 
-namespace Wax\Shop\Validators;
+namespace Wax\Shop\Payment\Validators;
 
 use Omnipay\Common\CreditCard;
 use Omnipay\Common\Helper;
 use Illuminate\Support\MessageBag;
+use Wax\Shop\Validators\AbstractValidator;
 
-class CreditCardValidator extends AbstractValidator
+class CreditCardPreValidator extends AbstractValidator
 {
     protected $card;
 
@@ -20,31 +21,31 @@ class CreditCardValidator extends AbstractValidator
         $this->messages = new MessageBag;
 
         if (!strlen($this->card->getNumber()) || !Helper::validateLuhn($this->card->getNumber())) {
-            $this->errors()->add('', 'Credit card number is invalid.');
+            $this->errors()->add('number', 'Credit card number is invalid.');
         }
 
         if (empty($this->card->getExpiryMonth()) || empty($this->card->getExpiryYear())) {
-            $this->errors()->add('', 'Credit Card expiration date is required.');
+            $this->errors()->add('number', 'Credit Card expiration date is required.');
         }
 
         if (empty($this->card->getCvv())) {
-            $this->errors()->add('', 'Credit Card security code is required.');
+            $this->errors()->add('cvc', 'Credit Card security code is required.');
         }
 
         if (empty($this->card->getFirstName())) {
-            $this->errors()->add('', 'First Name is required on billing address.');
+            $this->errors()->add('firstName', 'First Name is required on billing address.');
         }
 
         if (empty($this->card->getLastName())) {
-            $this->errors()->add('', 'Last Name is required on billing address.');
+            $this->errors()->add('lastName', 'Last Name is required on billing address.');
         }
 
         if (empty($this->card->getBillingAddress1())) {
-            $this->errors()->add('', 'Billing Address is required.');
+            $this->errors()->add('address1', 'Billing Address is required.');
         }
 
         if (empty($this->card->getPostcode())) {
-            $this->errors()->add('', 'Zip / Postal Code is required on billing address.');
+            $this->errors()->add('zip', 'Zip / Postal Code is required on billing address.');
         }
 
         return $this->messages->isEmpty();

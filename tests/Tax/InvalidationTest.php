@@ -5,12 +5,12 @@ namespace Tests\Shop\Tax;
 use Faker\Factory;
 use Tests\Shop\Traits\SetsShippingAddress;
 use Tests\Shop\ShopBaseTestCase;
-use Wax\Shop\Drivers\Tax\DbDriver;
 use Wax\Shop\Facades\ShopServiceFacade;
 use Wax\Shop\Models\Coupon;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Models\Tax;
+use Wax\Shop\Tax\Drivers\DbDriver;
 
 class InvalidationTest extends ShopBaseTestCase
 {

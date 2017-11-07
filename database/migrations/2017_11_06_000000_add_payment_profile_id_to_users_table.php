@@ -20,7 +20,7 @@ class AddPaymentProfileIdToUsersTable extends Migration
     public function up()
     {
         Schema::table($this->set_schema_table, function (Blueprint $table) {
-            $table->string('payment_profile_id');
+            $table->string('payment_profile_id')->nullable();
         });
     }
 

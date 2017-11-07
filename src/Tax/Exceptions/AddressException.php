@@ -1,6 +1,6 @@
 <?php
 
-namespace Wax\Shop\Exceptions\Tax;
+namespace Wax\Shop\Tax\Exceptions;
 
 class AddressException extends \Exception
 {
