@@ -37,7 +37,7 @@ Route::group(['prefix' => 'shop'], function () {
     Route::get('{slug}', 'CatalogController@show')->name('productDetail');
 });
 
-Route::group(['prefix' => 'admin/cms/coupons/bulk', 'middleware' => 'auth.panel', 'as' => 'coupons::'], function() {
+Route::group(['prefix' => 'admin/cms/coupons', 'middleware' => 'auth.panel', 'as' => 'coupons::'], function() {
     Route::get('generate', 'Admin\CouponController@showGenerateForm')->name('generate.form');
     Route::post('generate', 'Admin\CouponController@bulkGenerateCoupons')->name('generate');
 

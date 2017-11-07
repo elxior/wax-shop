@@ -1,10 +1,18 @@
 @extends('admin::layouts.base')
 
 @section('head')
-
+    <script type="text/javascript" src="{{ URL::to('/') }}/assets/vendor/wax/admin/js/flatpickr.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ URL::to('/') }}/assets/vendor/wax/admin/css/flatpickr.min.css" />
 @stop
 
 @section('body')
+    @if ($errors->any())
+        <ul class="errors" style="color: #ff0000; font-weight: bold;">
+            @foreach($errors->all() as $message)
+                <li>{{ $message }}</li>
+            @endforeach
+        </ul>
+    @endif
     <div class="cms-edit-box group">
         <div class="edit-heading icon-edit">
             Bulk Generate Coupons
@@ -13,23 +21,11 @@
             <form enctype="multipart/form-data" action="{{ URL::route('shop::coupons::generate') }}" method="post">
                 {{ csrf_field() }}
                 <div class="cms-col-wide">
-                    @if (!empty($error_msg))
-                        @foreach ($error_msg as $msg)
-                        <div style="color: #ff0000; font-weight: bold;">
-                            {{ $msg }}
-                        </div>
-                        @endforeach
-                        <br>
-                    @endif
-
-                    <div style="color: green; font-weight: bold;">
-                    </div>
-
                     <div class="edit-container field-container">
                         <div class="field-heading"><label class="cmsFieldLabel" for="title">Title</label></div>
                         <div class="body-container">
                             <div class="inputContainer" id="inputContainer_title">
-                                <input type="text" name="title" id="title" value="{{ $title or '' }}">
+                                <input type="text" name="title" id="title" value="{{ session()->getOldInput('title', null) }}">
                             </div>
                         </div>
                         <div style="clear: both;"></div>
@@ -44,7 +40,7 @@
                                             <label for="percent">
                                                 Percent Off
                                             </label>
-                                            <input type="number" name="percent" id="percent" value="{{ $percent or '0' }}" min="0" max="50" step="1">
+                                            <input type="number" name="percent" id="percent" value="{{ session()->getOldInput('percent', null) }}" min="0" max="50" step="1">
                                             <div class="cms_notes"></div>
                                         </div>
 
@@ -54,7 +50,7 @@
                                             <label for="dollars">
                                                 Dollars Off
                                             </label>
-                                            <input type="number" name="dollars" id="dollars" value="{{ $dollars or '0.00' }}" min="0" step="0.01">
+                                            <input type="number" name="dollars" id="dollars" value="{{ session()->getOldInput('dollars', null) }}" min="0" step="0.01">
                                             <div class="cms_notes"></div>
                                         </div>
 
@@ -64,7 +60,7 @@
                                             <label for="minimum_order">
                                                 Minimum Order
                                             </label>
-                                            <input type="number" name="minimum_order" id="minimum_order" value="{{ $minimum_order or '0.00' }}" min="0" step="0.01">
+                                            <input type="number" name="minimum_order" id="minimum_order" value="{{ session()->getOldInput('minimum_order', null) }}" min="0" step="0.01">
                                             <div class="cms_notes"></div>
                                         </div>
 
@@ -83,7 +79,7 @@
                                     <td class="field-container">
                                         <div class="inputContainer" id="inputContainer_code">
                                             <label for="quantity">Quantity</label>
-                                            <input type="text" name="quantity" id="quantity" style="width: 50px;" value="{{ $quantity or '' }}">
+                                            <input type="text" name="quantity" id="quantity" style="width: 50px;" value="{{ session()->getOldInput('quantity', null) }}">
                                             <div class="cms_notes">
                                                 <em>Number of codes to generate</em>
                                             </div>
@@ -94,7 +90,7 @@
                                             <label for="expired_at">
                                                 Expiration Date
                                             </label>
-                                            <input type="text" name="expired_at" id="expired_at" value="{{ $expired_at or '' }}" style="max-width: 250px;" class="flatpickr-input active">
+                                            <input type="text" name="expired_at" id="expired_at" value="{{ session()->getOldInput('expired_at', null) }}" style="max-width: 250px;" class="flatpickr-input active">
 
                                             <script type="text/javascript">
                                                 $(function(){

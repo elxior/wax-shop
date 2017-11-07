@@ -3,6 +3,7 @@
 namespace Wax\Shop\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Redirect;
 use Wax\Shop\Models\Coupon;
 
@@ -36,76 +37,66 @@ class CouponController
      */
     public function bulkGenerateCoupons(Request $request)
     {
-        $title = $request->get('title');
-        $qty = (int)$request->get('quantity');
-        $percent = $request->get('percent');
-        $dollars = $request->get('dollars');
-        $minimum = $request->get('minimum');
-        $expired_at = $request->get('expired_at');
-        $oneTime = (int)$request->get('one_time');
+        $validator = $this->getGeneratorValidator($request->all());
 
-        if ($title == '') {
-            $error_msg[] = 'Please enter a Title.';
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withInput($request->all())
+                ->withErrors($validator->errors());
         }
 
-        if ($dollars == 0 && $percent == 0) {
-            $error_msg[] = 'Please set either "Dollars Off" or "Percent Off".';
-        }
-
-        if ($dollars> 0 && $percent > 0) {
-            $error_msg[] = 'You may set only one of "Dollars Off" or "Percent Off".';
-        }
-
-        if ($qty == 0) {
-            $error_msg[] = 'Please enter a Quantity.';
-        }
-
-        if (empty($error_msg)) {
-            // pull current Codes
-            $currentCodes = Coupon::select('code')->get()->toArray();
-            $chars = 'BC2DF3GH4JK6MP7QR8TV9WXY';
-            $numChars = strlen($chars) - 1;
-            $newCodes = [];
-            for ($n = 1; $n <= $qty; $n++) {
-                $newCode = '';
-                for ($c = 1; $c <= 8; $c++) {
-                    $r = rand(0, $numChars);
-                    $newCode .= substr($chars, $r, 1);
-                }
-
-                if (in_array($newCode, $currentCodes)) {
-                    $n--;
-                } else {
-                    $newCodes[] = $newCode;
-                }
+        // pull current Codes
+        $currentCodes = Coupon::select('code')->get()->toArray();
+        $chars = 'BC2DF3GH4JK6MP7QR8TV9WXY';
+        $numChars = strlen($chars) - 1;
+        $newCodes = [];
+        for ($n = 1; $n <= $request->get('quantity', 0); $n++) {
+            $newCode = '';
+            for ($c = 1; $c <= 8; $c++) {
+                $r = rand(0, $numChars);
+                $newCode .= substr($chars, $r, 1);
             }
 
-            foreach ($newCodes as $code) {
-                $newCoupon = new Coupon;
-
-                $newCoupon->percent = $percent;
-                $newCoupon->title = $title;
-                $newCoupon->expired_at = $expired_at;
-                $newCoupon->dollars = $dollars;
-                $newCoupon->minimum_order = $minimum;
-                $newCoupon->code = $code;
-                $newCoupon->one_time = $oneTime;
-
-                $newCoupon->save();
+            if (in_array($newCode, $currentCodes)) {
+                $n--;
+            } else {
+                $newCodes[] = $newCode;
             }
-        } else {
-            return view('shop::pages.admin.coupons.bulk_generate', [
-                'error_msg' => $error_msg,
-                'title' => $title,
-                'dollars' => $dollars,
-                'expired_at' => $expired_at,
-                'minimum_order' => $minimum,
-                'percent' => $percent,
-                'quantity' => $qty,
-            ]);
         }
 
+        foreach ($newCodes as $code) {
+            $newCoupon = new Coupon;
+
+            $newCoupon->percent = (int)$request->get('percent', 0);
+            $newCoupon->title = $request->get('title');
+            $newCoupon->expired_at = $request->has('expired_at') ? $request->input('expired_at').':00' : null;
+            $newCoupon->dollars = (float)$request->get('dollars', 0);
+            $newCoupon->minimum_order = (int)$request->get('minimum_order', 0);
+            $newCoupon->code = $code;
+            $newCoupon->one_time = (bool)$request->get('one_time');
+
+            $newCoupon->save();
+        }
+
+        $request->session()->flash('message', 'Successfully generated '.$request->get('quantity').' coupons.');
         return Redirect::to('admin/cms/coupons');
+    }
+
+    protected function getGeneratorValidator(array $data)
+    {
+        $validator = Validator::make($data, [
+            'title' => 'required|max:255',
+            'dollars' => 'required_without:percent|numeric',
+            'percent' => 'max:50|numeric',
+            'quantity' => 'required|numeric'
+        ]);
+
+        $validator->sometimes('dollars', 'numeric|required|min:.01', function ($input) {
+            return $input->percent == 0;
+        });
+
+        return $validator;
     }
 
     /**
