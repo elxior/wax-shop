@@ -28,7 +28,7 @@ class CreateCardResponseValidator extends AbstractValidator
 
         switch ($this->response->getReasonCode()) {
             case 'E00039':
-                $this->errors()->add('number', 'This credit card is already saved on your account. Please delete or update the existing payment method.');
+                $this->errors()->add('number', __('shop::payment.duplicate_stored_card'));
                 break;
         }
 

@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
 use Omnipay\Common\CreditCard;
 use Omnipay\Omnipay;
-use App\Models\User\BillingInfo;
-use Wax\Shop\Validators\Payment\AuthorizeNetCim\CreateCardResponseValidator;
-use Wax\Shop\Validators\Payment\CreditCardPreValidator;
+use App\Models\User\PaymentMethod;
+use Wax\Shop\Payment\Validators\AuthorizeNetCim\CreateCardResponseValidator;
+use Wax\Shop\Payment\Validators\CreditCardPreValidator;
 
 class AuthorizeNetCimDriver
 {
@@ -22,11 +22,12 @@ class AuthorizeNetCimDriver
         }
         $this->user = Auth::user();
 
-        if (
-            empty(config('wax.shop.payment.drivers.authorizenet_cim.api_login_id'))
+        if (empty(config('wax.shop.payment.drivers.authorizenet_cim.api_login_id'))
             || empty(config('wax.shop.payment.drivers.authorizenet_cim.transaction_key'))
         ) {
-            throw new \Exception('Authorize.net CIM credentials are not configured');
+            throw new \Exception(
+                __('shop::payment.driver_not_configured', ['name' => 'Authorize.net CIM'])
+            );
         }
 
         $this->gateway = Omnipay::create('AuthorizeNet_CIM');
@@ -64,7 +65,7 @@ class AuthorizeNetCimDriver
             $this->user->save();
         }
 
-        return new BillingInfo([
+        return new PaymentMethod([
             'gateway_payment_profile_id' => $response->getCustomerPaymentProfileId(),
             'masked_card_number' => substr($data['cardNumber'], -4),
             'expiration_date' => $data['expMonth'].'/'.$data['expYear'],

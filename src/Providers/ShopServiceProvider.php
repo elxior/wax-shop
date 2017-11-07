@@ -79,6 +79,8 @@ class ShopServiceProvider extends ServiceProvider
     {
         Cms::registerStructurePath(__DIR__.'/../../resources/structures');
 
+        Route::model('paymentmethods', config('wax.shop.models.payment_method'));
+
         Route::middleware('web')
             ->namespace('Wax\Shop\Http\Controllers')
             ->attribute('as', 'shop::')
@@ -90,6 +92,7 @@ class ShopServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations/');
         $this->loadViewsFrom(__DIR__.'/../../resources/views/', 'shop');
+        $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'shop');
 
         $this->app->make('Illuminate\Database\Eloquent\Factory')->load(__DIR__ . '/../../database/factories');
     }
@@ -105,7 +108,6 @@ class ShopServiceProvider extends ServiceProvider
         // clean up the nested relations when an Order Item changes
         Item::observe(OrderItemObserver::class);
         Bundle::observe(OrderBundleObserver::class);
-
 
         Event::listen(SessionMigrationEvent::class, SessionMigrationListener::class);
         Event::listen(Login::class, LoginListener::class);

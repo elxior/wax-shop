@@ -18,6 +18,7 @@ return [
     ],
     'models' => [
         'product' => Wax\Shop\Models\Product::class,
+        'payment_method' => Wax\Shop\Models\User\PaymentMethod::class,
     ],
     'payment' => [
         'drivers' => [
