@@ -2,48 +2,39 @@
 
 namespace Wax\Shop\Payment\Repositories;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Wax\Shop\Models\User\PaymentMethod;
+use Wax\Shop\Payment\Contracts\StoredPaymentDriverContract;
 use Wax\Shop\Payment\Drivers\AuthorizeNetCimDriver;
 
 class PaymentMethodRepository
 {
-    protected function getDriver()
+    protected function getDriver() : StoredPaymentDriverContract
     {
         return app()->make(AuthorizeNetCimDriver::class);
     }
 
-    public function getBillingInfo()
+    public function getAll()
     {
-        return Auth::user()->billingInfo;
+        return Auth::user()->paymentMethods;
     }
 
     public function create($data)
     {
-        $billingInfo = $this->getDriver()->createCard($data);
+        $paymentMethod = $this->getDriver()->createCard($data);
 
-        Auth::user()->billingInfo()->save($billingInfo);
+        Auth::user()->paymentMethods()->save($paymentMethod);
     }
 
-    public function update($data, Model $billingInfo)
+    public function update($data, PaymentMethod $paymentMethod)
     {
-        // talk to the payment gateway service here
+        $paymentMethod = $this->getDriver()->updateCard($data, $paymentMethod);
 
-        // save the local record
-        $billingInfo->update([
-            'masked_card_number' => substr($data['cardNumber'], -4),
-            'expiration_date' => $data['expMonth'].'/'.$data['expYear'],
-            'firstname' => $data['firstName'],
-            'lastname' => $data['lastName'],
-            'address' => $data['address'],
-            'zip' => $data['zip'],
-        ]);
+        Auth::user()->paymentMethods()->save($paymentMethod);
     }
 
-    public function delete(Model $billingInfo)
+    public function delete(PaymentMethod $paymentMethod)
     {
-        // talk to the payment gateway service here
-
-        $billingInfo->delete();
+        $this->getDriver()->deleteCard($paymentMethod);
     }
 }

@@ -6,10 +6,10 @@ use Avalara\AvaTaxClient;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factory as EloquentFactory;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\ServiceProvider;
 use Wax\Core\Contracts\FilterAggregatorContract;
 use Wax\Core\Contracts\FilterableRepositoryContract;
 use Wax\Core\Events\SessionMigrationEvent;
@@ -27,14 +27,20 @@ use Wax\Shop\Listeners\RecalculateDiscountsListener;
 use Wax\Shop\Listeners\SessionMigrationListener;
 use Wax\Shop\Models\Order\Bundle;
 use Wax\Shop\Models\Order\Item;
+use Wax\Shop\Models\User\PaymentMethod;
 use Wax\Shop\Observers\OrderBundleObserver;
 use Wax\Shop\Observers\OrderItemObserver;
+use Wax\Shop\Policies\PaymentMethodPolicy;
 use Wax\Shop\Repositories\ProductRepository;
 use Wax\Shop\Services\ShopService;
 use Wax\Shop\Tax\Contracts\TaxDriverContract;
 
 class ShopServiceProvider extends ServiceProvider
 {
+    protected $policies = [
+        PaymentMethod::class => PaymentMethodPolicy::class,
+    ];
+
     public function register()
     {
         $this->app->make(EloquentFactory::class)->load(__DIR__.'/../../database/factories');
@@ -77,9 +83,12 @@ class ShopServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->registerPolicies();
+
         Cms::registerStructurePath(__DIR__.'/../../resources/structures');
 
-        Route::model('paymentmethods', config('wax.shop.models.payment_method'));
+        // route model binding for the payment methods resource controller
+        Route::model('paymentmethod', config('wax.shop.models.payment_method'));
 
         Route::middleware('web')
             ->namespace('Wax\Shop\Http\Controllers')

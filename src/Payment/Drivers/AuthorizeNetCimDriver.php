@@ -6,11 +6,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
 use Omnipay\Common\CreditCard;
 use Omnipay\Omnipay;
-use App\Models\User\PaymentMethod;
-use Wax\Shop\Payment\Validators\AuthorizeNetCim\CreateCardResponseValidator;
+use Wax\Shop\Exceptions\ValidationException;
+use Wax\Shop\Models\User\PaymentMethod;
+use Wax\Shop\Payment\Contracts\StoredPaymentDriverContract;
+use Wax\Shop\Payment\Validators\AuthorizeNetCim\PaymentProfileResponseParser;
 use Wax\Shop\Payment\Validators\CreditCardPreValidator;
 
-class AuthorizeNetCimDriver
+class AuthorizeNetCimDriver implements StoredPaymentDriverContract
 {
     protected $gateway;
     protected $user;
@@ -41,6 +43,13 @@ class AuthorizeNetCimDriver
         }
     }
 
+    /**
+     * Create a payment profile at the gateway and return a PaymentMethod model.
+     *
+     * @param array $data
+     * @return PaymentMethod
+     * @throws ValidationException
+     */
     public function createCard($data)
     {
         $requestData = [
@@ -57,7 +66,7 @@ class AuthorizeNetCimDriver
             ->createCard($requestData)
             ->send();
 
-        (new CreateCardResponseValidator($response))
+        (new PaymentProfileResponseParser($response))
             ->validate();
 
         if (!empty($response->getCustomerProfileId())) {
@@ -65,8 +74,9 @@ class AuthorizeNetCimDriver
             $this->user->save();
         }
 
-        return new PaymentMethod([
-            'gateway_payment_profile_id' => $response->getCustomerPaymentProfileId(),
+        $paymentModel = config('wax.shop.models.payment_method');
+        return new $paymentModel([
+            'payment_profile_id' => $response->getCustomerPaymentProfileId(),
             'masked_card_number' => substr($data['cardNumber'], -4),
             'expiration_date' => $data['expMonth'].'/'.$data['expYear'],
             'firstname' => $data['firstName'],
@@ -74,6 +84,48 @@ class AuthorizeNetCimDriver
             'address' => $data['address'],
             'zip' => $data['zip'],
         ]);
+    }
+
+    /**
+     * Update an existing PaymentMethod. The gateway communication may be implemented as a Delete & Create instead of
+     * a pure Update.
+     *
+     * @param array $data
+     * @param PaymentMethod $originalPaymentMethod
+     * @return PaymentMethod
+     * @throws ValidationException
+     */
+    public function updateCard($data, PaymentMethod $originalPaymentMethod)
+    {
+        $newPaymentMethod = $this->createCard($data);
+
+        $this->deleteCard($originalPaymentMethod);
+
+        return $newPaymentMethod;
+    }
+
+    /**
+     * Delete a PaymentMethod along with the corresponding gateway payment profile.
+     *
+     * @param PaymentMethod $paymentMethod
+     * @throws ValidationException
+     */
+    public function deleteCard(PaymentMethod $paymentMethod)
+    {
+        $requestData = [
+            'customerId' => $this->user->id,
+            'customerProfileId' => $this->user->payment_profile_id,
+            'customerPaymentProfileId' => $paymentMethod->payment_profile_id,
+        ];
+
+        $response = $this->gateway
+            ->deleteCard($requestData)
+            ->send();
+
+        (new PaymentProfileResponseParser($response))
+            ->validate();
+
+        $paymentMethod->delete();
     }
 
     protected function prepareCreditCardData($data)
