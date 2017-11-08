@@ -77,6 +77,7 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
         $paymentModel = config('wax.shop.models.payment_method');
         return new $paymentModel([
             'payment_profile_id' => $response->getCustomerPaymentProfileId(),
+            'brand' => $requestData['card']->getBrand(),
             'masked_card_number' => substr($data['cardNumber'], -4),
             'expiration_date' => $data['expMonth'].'/'.$data['expYear'],
             'firstname' => $data['firstName'],
@@ -144,5 +145,13 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
         (new CreditCardPreValidator($card))->validate();
 
         return $card;
+    }
+
+    protected function buildCardReference(PaymentMethod $paymentMethod)
+    {
+        return json_encode([
+            'customerProfileId' => $this->user->payment_profile_id,
+            'customerPaymentProfileId' => $paymentMethod->payment_profile_id,
+        ]);
     }
 }
