@@ -20,6 +20,11 @@ class CartApiController extends Controller
 
     public function index()
     {
+        // This isn't necessary but it helps for debugging the math
+        $this->orderRepo
+            ->getActive()
+            ->calculateDiscounts();
+
         $this->orderRepo
             ->getActive()
             ->default_shipment

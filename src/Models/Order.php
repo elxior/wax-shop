@@ -354,12 +354,19 @@ class Order extends Model
 
         $bundles = Bundle::whereHas('products', function ($query) use ($orderProductIds) {
             $query->whereIn('products.id', $orderProductIds);
-        })->orderBy('percent')->get();
+        })->orderBy('percent', 'desc')->get();
 
         $bundles->filter(function ($bundle) use ($orderProductIds) {
             return $bundle->products->count() == $orderProductIds->intersect($bundle->products->pluck('id'))->count();
         })->each(function ($bundle) {
-            $items = $this->items->wherein('product_id', $bundle->products->pluck('id'));
+            $items = $this->items
+                ->where('discountable', true)
+                ->wherein('product_id', $bundle->products->pluck('id'));
+
+            if ($items->isEmpty()) {
+                return;
+            }
+
             $orderBundle = $this->bundles()->create([
                 'name' => $bundle->name,
                 'percent' => $bundle->percent,
@@ -368,6 +375,7 @@ class Order extends Model
 
             $items->each(function ($item) use ($orderBundle) {
                 $item->discount_amount = round($item->gross_subtotal * $orderBundle->percent / 100, 2);
+                $item->discountable = false;
                 $item->bundle_id = $orderBundle->id;
                 $item->save();
             });

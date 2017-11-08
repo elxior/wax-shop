@@ -33,4 +33,16 @@ class PaymentMethodPolicy
     {
         return $user->id === $paymentMethod->user_id;
     }
+
+    /**
+     * Determine whether the user can make a payment using the $paymentMethod.
+     *
+     * @param  \App\User  $user
+     * @param  PaymentMethod  $paymentMethod
+     * @return mixed
+     */
+    public function pay(User $user, PaymentMethod $paymentMethod)
+    {
+        return $user->id === $paymentMethod->user_id;
+    }
 }

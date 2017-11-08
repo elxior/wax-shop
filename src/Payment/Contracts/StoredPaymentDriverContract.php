@@ -3,6 +3,8 @@
 namespace Wax\Shop\Payment\Contracts;
 
 use Wax\Shop\Exceptions\ValidationException;
+use Wax\Shop\Models\Order;
+use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\User\PaymentMethod;
 
 interface StoredPaymentDriverContract
@@ -14,7 +16,7 @@ interface StoredPaymentDriverContract
      * @return PaymentMethod
      * @throws ValidationException
      */
-    public function createCard($data);
+    public function createCard($data) : PaymentMethod;
 
     /**
      * Update an existing PaymentMethod. The gateway communication may be implemented as a Delete & Create instead of
@@ -25,7 +27,7 @@ interface StoredPaymentDriverContract
      * @return PaymentMethod
      * @throws ValidationException
      */
-    public function updateCard($data, PaymentMethod $originalPaymentMethod);
+    public function updateCard($data, PaymentMethod $originalPaymentMethod) : PaymentMethod;
 
     /**
      * Delete a PaymentMethod along with the corresponding gateway payment profile.
@@ -34,4 +36,15 @@ interface StoredPaymentDriverContract
      * @throws ValidationException
      */
     public function deleteCard(PaymentMethod $paymentMethod);
+
+    /**
+     * Create a 'purchase' transaction (authorize and capture) for an order. If an amount is not provided, it should
+     * default to the balance due on the order
+     *
+     * @param Order $order
+     * @param PaymentMethod $paymentMethod
+     * @param float|null $amount
+     * @return Payment
+     */
+    public function purchase(Order $order, PaymentMethod $paymentMethod, float $amount) : Payment;
 }

@@ -21,7 +21,6 @@ Route::group(['prefix' => 'shop'], function () {
         Route::post('coupon', 'CouponApiController@store')->name('api.coupon.store');
         Route::delete('coupon', 'CouponApiController@destroy')->name('api.coupon.destroy');
 
-
         Route::resource(
             'paymentmethods',
             'PaymentMethodApiController',
@@ -30,6 +29,8 @@ Route::group(['prefix' => 'shop'], function () {
                 'middleware' => 'auth'
             ]
         );
+
+        Route::post('paymentmethods/{paymentmethod}/pay', 'PaymentMethodApiController@makePayment');
     });
 
     Route::get('/cart', function () {

@@ -2,11 +2,15 @@
 
 namespace Wax\Shop\Payment\Drivers;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
 use Omnipay\Common\CreditCard;
+use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Omnipay;
 use Wax\Shop\Exceptions\ValidationException;
+use Wax\Shop\Models\Order;
+use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\User\PaymentMethod;
 use Wax\Shop\Payment\Contracts\StoredPaymentDriverContract;
 use Wax\Shop\Payment\Validators\AuthorizeNetCim\PaymentProfileResponseParser;
@@ -50,7 +54,7 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
      * @return PaymentMethod
      * @throws ValidationException
      */
-    public function createCard($data)
+    public function createCard($data) : PaymentMethod
     {
         $requestData = [
             'customerId' => $this->user->id,
@@ -96,7 +100,7 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
      * @return PaymentMethod
      * @throws ValidationException
      */
-    public function updateCard($data, PaymentMethod $originalPaymentMethod)
+    public function updateCard($data, PaymentMethod $originalPaymentMethod) : PaymentMethod
     {
         $newPaymentMethod = $this->createCard($data);
 
@@ -127,6 +131,61 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
             ->validate();
 
         $paymentMethod->delete();
+    }
+
+    /**
+     * Create a 'purchase' transaction (authorize and capture) for an order. If an amount is not provided, it should
+     * default to the balance due on the order
+     *
+     * @param Order $order
+     * @param PaymentMethod $paymentMethod
+     * @param float $amount
+     * @return Payment
+     * @throws \Exception
+     */
+    public function purchase(Order $order, PaymentMethod $paymentMethod, float $amount) : Payment
+    {
+        $requestData = [
+            'cardReference' => $this->buildCardReference($paymentMethod),
+            'amount' => $amount,
+        ];
+
+        $response = $this->gateway
+            ->purchase($requestData)
+            ->send();
+
+        return $this->parseTransactionResponse($response, $paymentMethod);
+    }
+
+    protected function parseTransactionResponse(AbstractResponse $response, PaymentMethod $paymentMethod) : Payment
+    {
+        $payment = new Payment([
+            'type' => 'Credit Card',
+            'account' => $paymentMethod->account_number,
+            'error' => $response->getMessage(),
+            'auth'
+        ]);
+
+        if ($response->isSuccessful()) {
+            $action = $response->getRequest()
+            $payment->response = $this->parseTransactionResponseType($response);
+
+            if($payment->response = 'CAPTURED') {
+                $payment->captured = Carbon::now();
+            } else {
+                $payment->authorized_at = Carbon::now();
+            }
+
+            return new Payment([
+
+                'response' => ($this->capture ? 'CAPTURED' : 'APPROVED'),
+                'error' => $response->getMessage() ?: '',
+                'code' => method_exists($response, 'getAuthorizationCode') ? $response->getAuthorizationCode() : '',
+                'ref' => $response->getTransactionReference(),
+                'amount' => $request['amount'],
+                'type' => 'Payment'
+            ])
+        }
     }
 
     protected function prepareCreditCardData($data)
