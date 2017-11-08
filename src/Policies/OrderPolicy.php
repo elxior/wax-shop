@@ -2,13 +2,21 @@
 
 namespace Wax\Shop\Policies;
 
-use Wax\Shop\Models\Order;
 use App\User;
+use Wax\Shop\Models\Order;
+use Wax\Core\Repositories\AuthorizationRepository;
 
 class OrderPolicy
 {
     public function get(User $user, Order $order)
     {
+        $authRepo = new AuthorizationRepository;
+
+        $privilege = $authRepo->getPrivilege('Orders');
+        if ($authRepo->userHasPrivilege($user, $privilege)) {
+            return true;
+        }
+
         return $user->id === $order->user_id;
     }
 }
