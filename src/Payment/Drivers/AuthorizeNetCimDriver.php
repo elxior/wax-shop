@@ -163,14 +163,14 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
             'type' => 'Credit Card',
             'account' => $paymentMethod->account_number,
             'error' => $response->getMessage(),
-            'auth'
+            'auth' => 'borked',
         ]);
 
         if ($response->isSuccessful()) {
-            $action = $response->getRequest()
+            $action = $response->getRequest();
             $payment->response = $this->parseTransactionResponseType($response);
 
-            if($payment->response = 'CAPTURED') {
+            if ($payment->response = 'CAPTURED') {
                 $payment->captured = Carbon::now();
             } else {
                 $payment->authorized_at = Carbon::now();
@@ -184,7 +184,7 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
                 'ref' => $response->getTransactionReference(),
                 'amount' => $request['amount'],
                 'type' => 'Payment'
-            ])
+            ]);
         }
     }
 
