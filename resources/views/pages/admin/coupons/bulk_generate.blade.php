@@ -111,6 +111,14 @@
                                             <div class="cms_notes">One-Time Use</div>
                                         </div>
                                     </td>
+                                    <td class="field-container">
+                                        <div class="inputContainer" id="inputContainer_include_shipping">
+                                            <label for="include_shipping">Include Shipping</label>
+                                            <input type="checkbox" name="include_shipping" id="include_shipping" value="1">
+
+                                            <div class="cms_notes">Include Shipping</div>
+                                        </div>
+                                    </td>
                                 </tr></tbody></table>
                         </div>
                         <div style="clear: both;"></div>

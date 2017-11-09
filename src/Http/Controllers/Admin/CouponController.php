@@ -75,6 +75,7 @@ class CouponController
             $newCoupon->minimum_order = (int)$request->get('minimum_order', 0);
             $newCoupon->code = $code;
             $newCoupon->one_time = (bool)$request->get('one_time');
+            $newCoupon->include_shipping = (bool)$request->get('include_shipping');
 
             $newCoupon->save();
         }
@@ -107,6 +108,10 @@ class CouponController
      */
     public function bulkImportCoupons(Request $request)
     {
+        if ($request->get('action') == 'Cancel') {
+            return Redirect::to('admin/cms/coupons');
+        }
+
         $path = $request->file('file')->getRealPath();
         $data = $this->csvToArray($path);
 
@@ -119,6 +124,8 @@ class CouponController
 
             Coupon::insert($record);
         }
+
+        $request->session()->flash('message', 'Successfully imported '.count($data).' coupons.');
 
         return Redirect::to('admin/cms/coupons');
     }

@@ -23,7 +23,7 @@
                 <div style="width: 65%;">
                     <p>
                         Use the upload field below to upload an <em>.csv</em> file to import new coupons.  Please reference the provided example to ensure proper formatting -
-                        (<a href="{{ URL::to('res/uploads/shop/coupons/example_coupon_import.csv') }}">Example <em>.csv</em> file</a>).
+                        (<a href="{{ URL::to('uploads/shop/coupons/example_coupon_import.csv') }}">Example <em>.csv</em> file</a>).
                     </p>
                 </div>
 
