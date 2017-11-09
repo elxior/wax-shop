@@ -1,0 +1,2 @@
+code,expired_at,title,dollars,percent,minimum_order,one_time,include_shipping
+TEST456,NULL,"Imported Coupon",5,0,0,1,0
