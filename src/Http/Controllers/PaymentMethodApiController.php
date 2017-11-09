@@ -117,6 +117,8 @@ class PaymentMethodApiController extends Controller
 
         $payment = $this->repo->makePayment($order, $paymentMethod, $order->balanceDue);
 
+
+
         return response()->json($payment);
     }
 

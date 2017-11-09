@@ -85,6 +85,7 @@ class Order extends Model
         'bundle_value',
         'discount_amount',
         'total',
+        'balance_due',
     ];
 
     protected $hidden = [

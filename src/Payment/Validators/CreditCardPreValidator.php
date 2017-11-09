@@ -24,8 +24,16 @@ class CreditCardPreValidator extends AbstractValidator
             $this->errors()->add('cardNumber', 'Credit card number is invalid.');
         }
 
-        if (empty($this->card->getExpiryMonth()) || empty($this->card->getExpiryYear())) {
-            $this->errors()->add('cardNumber', 'Credit Card expiration date is required.');
+        if (empty($this->card->getExpiryMonth())) {
+            $this->errors()->add('expMonth', 'Credit Card expiration month is required.');
+        }
+
+        if (empty($this->card->getExpiryYear())) {
+            $this->errors()->add('expYear', 'Credit Card expiration year is required.');
+        }
+
+        if ($this->card->getExpiryDate('Ym') < gmdate('Ym')) {
+            $this->errors()->add('expMonth', 'Credit Card has expired.');
         }
 
         if (empty($this->card->getCvv())) {

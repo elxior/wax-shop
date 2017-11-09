@@ -13,6 +13,7 @@ use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\User\PaymentMethod;
 use Wax\Shop\Payment\Contracts\StoredPaymentDriverContract;
+use Wax\Shop\Payment\Validators\AuthorizeNetCim\ExceptionParser;
 use Wax\Shop\Payment\Validators\AuthorizeNetCim\PaymentProfileResponseParser;
 use Wax\Shop\Payment\Validators\CreditCardPreValidator;
 
@@ -66,9 +67,14 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
             $requestData['customerProfileId'] = $this->user->payment_profile_id;
         }
 
-        $response = $this->gateway
-            ->createCard($requestData)
-            ->send();
+        try {
+            $response = $this->gateway
+                ->createCard($requestData)
+                ->send();
+        } catch (\Exception $e) {
+            (new ExceptionParser($e))->validate();
+        }
+
 
         (new PaymentProfileResponseParser($response))
             ->validate();
@@ -102,9 +108,12 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
      */
     public function updateCard($data, PaymentMethod $originalPaymentMethod) : PaymentMethod
     {
-        $newPaymentMethod = $this->createCard($data);
-
-        $this->deleteCard($originalPaymentMethod);
+        try {
+            $newPaymentMethod = $this->createCard($data);
+            $this->deleteCard($originalPaymentMethod);
+        } catch (\Exception $e) {
+            (new ExceptionParser($e))->validate();
+        }
 
         return $newPaymentMethod;
     }
@@ -123,9 +132,13 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
             'customerPaymentProfileId' => $paymentMethod->payment_profile_id,
         ];
 
-        $response = $this->gateway
-            ->deleteCard($requestData)
-            ->send();
+        try {
+            $response = $this->gateway
+                ->deleteCard($requestData)
+                ->send();
+        } catch (\Exception $e) {
+            (new ExceptionParser($e))->validate();
+        }
 
         (new PaymentProfileResponseParser($response))
             ->validate();
@@ -150,42 +163,86 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
             'amount' => $amount,
         ];
 
-        $response = $this->gateway
-            ->purchase($requestData)
-            ->send();
+        try {
+            $response = $this->gateway
+                ->purchase($requestData)
+                ->send();
+        } catch (\Exception $e) {
+            // An exception here is an error generated from by OmniPay, not the payment gateway.
+            return $this->buildPaymentError($paymentMethod, $amount, $e->getMessage());
+        }
 
         return $this->parseTransactionResponse($response, $paymentMethod);
     }
 
     protected function parseTransactionResponse(AbstractResponse $response, PaymentMethod $paymentMethod) : Payment
     {
+        $transactionType = (string)$response->getRequest()->getData()->transactionRequest->transactionType;
+        $amount = (float)$response->getRequest()->getData()->transactionRequest->amount;
+
+        // If this was a priorAuthCapture, you'd want to amend the existing payment here instead of creating one.
         $payment = new Payment([
             'type' => 'Credit Card',
-            'account' => $paymentMethod->account_number,
+            'account' => (string)$response->getData()->transactionResponse->accountNumber,
+            'brand' => (string)$response->getData()->transactionResponse->accountType,
             'error' => $response->getMessage(),
-            'auth' => 'borked',
+            'response' => null, // AUTHORIZED, CAPTURED, DECLINED, ERROR
+            'auth_code' => $response->getAuthorizationCode(),
+            'transaction_ref' => $response->getTransactionReference(),
+            'amount' => $amount,
+            'firstname' => $paymentMethod->firstname,
+            'lastname' => $paymentMethod->lastname,
+            'address1' => $paymentMethod->address,
+            'zip' => $paymentMethod->zip,
         ]);
 
         if ($response->isSuccessful()) {
-            $action = $response->getRequest();
-            $payment->response = $this->parseTransactionResponseType($response);
+            switch ($transactionType) {
+                case 'authCaptureTransaction':
+                    $payment->response = 'CAPTURED';
+                    $payment->authorized_at = Carbon::now();
+                    $payment->captured_at = Carbon::now();
+                    break;
 
-            if ($payment->response = 'CAPTURED') {
-                $payment->captured = Carbon::now();
-            } else {
-                $payment->authorized_at = Carbon::now();
+                case 'priorAuthCaptureTransaction':
+                    $payment->response = 'CAPTURED';
+                    $payment->captured_at = Carbon::now();
+                    break;
+
+                case 'authOnlyTransaction':
+                    $payment->response = 'AUTHORIZED';
+                    $payment->authorized_at = Carbon::now();
+                    break;
             }
+        } else {
+            switch ($response->getCode()) {
+                case $response::TRANSACTION_RESULT_CODE_DECLINED:
+                    $payment->response = 'DECLINED';
+                    break;
 
-            return new Payment([
-
-                'response' => ($this->capture ? 'CAPTURED' : 'APPROVED'),
-                'error' => $response->getMessage() ?: '',
-                'code' => method_exists($response, 'getAuthorizationCode') ? $response->getAuthorizationCode() : '',
-                'ref' => $response->getTransactionReference(),
-                'amount' => $request['amount'],
-                'type' => 'Payment'
-            ]);
+                default:
+                    $payment->response = 'ERROR';
+                    break;
+            }
         }
+
+        return $payment;
+    }
+
+    protected function buildPaymentError(PaymentMethod $paymentMethod, float $amount, string $message) : Payment
+    {
+        return new Payment([
+            'type' => 'Credit Card',
+            'account' => $paymentMethod->account_number,
+            'brand' => $paymentMethod->brand,
+            'error' => $message,
+            'response' => 'ERROR',
+            'amount' => $amount,
+            'firstname' => $paymentMethod->firstname,
+            'lastname' => $paymentMethod->lastname,
+            'address1' => $paymentMethod->address,
+            'zip' => $paymentMethod->zip,
+        ]);
     }
 
     protected function prepareCreditCardData($data)

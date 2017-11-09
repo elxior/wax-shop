@@ -26,6 +26,7 @@ class CreateOrderPaymentsTable extends Migration
             $table->timestamp('captured_at')->nullable();
             $table->string('type', 64);
             $table->string('account', 16)->nullable();
+            $table->string('brand')->nullable();
             $table->string('error')->nullable();
             $table->string('response', 64)->nullable();
             $table->string('auth_code')->nullable();

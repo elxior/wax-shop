@@ -5,6 +5,12 @@ namespace Wax\Shop\Models\User;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $firstname
+ * @property string $lastname
+ * @property string $address
+ * @property string $zip
+ */
 class PaymentMethod extends Model
 {
     protected $guarded = [];

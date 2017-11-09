@@ -36,11 +36,12 @@ class Payment extends Model
 {
     protected $table = 'order_payments';
 
+    protected $guarded = [];
+
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
-
 
     public function scopeAuthorized(Builder $query)
     {

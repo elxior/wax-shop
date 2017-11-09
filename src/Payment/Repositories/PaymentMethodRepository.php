@@ -42,6 +42,14 @@ class PaymentMethodRepository
 
     public function makePayment(Order $order, PaymentMethod $paymentMethod, float $amount = null)
     {
+        /**
+         * Authorization may have already been checked in the controller or elsewhere, but since it's dealing
+         * with payments it doesn't hurt to double-check.
+         */
+        if (Auth::user()->cant('pay', $paymentMethod)) {
+            abort(403);
+        }
+
         if (is_null($amount)) {
             $amount = $order->balance_due;
         }
