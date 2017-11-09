@@ -84,12 +84,10 @@ class Coupon extends Model
         $items = $this->order->items;
 
         foreach ($items as $item) {
-            if ($item->discountable) {
+            if ($item->discountable && ($item->discount_amount == 0)) {
                 $ratio = $item->gross_subtotal / $this->order->discountable_total;
                 $item->discount_amount = min($couponValue, round($ratio * $this->calculated_value, 2));
                 $couponValue -= $item->discount_amount;
-            } else {
-                $item->discount_amount = null;
             }
             $item->save();
         }

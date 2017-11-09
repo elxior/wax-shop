@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Response;
 use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Models\User\PaymentMethod;
 use Wax\Shop\Payment\Repositories\PaymentMethodRepository;
+use Wax\Shop\Payment\Validators\OrderPaymentParser;
 use Wax\Shop\Services\ShopService;
 
 class PaymentMethodApiController extends Controller
@@ -115,9 +116,13 @@ class PaymentMethodApiController extends Controller
 
         $order = $this->shopService->getActiveOrder();
 
-        $payment = $this->repo->makePayment($order, $paymentMethod, $order->balanceDue);
+        $payment = $this->repo->makePayment($order, $paymentMethod, $order->balance_due);
 
+        // Catch payment errors and convert them to a validation exception/message bag
+        (new OrderPaymentParser($payment))->validate();
 
+        $order->refresh();
+        
 
         return response()->json($payment);
     }

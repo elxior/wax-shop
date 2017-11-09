@@ -339,11 +339,12 @@ class Order extends Model
 
         $this->resetDiscounts();
 
-        $this->applyBundleDiscounts();
-
         if ($this->coupon) {
             $this->coupon->calculateValue();
+            $this->refresh();
         }
+
+        $this->applyBundleDiscounts();
 
         $this->refresh();
         event(new CouponChangedEvent($this));
@@ -361,7 +362,7 @@ class Order extends Model
             return $bundle->products->count() == $orderProductIds->intersect($bundle->products->pluck('id'))->count();
         })->each(function ($bundle) {
             $items = $this->items
-                ->where('discountable', true)
+                ->where('discount_amount', 0)
                 ->wherein('product_id', $bundle->products->pluck('id'));
 
             if ($items->isEmpty()) {
@@ -376,7 +377,6 @@ class Order extends Model
 
             $items->each(function ($item) use ($orderBundle) {
                 $item->discount_amount = round($item->gross_subtotal * $orderBundle->percent / 100, 2);
-                $item->discountable = false;
                 $item->bundle_id = $orderBundle->id;
                 $item->save();
             });

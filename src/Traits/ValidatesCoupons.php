@@ -21,7 +21,7 @@ trait ValidatesCoupons
         }
 
         // validate minimum order
-        if ($order->discountable_total < $coupon->minimum_order) {
+        if (($order->discountable_total == 0) || ($order->discountable_total < $coupon->minimum_order)) {
             return false;
         }
 
