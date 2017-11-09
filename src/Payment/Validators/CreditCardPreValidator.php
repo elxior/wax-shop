@@ -21,11 +21,11 @@ class CreditCardPreValidator extends AbstractValidator
         $this->messages = new MessageBag;
 
         if (!strlen($this->card->getNumber()) || !Helper::validateLuhn($this->card->getNumber())) {
-            $this->errors()->add('number', 'Credit card number is invalid.');
+            $this->errors()->add('cardNumber', 'Credit card number is invalid.');
         }
 
         if (empty($this->card->getExpiryMonth()) || empty($this->card->getExpiryYear())) {
-            $this->errors()->add('number', 'Credit Card expiration date is required.');
+            $this->errors()->add('cardNumber', 'Credit Card expiration date is required.');
         }
 
         if (empty($this->card->getCvv())) {
@@ -41,7 +41,7 @@ class CreditCardPreValidator extends AbstractValidator
         }
 
         if (empty($this->card->getBillingAddress1())) {
-            $this->errors()->add('address1', 'Billing Address is required.');
+            $this->errors()->add('address', 'Billing Address is required.');
         }
 
         if (empty($this->card->getPostcode())) {
