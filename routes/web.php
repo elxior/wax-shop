@@ -30,7 +30,10 @@ Route::group(['prefix' => 'shop'], function () {
             ]
         );
 
-        Route::post('paymentmethods/{paymentmethod}/pay', 'PaymentMethodApiController@makePayment');
+        Route::post(
+            'paymentmethods/{paymentmethod}/pay',
+            'PaymentMethodApiController@makePayment'
+        )->middleware('auth');
     });
 
     Route::get('/cart', function () {

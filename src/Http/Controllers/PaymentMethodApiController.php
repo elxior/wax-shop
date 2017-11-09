@@ -124,6 +124,6 @@ class PaymentMethodApiController extends Controller
 
     protected function buildListResponse()
     {
-        return Response::json($this->repo->getAll()->makeEntities());
+        return Response::json($this->repo->getAll());
     }
 }
