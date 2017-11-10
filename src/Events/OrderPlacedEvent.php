@@ -5,7 +5,7 @@ namespace Wax\Shop\Events;
 use Wax\Shop\Models\Order;
 use App\User;
 
-class OrderPlaced
+class OrderPlacedEvent
 {
     protected $order;
 

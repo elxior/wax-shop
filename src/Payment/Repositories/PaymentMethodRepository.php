@@ -3,14 +3,21 @@
 namespace Wax\Shop\Payment\Repositories;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\UnauthorizedException;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\User\PaymentMethod;
 use Wax\Shop\Payment\Contracts\StoredPaymentDriverContract;
 use Wax\Shop\Payment\Drivers\AuthorizeNetCimDriver;
+use Wax\Shop\Services\ShopService;
 
 class PaymentMethodRepository
 {
+    protected $shopService;
+
+    public function __construct(ShopService $shopService)
+    {
+        $this->shopService = $shopService;
+    }
+
     protected function getDriver() : StoredPaymentDriverContract
     {
         return app()->make(AuthorizeNetCimDriver::class);
@@ -43,11 +50,15 @@ class PaymentMethodRepository
     public function makePayment(Order $order, PaymentMethod $paymentMethod, float $amount = null)
     {
         /**
-         * Authorization may have already been checked in the controller or elsewhere, but since it's dealing
-         * with payments it doesn't hurt to double-check.
+         * Authorization & validation may have already been checked in the controller or elsewhere, but since
+         * we're dealing with payments it's worth the overhead to double-check.
          */
         if (Auth::user()->cant('pay', $paymentMethod)) {
-            abort(403);
+            return false;
+        }
+
+        if (!$order->validatePayable()) {
+            return false;
         }
 
         if (is_null($amount)) {

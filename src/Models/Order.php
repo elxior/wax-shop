@@ -3,6 +3,7 @@
 namespace Wax\Shop\Models;
 
 use Wax\Shop\Events\OrderChanged\CouponChangedEvent;
+use Wax\Shop\Events\OrderPlacedEvent;
 use Wax\Shop\Models\Order\Item;
 use Wax\Shop\Models\Order\Bundle as OrderBundle;
 use Wax\Shop\Models\Order\Coupon as OrderCoupon;
@@ -469,8 +470,99 @@ class Order extends Model
             && $this->validateTax();
     }
 
+    /**
+     * Tests that the order is ready to be `placed`. The tests are similar to `Payable`, except:
+     *   - Skip the inventory check. Any change in inventory after the payment was made shouldn't stop the order.
+     *   - Balance Due must be Zero.
+     *
+     * @return bool
+     */
     public function validatePlaceable() : bool
     {
-        return $this->validatePayable() && ($this->balance_due == 0);
+        return $this->validateHasItems()
+            && $this->validateShipping()
+            && $this->validateTax()
+            && ($this->balance_due == 0);
+    }
+
+    /**
+     * Place the order, i.e. persist all the ephemeral order data (product details, etc), set the `placed_at`
+     * flag, and trigger an OrderPlacedEvent event.
+     *
+     * @return bool
+     */
+    public function place() : bool
+    {
+        $this->refresh();
+
+        if (!$this->validatePlaceable()) {
+            return false;
+        }
+
+        $this->persistItemData();
+        $this->persistShipmentMetadata();
+        $this->persistOrderMetadata();
+
+        event(new OrderPlacedEvent($this->fresh()));
+
+        return true;
+    }
+
+    protected function persistItemData()
+    {
+        // Set the attributes on the Order Item to match the underlying Product data via the magic getters
+        $this->items->each(function ($item) {
+            $item->sku = $item->getAttribute('sku');
+            $item->name = $item->getAttribute('name');
+            $item->price = $item->getAttribute('price');
+            $item->shipping_flat_rate = $item->getAttribute('shipping_flat_rate');
+            $item->shipping_enable_rate_lookup = $item->getAttribute('shipping_enable_rate_lookup');
+            $item->shipping_disable_free_shipping = $item->getAttribute('shipping_disable_free_shipping');
+            $item->dim_l = $item->getAttribute('dim_l');
+            $item->dim_w = $item->getAttribute('dim_w');
+            $item->dim_h = $item->getAttribute('dim_h');
+            $item->weight = $item->getAttribute('weight');
+            $item->one_per_user = $item->getAttribute('one_per_user');
+            $item->taxable = $item->getAttribute('taxable');
+            $item->discountable = $item->getAttribute('discountable');
+
+            $item->save();
+        });
+    }
+
+    protected function persistShipmentMetadata()
+    {
+        $this->shipments->each(function ($shipment) {
+            $shipment->sequence = Shipment::max('sequence') + 1;
+            $shipment->save();
+        });
+    }
+
+    protected function persistOrderMetaData()
+    {
+        if (empty($this->email)) {
+            if (Auth::check()) {
+                $this->email = Auth::user()->email;
+            } elseif (!empty($this->payments->first()->email)) {
+                $this->email = $this->payments->first()->email;
+            } elseif (!empty($this->shipments->first()->email)) {
+                $this->email = $this->shipments->first()->email;
+            }
+        }
+
+        // set the actual total from the calculated attribute getter
+        $this->total = $this->getAttribute('total');
+
+        if (empty($this->sequence)) {
+            $this->sequence = Order::max('sequence') + 1;
+        }
+
+        $this->ip_address = request()->ip();
+
+        $this->placed_at = Carbon::now();
+
+        $this->searchIndex = $this->toJson();
+
+        $this->save();
     }
 }

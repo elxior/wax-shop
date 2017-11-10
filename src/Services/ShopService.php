@@ -3,9 +3,10 @@
 namespace Wax\Shop\Services;
 
 use Wax\Shop\Models\Order;
+use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\ShippingRate;
+use Wax\Shop\Models\User\PaymentMethod;
 use Wax\Shop\Repositories\OrderRepository;
-use Wax\Shop\Validators\OrderItemQuantityValidator;
 use Illuminate\Support\Facades\Auth;
 
 class ShopService
@@ -22,9 +23,9 @@ class ShopService
         return $this->orderRepo->getActive();
     }
 
-    public function getCompletedOrder(): Order
+    public function getPlacedOrder(): Order
     {
-        return $this->orderRepo->getCompleted();
+        return $this->orderRepo->getPlaced();
     }
 
     public function getOrderById($id): Order
@@ -131,8 +132,39 @@ class ShopService
         $this->getActiveOrder()->commitTax();
     }
 
-    public function validateOrderPayable()
+    public function validateOrderPayable() : bool
     {
         return $this->getActiveOrder()->validatePayable();
+    }
+
+    public function validateOrderPlaceable() : bool
+    {
+        return $this->getActiveOrder()->validatePlaceable();
+    }
+
+    /**
+     * Make a payment using a stored payment / token billing profile. As a side-effect, if the payment causes the order
+     * to be 'placeable', the order will be flagged as `placed` and trigger the OrderPlacedEvent event.
+     *
+     * @param PaymentMethod $paymentMethod
+     *
+     * @return Payment
+     */
+    public function makeStoredPayment(PaymentMethod $paymentMethod) : Payment
+    {
+        if (!$this->validateOrderPayable()) {
+            abort(400);
+        }
+
+        $order = $this->getActiveOrder();
+
+        $payment = $this->repo->makePayment($order, $paymentMethod, $order->balance_due);
+
+        // Catch payment errors and convert them to a validation exception/message bag
+        (new OrderPaymentParser($payment))->validate();
+
+        $order->place();
+
+        return $payment;
     }
 }

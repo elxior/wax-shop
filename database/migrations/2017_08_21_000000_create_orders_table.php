@@ -31,10 +31,11 @@ class CreateOrdersTable extends Migration
             $table->timestamp('shipped_at')->nullable();
             $table->timestamp('archived_at')->nullable();
             $table->decimal('total', 15, 4)->nullable();
+            $table->string('email')->nullable();
+            $table->string('ip_address')->nullable();
             $table->longText('searchIndex')->nullable();
 
             $table->index(["user_id"], 'orders_user_id');
-
             $table->index(["session_id"], 'orders_session_id');
         });
     }
@@ -44,8 +45,8 @@ class CreateOrdersTable extends Migration
      *
      * @return void
      */
-     public function down()
-     {
-       Schema::dropIfExists($this->set_schema_table);
-     }
+    public function down()
+    {
+        Schema::dropIfExists($this->set_schema_table);
+    }
 }

@@ -104,25 +104,16 @@ class PaymentMethodApiController extends Controller
     /**
      * Make a payment.
      *
-     * @param Request $request
      * @param PaymentMethod $paymentMethod
      * @return \Illuminate\Http\Response
      */
-    public function makePayment(Request $request, PaymentMethod $paymentMethod)
+    public function makePayment(PaymentMethod $paymentMethod)
     {
         if (Auth::user()->cant('pay', $paymentMethod)) {
             abort(403);
         }
 
-        $order = $this->shopService->getActiveOrder();
-
-        $payment = $this->repo->makePayment($order, $paymentMethod, $order->balance_due);
-
-        // Catch payment errors and convert them to a validation exception/message bag
-        (new OrderPaymentParser($payment))->validate();
-
-        $order->refresh();
-        
+        $payment = $this->shopService->makeStoredPayment($paymentMethod);
 
         return response()->json($payment);
     }

@@ -53,6 +53,8 @@ class OrderRepository
             $order->session_id = Session::getId();
         }
 
+        $order->ip_address = request()->ip();
+
         $order->save();
 
         return $order;
