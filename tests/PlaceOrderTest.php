@@ -31,6 +31,15 @@ class PlaceOrderTest extends ShopBaseTestCase
     {
         $order = $this->buildPlaceableOrder();
 
+        //dump($order->validateHasItems());
+        //dump($order->validateShipping());
+       // dump($order->validateTax());
+        if ($order->balance_due !== 0) {
+            dump('not zero');
+        }
+
+        dd($order->balance_due);
+
         $this->assertTrue($order->place());
 
         $placedOrder = $this->shopService->getPlacedOrder();
@@ -40,7 +49,15 @@ class PlaceOrderTest extends ShopBaseTestCase
 
     public function testItemDataPersists()
     {
-        $this->assertTrue(false);
+        $order = $this->buildPlaceableOrder();
+
+        $item = $order->items->first();
+
+        $this->assertNotEquals($this->product['sku'], $item->getAttribute('sku'));
+
+        $this->assertTrue($order->place());
+
+        $this->assertEquals($this->product['sku'], $item->getAttribute('sku'));
     }
 
     public function testShipmentDataPersists()

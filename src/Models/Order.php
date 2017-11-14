@@ -178,7 +178,7 @@ class Order extends Model
 
     public function getItemCountAttribute()
     {
-        return $this->shipments->sum('item_count');
+        return (int)$this->shipments->sum('item_count');
     }
 
     public function getTotalQuantityAttribute()
