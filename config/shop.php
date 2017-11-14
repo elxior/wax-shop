@@ -28,6 +28,7 @@ return [
                 'test_mode' => env('AUTHORIZE_NET_TEST_MODE', false),
                 'developer_mode' => env('AUTHORIZE_NET_DEVELOPER_MODE', true),
             ]
-        ]
+        ],
+        'stored_payment_driver' => \Wax\Shop\Payment\Drivers\AuthorizeNetCimDriver::class,
     ]
 ];

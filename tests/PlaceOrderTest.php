@@ -2,7 +2,7 @@
 
 namespace Tests\Shop;
 
-use Tests\Shop\ShopBaseTestCase;
+use Tests\Shop\Support\ShopBaseTestCase;
 use Tests\Shop\Traits\SetsShippingAddress;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\ShippingRate;
@@ -36,6 +36,21 @@ class PlaceOrderTest extends ShopBaseTestCase
         $placedOrder = $this->shopService->getPlacedOrder();
 
         $this->assertTrue($placedOrder->is($order));
+    }
+
+    public function testItemDataPersists()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function testShipmentDataPersists()
+    {
+        $this->assertTrue(false);
+    }
+
+    public function testOrderDataPersists()
+    {
+        $this->assertTrue(false);
     }
 
     protected function buildPlaceableOrder()

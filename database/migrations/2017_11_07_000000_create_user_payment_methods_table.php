@@ -26,7 +26,7 @@ class CreateUserPaymentMethodsTable extends Migration
             $table->unsignedInteger('user_id')->nullable();
             $table->string('payment_profile_id')->nullable();
 
-            $table->string('brand');
+            $table->string('brand')->nullable();
             $table->string('masked_card_number');
             $table->string('expiration_date');
             $table->string('firstname');

@@ -3,6 +3,7 @@
 namespace Tests\Shop;
 
 use App\User;
+use Tests\Shop\Support\ShopBaseTestCase;
 use Wax\Shop\Models\Bundle;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Repositories\ProductRepository;

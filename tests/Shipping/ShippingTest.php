@@ -2,7 +2,7 @@
 
 namespace Tests\Shop\Shipping;
 
-use Tests\Shop\ShopBaseTestCase;
+use Tests\Shop\Support\ShopBaseTestCase;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Services\ShopService;

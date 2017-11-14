@@ -4,7 +4,7 @@ namespace Tests\Shop\Tax;
 
 use Faker\Factory;
 use Tests\Shop\Traits\SetsShippingAddress;
-use Tests\Shop\ShopBaseTestCase;
+use Tests\Shop\Support\ShopBaseTestCase;
 use Wax\Shop\Facades\ShopServiceFacade;
 use Wax\Shop\Models\Coupon;
 use Wax\Shop\Models\Order\ShippingRate;

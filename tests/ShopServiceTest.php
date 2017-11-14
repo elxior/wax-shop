@@ -7,9 +7,8 @@ use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Support\Facades\Auth;
 use Tests\Shop\Traits\SeedsProducts;
-use Tests\Shop\ShopBaseTestCase;
+use Tests\Shop\Support\ShopBaseTestCase;
 use Wax\Shop\Exceptions\ValidationException;
-use Wax\Shop\Facades\ShopServiceFacade;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Services\ShopService;
 

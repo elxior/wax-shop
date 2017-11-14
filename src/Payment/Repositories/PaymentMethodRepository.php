@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Auth;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\User\PaymentMethod;
 use Wax\Shop\Payment\Contracts\StoredPaymentDriverContract;
-use Wax\Shop\Payment\Drivers\AuthorizeNetCimDriver;
 use Wax\Shop\Services\ShopService;
 
 class PaymentMethodRepository
@@ -20,7 +19,7 @@ class PaymentMethodRepository
 
     protected function getDriver() : StoredPaymentDriverContract
     {
-        return app()->make(AuthorizeNetCimDriver::class);
+        return app()->make(config('wax.shop.payment.stored_payment_driver'));
     }
 
     public function getAll()
@@ -28,23 +27,32 @@ class PaymentMethodRepository
         return Auth::user()->paymentMethods;
     }
 
-    public function create($data)
+    public function create($data) : PaymentMethod
     {
         $paymentMethod = $this->getDriver()->createCard($data);
 
         Auth::user()->paymentMethods()->save($paymentMethod);
+        Auth::user()->refresh();
+
+        return $paymentMethod->fresh();
     }
 
-    public function update($data, PaymentMethod $paymentMethod)
+    public function update($data, PaymentMethod $paymentMethod) : PaymentMethod
     {
         $paymentMethod = $this->getDriver()->updateCard($data, $paymentMethod);
 
         Auth::user()->paymentMethods()->save($paymentMethod);
+        Auth::user()->refresh();
+
+        return $paymentMethod->fresh();
     }
 
     public function delete(PaymentMethod $paymentMethod)
     {
         $this->getDriver()->deleteCard($paymentMethod);
+
+        $paymentMethod->delete();
+        Auth::user()->refresh();
     }
 
     public function makePayment(Order $order, PaymentMethod $paymentMethod, float $amount = null)
@@ -76,5 +84,14 @@ class PaymentMethodRepository
         $order->payments()->save($payment);
 
         return $payment;
+    }
+
+    public function useAddressForShipping(Order $order, PaymentMethod $paymentMethod)
+    {
+        $order->shipments->each(function ($shipment) use ($paymentMethod) {
+            $shipment->address1 = $paymentMethod->address;
+            $shipment->zip = $paymentMethod->zip;
+            $shipment->save();
+        });
     }
 }

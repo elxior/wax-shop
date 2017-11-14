@@ -20,7 +20,7 @@ interface StoredPaymentDriverContract
 
     /**
      * Update an existing PaymentMethod. The gateway communication may be implemented as a Delete & Create instead of
-     * a pure Update.
+     * a pure Update as necessary.
      *
      * @param array $data
      * @param PaymentMethod $originalPaymentMethod

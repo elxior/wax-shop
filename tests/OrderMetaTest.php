@@ -3,7 +3,7 @@
 namespace Tests\Shop;
 
 use Tests\Shop\Traits\SeedsProducts;
-use Tests\Shop\ShopBaseTestCase;
+use Tests\Shop\Support\ShopBaseTestCase;
 use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Services\ShopService;
 

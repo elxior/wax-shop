@@ -4,7 +4,7 @@ namespace Tests\Shop;
 
 use App\User;
 use Tests\Shop\Traits\SeedsProducts;
-use Tests\Shop\ShopBaseTestCase;
+use Tests\Shop\Support\ShopBaseTestCase;
 use Wax\Shop\Models\Coupon;
 use Wax\Shop\Services\ShopService;
 

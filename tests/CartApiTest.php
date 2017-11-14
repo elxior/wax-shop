@@ -5,7 +5,7 @@ namespace Tests\Shop;
 use App\User;
 use Carbon\Carbon;
 use Tests\Shop\Traits\SeedsProducts;
-use Tests\Shop\ShopBaseTestCase;
+use Tests\Shop\Support\ShopBaseTestCase;
 use Wax\Shop\Models\Order;
 
 class CartApiTest extends ShopBaseTestCase

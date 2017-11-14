@@ -3,7 +3,7 @@
 namespace Tests\Shop;
 
 use Tests\Shop\Traits\SetsShippingAddress;
-use Tests\Shop\ShopBaseTestCase;
+use Tests\Shop\Support\ShopBaseTestCase;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Drivers\Tax\DbDriver;

@@ -2,7 +2,7 @@
 
 namespace Tests\Shop\Payment;
 
-use Tests\Shop\ShopBaseTestCase;
+use Tests\Shop\Support\ShopBaseTestCase;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Services\ShopService;

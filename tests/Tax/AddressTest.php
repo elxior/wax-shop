@@ -9,6 +9,7 @@ use Wax\Shop\Tax\Support\Address;
 
 class AddressTest extends TestCase
 {
+    /* @var \Faker\Generator */
     protected $faker;
 
     public function setUp()
