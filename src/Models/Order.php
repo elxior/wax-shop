@@ -279,7 +279,14 @@ class Order extends Model
 
     public function invalidateTax()
     {
-        $this->shipments->each->invalidateTax();
+        $this->shipments->each(function ($shipment) {
+            $recalculate = !is_null($shipment->tax_amount) && ($shipment->item_count > 0);
+            $shipment->invalidateTax();
+
+            if ($recalculate) {
+                $shipment->calculateTax();
+            }
+        });
     }
 
     public function invalidateShipping()

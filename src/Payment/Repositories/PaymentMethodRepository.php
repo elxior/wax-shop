@@ -103,5 +103,7 @@ class PaymentMethodRepository
                 ''
             );
         });
+
+        $this->shopService->calculateTax();
     }
 }

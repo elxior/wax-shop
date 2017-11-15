@@ -52,10 +52,8 @@ class InvalidationTest extends ShopBaseTestCase
         );
 
         $order = ShopServiceFacade::getActiveOrder();
-        $this->assertNull($order->default_shipment->tax_desc);
-        $this->assertNull($order->default_shipment->tax_rate);
-        $this->assertNull($order->default_shipment->tax_amount);
-        $this->assertEquals(20, $order->default_shipment->total);
+        $this->assertEquals(1.2, $order->default_shipment->tax_amount);
+        $this->assertEquals(21.2, $order->default_shipment->total);
     }
 
     public function testUpdateOrderItemQuantityInvalidatesTax()
@@ -75,10 +73,8 @@ class InvalidationTest extends ShopBaseTestCase
         ShopServiceFacade::updateOrderItemQuantity(1, 2);
 
         $order = ShopServiceFacade::getActiveOrder();
-        $this->assertNull($order->default_shipment->tax_desc);
-        $this->assertNull($order->default_shipment->tax_rate);
-        $this->assertNull($order->default_shipment->tax_amount);
-        $this->assertEquals(20, $order->default_shipment->total);
+        $this->assertEquals(1.2, $order->default_shipment->tax_amount);
+        $this->assertEquals(21.2, $order->default_shipment->total);
     }
 
     public function testDeleteOrderItemInvalidatesTax()
@@ -101,10 +97,8 @@ class InvalidationTest extends ShopBaseTestCase
         ShopServiceFacade::deleteOrderItem(1);
 
         $order = ShopServiceFacade::getActiveOrder();
-        $this->assertNull($order->default_shipment->tax_desc);
-        $this->assertNull($order->default_shipment->tax_rate);
-        $this->assertNull($order->default_shipment->tax_amount);
-        $this->assertEquals(10, $order->default_shipment->total);
+        $this->assertEquals(.6, $order->default_shipment->tax_amount);
+        $this->assertEquals(10.6, $order->default_shipment->total);
     }
 
     public function testSetShippingAddressInvalidatesTax()
@@ -112,22 +106,22 @@ class InvalidationTest extends ShopBaseTestCase
         ShopServiceFacade::addOrderItem(
             factory(Product::class)->create(['price' => 10])->id
         );
-        $this->setKyShippingAddress();
+        $this->setShippingAddress(['state' => 'AK']);
         ShopServiceFacade::getActiveOrder()->calculateTax();
+
+        $order = ShopServiceFacade::getActiveOrder();
+        $this->assertEquals('', $order->default_shipment->tax_desc);
+        $this->assertEquals(0, $order->default_shipment->tax_rate);
+        $this->assertEquals(0, $order->default_shipment->tax_amount);
+        $this->assertEquals(10, $order->default_shipment->total);
+
+        $this->setKyShippingAddress();
 
         $order = ShopServiceFacade::getActiveOrder();
         $this->assertEquals('KY 6%', $order->default_shipment->tax_desc);
         $this->assertEquals(6, $order->default_shipment->tax_rate);
         $this->assertEquals(.6, $order->default_shipment->tax_amount);
         $this->assertEquals(10.6, $order->default_shipment->total);
-
-        $this->setKyShippingAddress();
-
-        $order = ShopServiceFacade::getActiveOrder();
-        $this->assertNull($order->default_shipment->tax_desc);
-        $this->assertNull($order->default_shipment->tax_rate);
-        $this->assertNull($order->default_shipment->tax_amount);
-        $this->assertEquals(10, $order->default_shipment->total);
     }
 
     public function testSetShippingServiceInvalidatesTax()
@@ -147,17 +141,17 @@ class InvalidationTest extends ShopBaseTestCase
         ShopServiceFacade::setShippingService(factory(ShippingRate::class)->create(['amount' => 10]));
 
         $order = ShopServiceFacade::getActiveOrder();
-        $this->assertNull($order->default_shipment->tax_desc);
-        $this->assertNull($order->default_shipment->tax_rate);
-        $this->assertNull($order->default_shipment->tax_amount);
-        $this->assertEquals(20, $order->default_shipment->total);
+        $this->assertEquals('KY 6%', $order->default_shipment->tax_desc);
+        $this->assertEquals(6, $order->default_shipment->tax_rate);
+        $this->assertEquals(1.2, $order->default_shipment->tax_amount);
+        $this->assertEquals(21.2, $order->default_shipment->total);
     }
 
     public function testApplyCouponInvalidatesTax()
     {
         $coupon = factory(Coupon::class)
             ->create([
-                'dollars' => 1,
+                'dollars' => 5,
                 'minimum_order' => 10,
             ]);
 
@@ -177,9 +171,9 @@ class InvalidationTest extends ShopBaseTestCase
         $this->assertTrue(ShopServiceFacade::applyCoupon($coupon->code));
 
         $order = ShopServiceFacade::getActiveOrder();
-        $this->assertNull($order->default_shipment->tax_desc);
-        $this->assertNull($order->default_shipment->tax_rate);
-        $this->assertNull($order->default_shipment->tax_amount);
-        $this->assertEquals(9, $order->default_shipment->total);
+        $this->assertEquals('KY 6%', $order->default_shipment->tax_desc);
+        $this->assertEquals(6, $order->default_shipment->tax_rate);
+        $this->assertEquals(.3, $order->default_shipment->tax_amount);
+        $this->assertEquals(5.3, $order->default_shipment->total);
     }
 }
