@@ -89,9 +89,19 @@ class PaymentMethodRepository
     public function useAddressForShipping(Order $order, PaymentMethod $paymentMethod)
     {
         $order->shipments->each(function ($shipment) use ($paymentMethod) {
-            $shipment->address1 = $paymentMethod->address;
-            $shipment->zip = $paymentMethod->zip;
-            $shipment->save();
+            $shipment->setAddress(
+                $paymentMethod->firstname,
+                $paymentMethod->lastname,
+                '',
+                Auth::user()->email,
+                '',
+                $paymentMethod->address,
+                '',
+                '',
+                '',
+                $paymentMethod->zip,
+                ''
+            );
         });
     }
 }

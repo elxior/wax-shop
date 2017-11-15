@@ -2,19 +2,30 @@
 
 namespace Tests\Shop;
 
+use Tests\Shop\Support\Models\User;
 use Tests\Shop\Support\ShopBaseTestCase;
+use Tests\Shop\Traits\GeneratesPaymentMethods;
 use Tests\Shop\Traits\SetsShippingAddress;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
+use Wax\Shop\Payment\Drivers\DummyDriver;
+use Wax\Shop\Payment\Repositories\PaymentMethodRepository;
 use Wax\Shop\Services\ShopService;
 
 class PlaceOrderTest extends ShopBaseTestCase
 {
-    use SetsShippingAddress;
+    use SetsShippingAddress,
+        GeneratesPaymentMethods;
 
     /* @var ShopService $shop */
     protected $shopService;
+
+    /* @var PaymentMethodRepository */
+    protected $storedPaymentRepo;
+
+    /* @var User */
+    protected $user;
 
     protected $product;
 
@@ -22,9 +33,15 @@ class PlaceOrderTest extends ShopBaseTestCase
     {
         parent::setUp();
 
+        config(['wax.shop.payment.stored_payment_driver' => DummyDriver::class]);
+
         $this->shopService = app()->make(ShopService::class);
 
+        $this->storedPaymentRepo = app()->make(PaymentMethodRepository::class);
+
         $this->product = factory(Product::class)->create(['price' => 10]);
+
+        $this->user = factory(User::class)->create();
     }
 
     public function testGetPlacedOrder()
@@ -40,7 +57,25 @@ class PlaceOrderTest extends ShopBaseTestCase
 
     public function testPayingBalanceDueCausesOrderPlaced()
     {
-        $this->assertTrue(false);
+        $this->be($this->user);
+
+        // set up the order
+        $this->shopService->addOrderItem($this->product->id);
+        $this->setShippingAddress();
+        $this->shopService->setShippingService(factory(ShippingRate::class)->create());
+        $this->shopService->calculateTax();
+
+        $order = $this->shopService->getActiveOrder();
+
+        // make the payment
+        $data = $this->generatePaymentMethodData();
+        $paymentMethod = $this->storedPaymentRepo->create($data);
+        $this->shopService->makeStoredPayment($paymentMethod);
+
+        $placedOrder = $this->shopService->getPlacedOrder();
+        $this->assertNotNull($placedOrder);
+
+        $this->assertTrue($order->is($placedOrder));
     }
 
     public function testItemDataPersists()

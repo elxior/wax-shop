@@ -5,6 +5,7 @@ namespace Tests\Shop\Payment;
 use Faker\Factory;
 use Tests\Shop\Support\ShopBaseTestCase;
 use Tests\Shop\Support\Models\User;
+use Tests\Shop\Traits\GeneratesPaymentMethods;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Payment\Drivers\DummyDriver;
 use Wax\Shop\Payment\Repositories\PaymentMethodRepository;
@@ -12,6 +13,8 @@ use Wax\Shop\Services\ShopService;
 
 class PaymentMethodRepositoryTest extends ShopBaseTestCase
 {
+    use GeneratesPaymentMethods;
+
     /* @var \Faker\Generator */
     protected $faker;
 
@@ -117,19 +120,5 @@ class PaymentMethodRepositoryTest extends ShopBaseTestCase
         $this->repo->delete($this->repo->getAll()->first());
 
         $this->assertEmpty($this->repo->getAll());
-    }
-
-    protected function generatePaymentMethodData()
-    {
-        return [
-            'cardNumber' => $this->faker->creditCardNumber(),
-            'expMonth' => $this->faker->numberBetween(1, 12),
-            'expYear' => $this->faker->numberBetween(date('y')+1, date('y')+10),
-            'cvc' => $this->faker->numberBetween(100, 999),
-            'firstName' => $this->faker->firstName(),
-            'lastName' => $this->faker->lastName,
-            'address' => $this->faker->streetAddress,
-            'zip' => $this->faker->postcode,
-        ];
     }
 }

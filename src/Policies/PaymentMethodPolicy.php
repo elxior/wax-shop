@@ -2,7 +2,7 @@
 
 namespace Wax\Shop\Policies;
 
-use App\User;
+use Wax\Core\Eloquent\Models\User;
 use Wax\Shop\Models\User\PaymentMethod;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -13,48 +13,48 @@ class PaymentMethodPolicy
     /**
      * Determine whether the user can view the $paymentMethod.
      *
-     * @param  \App\User  $user
+     * @param  User  $user
      * @param  PaymentMethod  $paymentMethod
      * @return mixed
      */
     public function view(User $user, PaymentMethod $paymentMethod)
     {
-        return $user->id === $paymentMethod->user_id;
+        return $user->id === (int)$paymentMethod->user_id;
     }
 
     /**
      * Determine whether the user can update the $paymentMethod.
      *
-     * @param  \App\User  $user
+     * @param  User  $user
      * @param  PaymentMethod  $paymentMethod
      * @return mixed
      */
     public function update(User $user, PaymentMethod $paymentMethod)
     {
-        return $user->id === $paymentMethod->user_id;
+        return $user->id === (int)$paymentMethod->user_id;
     }
 
     /**
      * Determine whether the user can delete the $paymentMethod.
      *
-     * @param  \App\User  $user
+     * @param  User  $user
      * @param  PaymentMethod  $paymentMethod
      * @return mixed
      */
     public function delete(User $user, PaymentMethod $paymentMethod)
     {
-        return $user->id === $paymentMethod->user_id;
+        return $user->id === (int)$paymentMethod->user_id;
     }
 
     /**
      * Determine whether the user can make a payment using the $paymentMethod.
      *
-     * @param  \App\User  $user
+     * @param  User  $user
      * @param  PaymentMethod  $paymentMethod
      * @return mixed
      */
     public function pay(User $user, PaymentMethod $paymentMethod)
     {
-        return $user->id === $paymentMethod->user_id;
+        return $user->id === (int)$paymentMethod->user_id;
     }
 }

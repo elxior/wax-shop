@@ -6,6 +6,7 @@ use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\User\PaymentMethod;
+use Wax\Shop\Payment\Repositories\PaymentMethodRepository;
 use Wax\Shop\Payment\Validators\OrderPaymentParser;
 use Wax\Shop\Repositories\OrderRepository;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 class ShopService
 {
     protected $orderRepo;
+
+    protected $paymentMethodRepo;
 
     public function __construct(OrderRepository $orderRepo)
     {
@@ -159,7 +162,8 @@ class ShopService
 
         $order = $this->getActiveOrder();
 
-        $payment = $this->repo->makePayment($order, $paymentMethod, $order->balance_due);
+        $paymentRepo = app()->make(PaymentMethodRepository::class);
+        $payment = $paymentRepo->makePayment($order, $paymentMethod, $order->balance_due);
 
         // Catch payment errors and convert them to a validation exception/message bag
         (new OrderPaymentParser($payment))->validate();
