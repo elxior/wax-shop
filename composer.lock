@@ -71,7 +71,7 @@
                 "source": "https://github.com/avadev/AvaTax-REST-V2-PHP-SDK",
                 "issues": "https://github.com/avadev/AvaTax-REST-V2-PHP-SDK/issues"
             },
-            "time": "2017-09-28T20:00:10+00:00"
+            "time": "2017-09-28 20:00:10"
         },
         {
             "name": "doctrine/annotations",
@@ -1456,12 +1456,12 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.com:oohology/wax-cms.git",
-                "reference": "3ca31385a6407456020b3666078ae4aec6e7ad9d"
+                "reference": "162202ad1e5bf9ee72b20b6fd5049f080dbdcfc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/oohology%2Fwax-cms/repository/archive.zip?sha=3ca31385a6407456020b3666078ae4aec6e7ad9d",
-                "reference": "3ca31385a6407456020b3666078ae4aec6e7ad9d",
+                "url": "https://gitlab.com/api/v3/projects/oohology%2Fwax-cms/repository/archive.zip?sha=162202ad1e5bf9ee72b20b6fd5049f080dbdcfc2",
+                "reference": "162202ad1e5bf9ee72b20b6fd5049f080dbdcfc2",
                 "shasum": ""
             },
             "require": {
@@ -1520,7 +1520,7 @@
                 }
             ],
             "description": "WAX Cms system built on the Laravel Framework",
-            "time": "2017-11-14T22:29:52+00:00"
+            "time": "2017-11-15 20:36:07"
         },
         {
             "name": "paragonie/random_compat",
@@ -3636,7 +3636,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-10-26T23:06:35+00:00"
+            "time": "2017-10-26 23:06:35"
         },
         {
             "name": "phpdocumentor/reflection-common",

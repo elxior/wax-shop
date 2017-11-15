@@ -2,6 +2,7 @@
 
 namespace Wax\Shop\Models;
 
+use Wax\Core\Support\Localization\Currency;
 use Wax\Shop\Events\OrderChanged\CouponChangedEvent;
 use Wax\Shop\Events\OrderPlacedEvent;
 use Wax\Shop\Models\Order\Item;
@@ -188,87 +189,87 @@ class Order extends Model
 
     public function getDiscountableTotalAttribute()
     {
-        return $this->shipments->sum('discountable_total');
+        return Currency::round($this->shipments->sum('discountable_total'));
     }
 
     public function getItemGrossSubtotalAttribute()
     {
-        return $this->shipments->sum('item_gross_subtotal');
+        return Currency::round($this->shipments->sum('item_gross_subtotal'));
     }
 
     public function getItemSubtotalAttribute()
     {
-        return $this->shipments->sum('item_subtotal');
+        return Currency::round($this->shipments->sum('item_subtotal'));
     }
 
     public function getItemDiscountAmountAttribute()
     {
-        return $this->shipments->sum('item_discount_amount');
+        return Currency::round($this->shipments->sum('item_discount_amount'));
     }
 
     public function getFlatShippingSubtotalAttribute()
     {
-        return $this->shipments->sum('flat_shipping_subtotal');
+        return Currency::round($this->shipments->sum('flat_shipping_subtotal'));
     }
 
     public function getShippingServiceSubtotalAttribute()
     {
-        return $this->shipments->sum('shipping_service_amount');
+        return Currency::round($this->shipments->sum('shipping_service_amount'));
     }
 
     public function getShippingGrossSubtotalAttribute()
     {
-        return $this->shipments->sum('shipping_gross_subtotal');
+        return Currency::round($this->shipments->sum('shipping_gross_subtotal'));
     }
 
     public function getShippingDiscountAmountAttribute()
     {
-        return $this->shipments->sum('shipping_discount_amount');
+        return Currency::round($this->shipments->sum('shipping_discount_amount'));
     }
 
     public function getShippingSubtotalAttribute()
     {
-        return $this->shipments->sum('shipping_subtotal');
+        return Currency::round($this->shipments->sum('shipping_subtotal'));
     }
 
     public function getTaxSubtotalAttribute()
     {
-        return $this->shipments->sum('tax_amount');
+        return Currency::round($this->shipments->sum('tax_amount'));
     }
 
     public function getCouponValueAttribute()
     {
-        return $this->coupon->calculated_value ?? 0;
+        return Currency::round($this->coupon->calculated_value ?? 0);
     }
 
     public function getBundleValueAttribute()
     {
-        return $this->bundles->sum('calculated_value');
+        return Currency::round($this->bundles->sum('calculated_value'));
     }
 
     public function getDiscountAmountAttribute()
     {
-        return $this->coupon_value + $this->bundle_value;
+        return Currency::round($this->coupon_value + $this->bundle_value);
     }
 
     public function getGrossTotalAttribute()
     {
-        return $this->shipments->sum('gross_total');
+        return Currency::round($this->shipments->sum('gross_total'));
     }
 
     public function getTotalAttribute()
     {
-        return $this->shipments->sum('total');
+        return Currency::round($this->shipments->sum('total'));
     }
 
     public function getPaymentTotalAttribute()
     {
-        return $this->payments()->authorized()->sum('amount');
+        return Currency::round($this->payments()->authorized()->sum('amount'));
     }
 
     public function getBalanceDueAttribute()
     {
-        return $this->total - $this->payment_total;
+        return Currency::round($this->total - $this->payment_total);
     }
 
     public function calculateTax()

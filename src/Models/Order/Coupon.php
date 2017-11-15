@@ -2,7 +2,6 @@
 
 namespace Wax\Shop\Models\Order;
 
-use Wax\Core\Eloquent\Traits\HasDynamicCasts;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Traits\ValidatesCoupons;
 use Illuminate\Database\Eloquent\Model;
@@ -22,8 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Coupon extends Model
 {
-    use ValidatesCoupons,
-        HasDynamicCasts;
+    use ValidatesCoupons;
 
     protected $table = 'order_coupons';
     protected $fillable = [
@@ -38,7 +36,6 @@ class Coupon extends Model
     ];
     protected $casts = [
         'expired_at' => 'datetime',
-        'calculated_value' => 'currency',
     ];
     protected $hidden = [
         'order',

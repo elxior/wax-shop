@@ -2,7 +2,7 @@
 
 namespace Wax\Shop\Models;
 
-use Wax\Core\Eloquent\Traits\HasDynamicCasts;
+use Wax\Core\Support\Localization\Currency;
 use Wax\Shop\Models\Product\Category;
 use Wax\Shop\Models\Product\Image;
 use Wax\Shop\Models\Product\Option;
@@ -35,9 +35,6 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class Product extends Model
 {
-    use HasDynamicCasts;
-
-    // model stuff
     protected $table = 'products';
     protected $with = [
         'category',
@@ -55,10 +52,6 @@ class Product extends Model
         'category',
         'defaultImage',
         'bundles',
-    ];
-
-    protected $casts = [
-        'price' => 'currency'
     ];
 
     protected $appends = [
@@ -219,5 +212,10 @@ class Product extends Model
             }
         }
         return $result;
+    }
+
+    public function getPriceAttribute($value)
+    {
+        return Currency::round($value);
     }
 }

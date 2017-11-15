@@ -32,8 +32,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Item extends Model
 {
-    use HasDynamicCasts;
-
     protected $table = 'order_items';
     protected $fillable = [
         'product_id',
@@ -57,10 +55,6 @@ class Item extends Model
         'shipping_flat_rate',
         'shipping_enable_rate_lookup',
         'shipping_disable_free_shipping',
-    ];
-
-    protected $casts = [
-        'discount_amount' => 'currency',
     ];
 
     protected $appends = [

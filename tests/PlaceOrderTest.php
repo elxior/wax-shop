@@ -31,15 +31,6 @@ class PlaceOrderTest extends ShopBaseTestCase
     {
         $order = $this->buildPlaceableOrder();
 
-        //dump($order->validateHasItems());
-        //dump($order->validateShipping());
-       // dump($order->validateTax());
-        if ($order->balance_due !== 0) {
-            dump('not zero');
-        }
-
-        dd($order->balance_due);
-
         $this->assertTrue($order->place());
 
         $placedOrder = $this->shopService->getPlacedOrder();
@@ -52,22 +43,39 @@ class PlaceOrderTest extends ShopBaseTestCase
         $order = $this->buildPlaceableOrder();
 
         $item = $order->items->first();
-
-        $this->assertNotEquals($this->product['sku'], $item->getAttribute('sku'));
+        $this->assertNotEquals($this->product['sku'], $item->getAttributes()['sku']);
+        $this->assertNotEquals($this->product['name'], $item->getAttributes()['name']);
+        $this->assertNotEquals($this->product['price'], $item->getAttributes()['price']);
 
         $this->assertTrue($order->place());
+        $order->refresh();
 
-        $this->assertEquals($this->product['sku'], $item->getAttribute('sku'));
+        $item = $order->items->first();
+        $this->assertEquals($this->product['sku'], $item->getAttributes()['sku']);
+        $this->assertEquals($this->product['name'], $item->getAttributes()['name']);
+        $this->assertEquals($this->product['price'], $item->getAttributes()['price']);
     }
 
     public function testShipmentDataPersists()
     {
-        $this->assertTrue(false);
+        $order = $this->buildPlaceableOrder();
+        $this->assertTrue($order->place());
+        $order->refresh();
+
+        $this->assertGreaterThan(0, $order->default_shipment->sequence);
     }
 
     public function testOrderDataPersists()
     {
-        $this->assertTrue(false);
+        $order = $this->buildPlaceableOrder();
+        $this->assertTrue($order->place());
+        $order->refresh();
+
+        $this->assertNotEmpty($order->email);
+        $this->assertGreaterThan(0, $order->getAttributes()['total']);
+        $this->assertGreaterThan(0, $order->sequence);
+        $this->assertNotNull($order->placed_at);
+        $this->assertNotEmpty($order->searchIndex);
     }
 
     protected function buildPlaceableOrder()
