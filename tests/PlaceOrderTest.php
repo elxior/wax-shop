@@ -38,6 +38,11 @@ class PlaceOrderTest extends ShopBaseTestCase
         $this->assertTrue($placedOrder->is($order));
     }
 
+    public function testPayingBalanceDueCausesOrderPlaced()
+    {
+        $this->assertTrue(false);
+    }
+
     public function testItemDataPersists()
     {
         $order = $this->buildPlaceableOrder();

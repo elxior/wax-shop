@@ -118,6 +118,18 @@ class PaymentMethodApiController extends Controller
         return response()->json($payment);
     }
 
+    public function setShippingAddress(PaymentMethod $paymentMethod)
+    {
+        if (Auth::user()->cant('view', $paymentMethod)) {
+            abort(403);
+        }
+
+        $order = $this->shopService->getActiveOrder();
+        $this->repo->useAddressForShipping($order, $paymentMethod);
+
+        return response()->json($this->shopService->getActiveOrder());
+    }
+
     protected function buildListResponse()
     {
         return Response::json($this->repo->getAll());

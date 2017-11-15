@@ -6,6 +6,7 @@ use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\User\PaymentMethod;
+use Wax\Shop\Payment\Validators\OrderPaymentParser;
 use Wax\Shop\Repositories\OrderRepository;
 use Illuminate\Support\Facades\Auth;
 

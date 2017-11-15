@@ -11,6 +11,18 @@ class PaymentMethodPolicy
     use HandlesAuthorization;
 
     /**
+     * Determine whether the user can view the $paymentMethod.
+     *
+     * @param  \App\User  $user
+     * @param  PaymentMethod  $paymentMethod
+     * @return mixed
+     */
+    public function view(User $user, PaymentMethod $paymentMethod)
+    {
+        return $user->id === $paymentMethod->user_id;
+    }
+
+    /**
      * Determine whether the user can update the $paymentMethod.
      *
      * @param  \App\User  $user
