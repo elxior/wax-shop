@@ -2,11 +2,11 @@
 
 namespace Tests\Shop;
 
+use Illuminate\Support\Facades\Event;
 use Tests\Shop\Support\Models\User;
 use Tests\Shop\Support\ShopBaseTestCase;
+use Tests\Shop\Traits\BuildsPlaceableOrders;
 use Tests\Shop\Traits\GeneratesPaymentMethods;
-use Tests\Shop\Traits\SetsShippingAddress;
-use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Payment\Drivers\DummyDriver;
@@ -15,8 +15,8 @@ use Wax\Shop\Services\ShopService;
 
 class PlaceOrderTest extends ShopBaseTestCase
 {
-    use SetsShippingAddress,
-        GeneratesPaymentMethods;
+    use GeneratesPaymentMethods,
+        BuildsPlaceableOrders;
 
     /* @var ShopService $shop */
     protected $shopService;
@@ -32,6 +32,9 @@ class PlaceOrderTest extends ShopBaseTestCase
     public function setUp()
     {
         parent::setUp();
+
+        // events are not tested here, but I want them faked to keep things simple.
+        Event::fake();
 
         config(['wax.shop.payment.stored_payment_driver' => DummyDriver::class]);
 
@@ -117,23 +120,4 @@ class PlaceOrderTest extends ShopBaseTestCase
         $this->assertNotNull($order->placed_at);
         $this->assertNotEmpty($order->searchIndex);
     }
-
-    protected function buildPlaceableOrder()
-    {
-        // set up the order
-        $this->shopService->addOrderItem($this->product->id);
-        $this->setShippingAddress();
-        $this->shopService->setShippingService(factory(ShippingRate::class)->create());
-        $this->shopService->calculateTax();
-
-        $order = $this->shopService->getActiveOrder();
-
-        // pay the balance due (simple cash-like payment)
-        $order->payments()->save(factory(Payment::class)->create([
-            'amount' => $order->balance_due
-        ]));
-
-        return $order->fresh();
-    }
-
 }

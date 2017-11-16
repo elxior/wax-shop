@@ -18,6 +18,7 @@ use Wax\Shop\Contracts\OrderChangedEventContract;
 use Wax\Shop\Events\OrderChanged\CartContentsChangedEvent;
 use Wax\Shop\Events\OrderChanged\ShippingAddressChangedEvent;
 use Wax\Shop\Events\OrderChanged\ShippingServiceChangedEvent;
+use Wax\Shop\Events\OrderPlacedEvent;
 use Wax\Shop\Filters\CatalogFilterAggregator;
 use Wax\Shop\Http\Controllers\CatalogController;
 use Wax\Shop\Listeners\InvalidateOrderShippingListener;
@@ -143,5 +144,7 @@ class ShopServiceProvider extends ServiceProvider
         );
 
         Event::listen(OrderChangedEventContract::class, InvalidateOrderTaxListener::class);
+
+        Event::listen(OrderPlacedEvent::class, config('wax.shop.listeners.place_order'));
     }
 }

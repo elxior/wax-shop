@@ -39,5 +39,12 @@ return [
             'license_key' => env('AVALARA_LICENSE_KEY', 'xxx'),
             'company_code' => env('AVALARA_COMPANY_CODE', 'DEFAULT')
         ]
+    ],
+    'listeners' => [
+        'place_order' => [
+            \Wax\Shop\Listeners\OrderPlaced\CouponListener::class,
+            \Wax\Shop\Listeners\OrderPlaced\EmailListener::class,
+            \Wax\Shop\Listeners\OrderPlaced\InventoryListener::class,
+        ],
     ]
 ];
