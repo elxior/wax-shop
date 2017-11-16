@@ -18,7 +18,6 @@ class OrderHistoryApiController extends Controller
     public function index()
     {
         $orders = $this->orderRepo->getOrderHistory();
-
         return response()->json($orders);
     }
 
@@ -26,11 +25,16 @@ class OrderHistoryApiController extends Controller
     {
         $order = $this->orderRepo->getById($id);
 
-
         if (Gate::denies('get-order', $order)) {
             abort(403);
         }
 
+        return response()->json($order);
+    }
+
+    public function getPlaced()
+    {
+        $order = $this->orderRepo->getPlaced();
         return response()->json($order);
     }
 }

@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Wax\Shop\Validators\OrderPlaceableValidator;
 
 /**
  * @property Collection|OrderCoupon[] $bundles Bundle discounts applied to the order.
@@ -98,11 +99,13 @@ class Order extends Model
         'searchIndex',
     ];
 
-    protected $casts = [
-        'placed_at' => 'timestamp',
-        'processed_at' => 'timestamp',
-        'shipped_at' => 'timestamp',
-        'archived_at' => 'timestamp',
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'placed_at',
+        'processed_at',
+        'shipped_at',
+        'archived_at',
     ];
 
 
@@ -467,7 +470,8 @@ class Order extends Model
     }
 
     /**
-     * Test that all the conditions have been met for a payment to be made on the order.
+     * Test that all the conditions have been met for a payment to be made on the order. If you want specific error
+     * messages you should access the Validator directly.
      *
      * @return bool
      */
@@ -481,14 +485,13 @@ class Order extends Model
      *   - Skip the inventory check. Any change in inventory after the payment was made shouldn't stop the order.
      *   - Balance Due must be Zero.
      *
+     * Note: If you want specific error messages you should access the Validator directly.
+     *
      * @return bool
      */
     public function validatePlaceable() : bool
     {
-        return $this->validateHasItems()
-            && $this->validateShipping()
-            && $this->validateTax()
-            && ($this->balance_due == 0);
+        return  (new OrderPlaceableValidator($this))->passes();
     }
 
     /**

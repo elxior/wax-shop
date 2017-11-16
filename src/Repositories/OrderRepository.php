@@ -36,7 +36,8 @@ class OrderRepository
     {
         return Order::mine()
             ->placed()
-            ->orderBy('placed_at', 'desc');
+            ->orderBy('placed_at', 'desc')
+            ->get();
     }
 
     public function getById($orderId) : Order

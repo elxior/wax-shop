@@ -21,9 +21,24 @@ Route::group(['prefix' => 'shop'], function () {
         Route::post('coupon', 'CouponApiController@store')->name('api.coupon.store');
         Route::delete('coupon', 'CouponApiController@destroy')->name('api.coupon.destroy');
 
-        Route::get('history', 'OrderHistoryApiController@index')->name('api.history.index');
-        Route::get('history/{id}', 'OrderHistoryApiController@view')->name('api.history.view');
+        /**
+         * Order History
+         */
+        Route::get('history', 'OrderHistoryApiController@index')
+            ->middleware('auth')
+            ->name('api.history.index');
 
+        Route::get('history/placed', 'OrderHistoryApiController@getPlaced')
+            ->middleware('auth')
+            ->name('api.history.placed');
+
+        Route::get('history/{id}', 'OrderHistoryApiController@view')
+            ->middleware('auth')
+            ->name('api.history.view');
+
+        /**
+         * Payment Methods
+         */
         Route::resource(
             'paymentmethods',
             'PaymentMethodApiController',

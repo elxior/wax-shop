@@ -6,7 +6,7 @@ use Illuminate\Support\MessageBag;
 use Wax\Core\Support\Localization\Currency;
 use Wax\Shop\Models\Order;
 
-class OrderPayableValidator extends AbstractValidator
+class OrderPlaceableValidator extends AbstractValidator
 {
     /** @var  Order $order */
     protected $order;
@@ -20,19 +20,8 @@ class OrderPayableValidator extends AbstractValidator
     {
         $this->messages = new MessageBag;
 
-        if ($this->order->balance_due == 0) {
-            $this->errors()->add(
-                'general',
-                __('shop::cart.validation_balance_due', ['amount' => Currency::format(0)])
-            );
-        }
-
         if (!$this->order->validateHasItems()) {
             $this->errors()->add('general', __('shop::cart.validation_empty'));
-        }
-
-        if (!$this->order->validateInventory()) {
-            $this->errors()->add('general', __('shop::cart.validation_inventory'));
         }
 
         if (!$this->order->validateShipping()) {
@@ -41,6 +30,13 @@ class OrderPayableValidator extends AbstractValidator
 
         if (!$this->order->validateTax()) {
             $this->errors()->add('general', __('shop::cart.validation_tax'));
+        }
+
+        if ($this->order->balance_due > 0) {
+            $this->errors()->add(
+                'general',
+                __('shop::cart.validation_balance_due', ['amount' => Currency::format($this->order->balance_due)])
+            );
         }
 
         return $this->messages->isEmpty();
