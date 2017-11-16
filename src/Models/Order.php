@@ -10,6 +10,7 @@ use Wax\Shop\Models\Order\Bundle as OrderBundle;
 use Wax\Shop\Models\Order\Coupon as OrderCoupon;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\Shipment;
+use Wax\Shop\Validators\OrderPayableValidator;
 use Wax\Shop\Validators\OrderItemQuantityValidator;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -472,10 +473,7 @@ class Order extends Model
      */
     public function validatePayable() : bool
     {
-        return $this->validateHasItems()
-            && $this->validateInventory()
-            && $this->validateShipping()
-            && $this->validateTax();
+        return (new OrderPayableValidator($this))->passes();
     }
 
     /**

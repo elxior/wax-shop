@@ -21,6 +21,9 @@ Route::group(['prefix' => 'shop'], function () {
         Route::post('coupon', 'CouponApiController@store')->name('api.coupon.store');
         Route::delete('coupon', 'CouponApiController@destroy')->name('api.coupon.destroy');
 
+        Route::get('history', 'OrderHistoryApiController@index')->name('api.history.index');
+        Route::get('history/{id}', 'OrderHistoryApiController@view')->name('api.history.view');
+
         Route::resource(
             'paymentmethods',
             'PaymentMethodApiController',

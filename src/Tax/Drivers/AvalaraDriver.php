@@ -66,7 +66,7 @@ class AvalaraDriver implements TaxDriverContract
             $address->getCity(),
             $address->getRegion(),
             $address->getPostalCode(),
-            $address->getCountry()
+            $address->getCountry() ?: 'US'
         );
 
         $request->getLineItems()->each(function ($item) use (&$transaction) {

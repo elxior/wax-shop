@@ -2,7 +2,6 @@
 
 namespace Wax\Shop\Repositories;
 
-use Wax\Shop\Events\OrderChanged\CouponChangedEvent;
 use Wax\Shop\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -31,6 +30,13 @@ class OrderRepository
             ->placed()
             ->orderBy('placed_at', 'desc')
             ->first();
+    }
+
+    public function getOrderHistory()
+    {
+        return Order::mine()
+            ->placed()
+            ->orderBy('placed_at', 'desc');
     }
 
     public function getById($orderId) : Order

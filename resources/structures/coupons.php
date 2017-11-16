@@ -1,7 +1,7 @@
 <?php
 
-use App\Localization\Currency;
 use Carbon\Carbon;
+use Wax\Core\Support\Localization\Currency;
 
 $structure = [
     'table' => 'coupons',

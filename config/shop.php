@@ -30,5 +30,14 @@ return [
             ]
         ],
         'stored_payment_driver' => \Wax\Shop\Payment\Drivers\AuthorizeNetCimDriver::class,
+    ],
+    'tax' => [
+        'driver' => \Wax\Shop\Tax\Drivers\DbDriver::class,
+
+        'avalara' => [
+            'account_id' => env('AVALARA_ACCOUNT_ID', 'xxx'),
+            'license_key' => env('AVALARA_LICENSE_KEY', 'xxx'),
+            'company_code' => env('AVALARA_COMPANY_CODE', 'DEFAULT')
+        ]
     ]
 ];

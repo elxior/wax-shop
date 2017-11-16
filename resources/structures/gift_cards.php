@@ -1,6 +1,6 @@
 <?php
 
-use App\Localization\Currency;
+use Wax\Core\Support\Localization\Currency;
 
     $structure = array(
         'table' => 'gift_cards',

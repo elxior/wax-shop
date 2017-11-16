@@ -2,6 +2,7 @@
 
 namespace Wax\Shop\Services;
 
+use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\ShippingRate;
@@ -10,6 +11,7 @@ use Wax\Shop\Payment\Repositories\PaymentMethodRepository;
 use Wax\Shop\Payment\Validators\OrderPaymentParser;
 use Wax\Shop\Repositories\OrderRepository;
 use Illuminate\Support\Facades\Auth;
+use Wax\Shop\Validators\OrderPayableValidator;
 
 class ShopService
 {
@@ -153,14 +155,13 @@ class ShopService
      * @param PaymentMethod $paymentMethod
      *
      * @return Payment
+     * @throws ValidationException
      */
     public function makeStoredPayment(PaymentMethod $paymentMethod) : Payment
     {
-        if (!$this->validateOrderPayable()) {
-            abort(400);
-        }
-
         $order = $this->getActiveOrder();
+
+        (new OrderPayableValidator($order))->validate();
 
         $paymentRepo = app()->make(PaymentMethodRepository::class);
         $payment = $paymentRepo->makePayment($order, $paymentMethod, $order->balance_due);

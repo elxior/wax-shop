@@ -115,7 +115,6 @@ class ShopServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->mergeConfigFrom(__DIR__.'/../../config/shop.php', 'wax.shop');
-        $this->mergeConfigFrom(__DIR__.'/../../config/tax.php', 'wax.shop.tax');
     }
 
     public function registerListeners()

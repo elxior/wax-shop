@@ -1,10 +1,10 @@
 <?php
 
 use App\Wax\Admin\Cms\Cms;
-use App\Localization\Currency;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Wax\Core\Support\ConfigurationDatabase;
+use Wax\Core\Support\Localization\Currency;
 use Wax\Core\Structures\Builder;
 
     $settings = new ConfigurationDatabase('Shop Settings');
