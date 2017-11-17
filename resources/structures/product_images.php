@@ -1,8 +1,8 @@
 <?php
 
-use App\Shop\Models\Product\Image;
 use Illuminate\Support\Facades\DB;
 use Wax\Core\Support\ConfigurationDatabase;
+use Wax\Shop\Models\Product\Image;
 
     $shopSettings = new ConfigurationDatabase("Shop Settings");
     $image_path = $shopSettings->get('SHOP_PRODUCT_IMAGE_PATH');
