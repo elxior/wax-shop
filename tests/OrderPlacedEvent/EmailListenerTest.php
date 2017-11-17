@@ -70,7 +70,7 @@ class EmailListenerTest extends ShopBaseTestCase
         $mailable = (new OrderPlaced($order))->build();
 
         $this->assertTrue($mailable->hasFrom($this->testMailFrom, config('app.name')));
-        $this->assertEquals('emails.order_placed', $mailable->view);
+        $this->assertEquals('emails.cart', $mailable->view);
         $this->assertEquals($this->testSubject, $mailable->subject);
     }
 

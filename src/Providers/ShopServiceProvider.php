@@ -145,6 +145,8 @@ class ShopServiceProvider extends ServiceProvider
 
         Event::listen(OrderChangedEventContract::class, InvalidateOrderTaxListener::class);
 
-        Event::listen(OrderPlacedEvent::class, config('wax.shop.listeners.place_order'));
+        foreach (config('wax.shop.listeners.place_order') as $listener) {
+            Event::listen(OrderPlacedEvent::class, $listener);
+        }
     }
 }
