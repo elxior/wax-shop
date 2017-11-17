@@ -496,7 +496,8 @@ class Order extends Model
 
     /**
      * Place the order, i.e. persist all the ephemeral order data (product details, etc), set the `placed_at`
-     * flag, and trigger an OrderPlacedEvent event.
+     * flag, and trigger an OrderPlacedEvent event. Structurally- any manipulation of the order itself happens here,
+     * whereas side-effects (inventory, emails) happens via listeners.
      *
      * @return bool
      */
@@ -549,6 +550,7 @@ class Order extends Model
 
     protected function persistOrderMetaData()
     {
+        // If the primary order email address is empty, try to fill it in from the available data
         if (empty($this->email)) {
             if (Auth::check()) {
                 $this->email = Auth::user()->email;
