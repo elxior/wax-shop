@@ -26,6 +26,7 @@ class EmailListenerTest extends ShopBaseTestCase
     protected $faker;
 
     protected $testMailFrom = 'noreply@example.org';
+    protected $testMailTo = 'test1@example.org, test2@example.org';
     protected $testSubject = 'teh subject';
 
     public function setUp()
@@ -47,6 +48,10 @@ class EmailListenerTest extends ShopBaseTestCase
             $double->shouldReceive('get')
                 ->with('WEBSITE_MAILFROM')
                 ->andReturn($this->testMailFrom);
+
+            $double->shouldReceive('get')
+                ->with('WEBSITE_MAILTO')
+                ->andReturn($this->testMailTo);
 
             return $double;
         });
@@ -74,7 +79,7 @@ class EmailListenerTest extends ShopBaseTestCase
         $this->assertEquals($this->testSubject, $mailable->subject);
     }
 
-    public function testCustomerEmail()
+    public function testEmailSent()
     {
         $emailAddress = $this->faker->safeEmail;
 
@@ -86,5 +91,14 @@ class EmailListenerTest extends ShopBaseTestCase
 
         $listener = new EmailListener();
         $listener->handle(new OrderPlacedEvent($order->fresh()));
+
+        Mail::assertSent(OrderPlaced::class, function ($mail) use ($emailAddress) {
+            return $mail->hasTo($emailAddress);
+        });
+
+        Mail::assertSent(OrderPlaced::class, function ($mail) use ($emailAddress) {
+            return $mail->hasTo('test1@example.org')
+                && $mail->hasTo('test2@example.org');
+        });
     }
 }

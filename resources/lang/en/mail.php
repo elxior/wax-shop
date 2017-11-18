@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'order_placed_subject' => 'hey test test',
+    'order_placed_subject' => 'Your '.config('app.name').' order has been placed!',
 ];

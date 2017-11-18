@@ -1,5 +1,6 @@
 <?php
 
+use Wax\Shop\Services\ShopService;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/admin/shop/product-modifiers/{product}', 'Admin\ProductModifiersController@show')
@@ -11,6 +12,9 @@ Route::put('/admin/shop/product-modifiers/{product}', 'Admin\ProductModifiersCon
 Route::group(['prefix' => 'shop'], function () {
     Route::get('/', 'CatalogController@index')->name('catalogIndex');
 
+    Route::get('email-test', function (ShopService $shopService) {
+        return view('emails.cart', ['order' => $shopService->getPlacedOrder()->toArray()]);
+    });
 
     Route::group(['prefix' => 'api'], function () {
         Route::get('cart', 'CartApiController@index')->name('api.cart.index');

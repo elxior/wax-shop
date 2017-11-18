@@ -24,7 +24,7 @@ class OrderRepository
         return $order;
     }
 
-    public function getPlaced() : Order
+    public function getPlaced() : ?Order
     {
         return Order::mine()
             ->placed()

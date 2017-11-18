@@ -72,7 +72,8 @@ class BasicPaymentTest extends ShopBaseTestCase
         ]));
 
         $order = $this->shopService->getActiveOrder();
-        $this->assertEquals(1, $order->payments->count());
+        $this->assertEquals(0, $order->payments->count());
+        $this->assertEquals(1, $order->paymentErrors->count());
         $this->assertEquals(10, $order->total);
         $this->assertEquals(0, $order->payment_total);
         $this->assertEquals(10, $order->balance_due);

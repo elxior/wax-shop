@@ -29,8 +29,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $zip
  * @property string $country Two-letter country code
  *
- * @method Builder|Payment authorized scope for approved/authorized payments
- * @method Builder|Payment captured scope for committed/captured payments
+ * @method Builder|Payment approved scope for successfully authorized or captured payments
+ * @method Builder|Payment authorized scope for authorized payments
+ * @method Builder|Payment captured scope for captured payments
+ * @method Builder|Payment declined scope for declined/failed payments
  */
 class Payment extends Model
 {
@@ -38,15 +40,33 @@ class Payment extends Model
 
     protected $guarded = [];
 
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'authorized_at',
+    ];
+
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
 
-    public function scopeAuthorized(Builder $query)
+    public function scopeApproved(Builder $query)
     {
         return $query->whereNotNull('authorized_at')
             ->whereIn('response', ['AUTHORIZED', 'CAPTURED']);
+    }
+
+    public function scopeDeclined(Builder $query)
+    {
+        return $query->whereNotNull('authorized_at')
+            ->whereNotIn('response', ['AUTHORIZED', 'CAPTURED']);
+    }
+
+    public function scopeAuthorized(Builder $query)
+    {
+        return $query->whereNotNull('authorized_at')
+            ->where('response', 'AUTHORIZED');
     }
 
     public function scopeCaptured(Builder $query)

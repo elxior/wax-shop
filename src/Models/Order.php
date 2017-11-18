@@ -25,7 +25,8 @@ use Wax\Shop\Validators\OrderPlaceableValidator;
  * @property OrderCoupon|null $coupon The coupon applied to the order.
  * @property Collection|Shipment[] $shipments All shipments associated with the order.
  * @property Shipment|null $default_shipment Shortcut to a primary shipment.
- * @property Collection|Payment[] $payments All payments applied to the order.
+ * @property Collection|Payment[] $payments All successful payments applied to the order.
+ * @property Collection|Payment[] $paymentErrors All declined/failed payments on the order.
  * @property Collection|Item[] $items The items/products contained in this order, i.e. the "cart"
  *
  * @property Carbon/Carbon $placed_at
@@ -173,7 +174,14 @@ class Order extends Model
 
     public function payments()
     {
-        return $this->hasMany(Payment::class);
+        return $this->hasMany(Payment::class)
+            ->whereIn('response', ['AUTHORIZED', 'CAPTURED']);
+    }
+
+    public function paymentErrors()
+    {
+        return $this->hasMany(Payment::class)
+            ->whereNotIn('response', ['AUTHORIZED', 'CAPTURED']);
     }
 
     public function getItemsAttribute()
@@ -268,7 +276,7 @@ class Order extends Model
 
     public function getPaymentTotalAttribute()
     {
-        return Currency::round($this->payments()->authorized()->sum('amount'));
+        return Currency::round($this->payments()->approved()->sum('amount'));
     }
 
     public function getBalanceDueAttribute()

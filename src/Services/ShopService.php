@@ -29,7 +29,7 @@ class ShopService
         return $this->orderRepo->getActive();
     }
 
-    public function getPlacedOrder(): Order
+    public function getPlacedOrder(): ?Order
     {
         return $this->orderRepo->getPlaced();
     }
