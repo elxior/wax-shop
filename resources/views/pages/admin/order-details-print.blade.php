@@ -36,7 +36,7 @@
                 {!! \Wax\Data::formatAddress($shipment, true) !!}
             </p>
             @include ('shop::components.admin.order-details.cart', ['shipment' => $shipment])
-            @include ('shop::components.admin.order-details.shipment-details', ['shipment' => $shipment])
+            @include ('shop::components.admin.order-details.shipment-details-print', ['shipment' => $shipment])
         </section>
     @endforeach
 
