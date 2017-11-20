@@ -8,7 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Wax\Core\Support\ConfigurationDatabase;
 use Wax\Shop\Models\Order;
 
-class OrderPlaced extends Mailable
+class OrderShipped extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -23,8 +23,14 @@ class OrderPlaced extends Mailable
     {
         $mailSettings = app()->makeWith(ConfigurationDatabase::class, ['group' => 'Mail Settings']);
 
+        $shipments = $this->order->shipments()
+            ->whereNotNull('tracking_number')
+            ->where('tracking_number', '!=', '')
+            ->get()
+            ->toArray();
+
         return $this->from($mailSettings->get('WEBSITE_MAILFROM'), config('app.name'))
-            ->subject(__('shop::mail.order_placed_subject'))
-            ->view('emails.order-placed', ['order' => $this->order->toArray()]);
+            ->subject(__('shop::mail.order_shipped_subject'))
+            ->view('emails.order-shipped', ['order' => $this->order->toArray(), 'trackedShipments' => $shipments]);
     }
 }

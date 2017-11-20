@@ -73,13 +73,26 @@ Route::group(['prefix' => 'shop'], function () {
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth.panel'], function () {
-    Route::get('shop/order/{id}', 'Admin\OrdersController@show')->name('orderDetails');
+    /**
+     * Order Manager
+     */
+    Route::get('shop/order/{id}', 'Admin\OrdersController@show')
+        ->name('orderDetails');
+    Route::get('shop/order/{id}/print', 'Admin\OrdersController@print')
+        ->name('orderDetails.print');
+    Route::post('shop/order/{id}/add-tracking/{shipmentId}', 'Admin\OrdersController@addTracking')
+        ->name('orderDetails.addTracking');
 
+    /**
+     * Product Modifiers
+     */
     Route::get('shop/product-modifiers/{product}', 'Admin\ProductModifiersController@show')
         ->name('admin.productModifiers');
     Route::put('shop/product-modifiers/{product}', 'Admin\ProductModifiersController@update');
 
-
+    /**
+     * Coupons
+     */
     Route::group(['prefix' => 'cms/coupons', 'as' => 'coupons::'], function () {
         Route::get('generate', 'Admin\CouponController@showGenerateForm')->name('generate.form');
         Route::post('generate', 'Admin\CouponController@bulkGenerateCoupons')->name('generate');

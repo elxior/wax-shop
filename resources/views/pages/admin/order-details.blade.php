@@ -20,11 +20,10 @@
 @endsection
 
 @section('body')
-    {!! csrf_field() !!}
     <div class="cms-edit-box group">
         <div class="edit-heading icon-edit">
             <div style="float: right;">
-                <a target="_blank" href="cms_print.php?structure={{ $structure }}&id={{ $id }}"><span style="font-size: 16px;">Print Order</span></a>
+                <a target="_blank" href="{{ route('shop::orderDetails.print', ['id' => $id]) }}">Print Order</a>
             </div>
             {{ $page['title'] }}
         </div>
@@ -38,62 +37,24 @@
             @endif
 
             <div class="cms-col-wide">
-                <ul>
-                    <li>Placed: {{ $order->placed_at->format('F j, Y @ g:ia') }}</li>
-                    <li>
-                        Customer:
-                        @if ($order->user_id)
-                            <a href="{{ route('admin::editRecord', ['structure' => 'users', 'id' => $order->user_id]) }}">{{ $order->email }}</a>
-                        @else
-                            {{ $order->email }} (Guest Checkout)
-                        @endif
-                    </li>
-                </ul>
+                @include ('shop::components.admin.order-details.header', ['order' => $order])
 
                 @foreach ($order->shipments as $shipment)
-                    @include ('shop::components.admin.order-details.shipment', ['shipment' => $shipment])
+                    <section>
+                        <h3>Shipment {{ $loop->iteration }}</h3>
+                        <p>
+                            <strong>Ship To:</strong><br>
+                            {!! \Wax\Data::formatAddress($shipment, true) !!}
+                        </p>
+                        @include ('shop::components.admin.order-details.cart', ['shipment' => $shipment])
+                        @include ('shop::components.admin.order-details.shipment-details', ['shipment' => $shipment])
+
+                    </section>
                 @endforeach
 
-                <section class="order-payment-info">
-                    <h3>Total</h3>
-                    <ul>
-                        @if ($order->gross_total != $order->total)
-                            <li>Cart Subtotal: {{ Currency::format($order->gross_total) }}</li>
-                        @endif
+                @include ('shop::components.admin.order-details.totals', ['order' => $order])
 
-                        @if ($order->shipping_gross_subtotal > 0)
-                            <li>Shipping Subtotal: {{ Currency::format($order->shipping_gross_subtotal) }}</li>
-                        @endif
-
-                        @if ($order->tax_subtotal > 0)
-                            <li>Tax Subtotal: {{ Currency::format($order->tax_subtotal) }}</li>
-                        @endif
-
-                        @foreach ($order->bundles as $bundle)
-                            <li>{{ $bundle->name }}: {{ Currency::format($bundle->calculated_value) }}</li>
-                        @endforeach
-
-                        @if (!empty($order->coupon))
-                            <li>{{ $order->coupon->title }} '{{ $order->coupon->code }}': {{ Currency::format($order->coupon->calculated_value) }}</li>
-                        @endif
-
-                        <li>Total: {{ Currency::format($order->total) }}</li>
-                        <li>Applied Payments: {{ Currency::format($order->payment_total) }}</li>
-                        <li>Balance Due: {{ Currency::format($order->balance_due) }}</li>
-                    </ul>
-                </section>
-
-                <section class="order-payment-info">
-                    <h3>Payment Details</h3>
-
-                    @foreach ($order->payments as $payment)
-                        @if ($payment->type == 'Credit Card')
-                            @include ('shop::components.admin.order-details.payment.credit-card', ['payment' => $payment])
-                        @else
-                            <?php throw new \Exception('unhandled payment type: ' . $payment->type) ?>
-                        @endif
-                    @endforeach
-                </section>
+                @include ('shop::components.admin.order-details.payment-details', ['order' => $order])
             </div>
 
             <div class="cms-col-thin">
@@ -105,14 +66,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="edit-container">
-                    <label class="cmsFieldLabel">More Processing</label>
-                    <div class="body-container">
-                        <div class="save">
-                            <button class="button" type="button" data-action="save" name="action">Process</button>
+
+                @if ($order->payments()->authorized()->get()->isNotEmpty())
+                    <div class="edit-container">
+                        <label class="cmsFieldLabel">Capture pre-authorized payments</label>
+                        <div class="body-container">
+                            @TODO: this isn't hooked up
+                            <div class="save">
+                                <button class="button" type="button" data-action="save" name="action">Process</button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>

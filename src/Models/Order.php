@@ -36,6 +36,7 @@ use Wax\Shop\Validators\OrderPlaceableValidator;
  *
  * @property string $session_id Orders belonging to unauthenticated users will have a session_id
  * @property int $user_id Orders belonging to authenticated users will have a user_id
+ * @property string $email Primary email address for customer notifications
  *
  * @property int $item_count Number of distinct products.
  * @property int $total_quantity Sum of all item quantities in the order.

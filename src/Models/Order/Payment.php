@@ -30,7 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $country Two-letter country code
  *
  * @method Builder|Payment approved scope for successfully authorized or captured payments
- * @method Builder|Payment authorized scope for authorized payments
+ * @method Builder|Payment authorized scope for authorized (not yet captured) payments
  * @method Builder|Payment captured scope for captured payments
  * @method Builder|Payment declined scope for declined/failed payments
  */
@@ -65,7 +65,9 @@ class Payment extends Model
 
     public function scopeAuthorized(Builder $query)
     {
-        return $query->whereNotNull('authorized_at')
+        return $query
+            ->whereNotNull('authorized_at')
+            ->whereNull('captured_at')
             ->where('response', 'AUTHORIZED');
     }
 
