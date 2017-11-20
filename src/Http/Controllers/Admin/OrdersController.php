@@ -39,7 +39,7 @@ class OrdersController extends BaseController
     {
         $order = ShopService::getOrderById($id);
 
-        $shipment = $order->shipments()->where('id', $shipmentId)->get();
+        $shipment = $order->shipments()->where('id', $shipmentId)->first();
 
         if (!$shipment) {
             abort(400);
@@ -56,8 +56,8 @@ class OrdersController extends BaseController
             'page' => $page,
             'structure' => 'orders',
             'id' => $id,
-            'errors' => [],
-            'notes' => ['The shipment has been marked as shipped and the customer has been notified.'],
+            'errors' => ['The shipment has been marked as shipped and the customer has been notified.'],
+            'notes' => [],
         ]);
     }
 }
