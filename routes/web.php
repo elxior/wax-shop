@@ -3,6 +3,8 @@
 use Wax\Shop\Services\ShopService;
 use Illuminate\Support\Facades\Route;
 
+Route::get('admin/shop/order/{id}', '\App\Shop\OrdersController@show')->name('orderDetails');
+
 Route::get('/admin/shop/product-modifiers/{product}', 'Admin\ProductModifiersController@show')
     ->middleware('auth.panel')
     ->name('admin.productModifiers');
