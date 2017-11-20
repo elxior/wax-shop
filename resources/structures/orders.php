@@ -13,9 +13,9 @@ $structure = [
         'allow_add' => false,
         'back_link' => 'index.php',
         'back_link_text' => 'main menu',
-        'edit_route' => 'orderDetails',
+        'edit_route' => 'shop::orderDetails',
         'editor_subtitle' => 'Order Processing',
-        'list_fields' => ['sequence', 'user_id', 'created_at', 'shipped_at', 'total'],
+        'list_fields' => ['sequence', 'email', 'placed_at', 'total'],
         'search_fields' => ['user_id'],
         'order' => ['sequence'],
         'order_direction' => ['desc'],
@@ -44,35 +44,44 @@ $structure['filters'] = [
     ],
 ];
 
-$structure['fields'][] = array(
+$structure['fields'][] = [
     'name' => 'sequence',
     'display_name' => 'Sequence #',
     'type' => 'text',
     'readonly' => true,
-);
-$structure['fields'][] = array(
+];
+$structure['fields'][] = [
     'name' => 'user_id',
     'display_name' => 'User',
     'type' => 'hidden',
     'bind' => CMS_BIND_ONE_TO_MANY,
     'bind_table' => 'users',
     'bind_key' => 'id',
-    'bind_value' => array(' ', 'firstname', 'lastname'),
+    'bind_value' => [' ', 'firstname', 'lastname'],
     'bind_value_type' => 'text',
-);
-$structure['fields'][] = array(
-    'name' => 'created_at',
-    'display_name' => 'Created At',
+];
+
+$structure['fields'][] = [
+    'name' => 'email',
+    'display_name' => 'Email',
+    'type' => 'text',
+];
+
+$structure['fields'][] = [
+    'name' => 'placed_at',
+    'display_name' => 'Placed At',
     'type' => 'text',
     'readonly' => true,
-);
-$structure['fields'][] = array(
+];
+
+$structure['fields'][] = [
     'name' => 'shipped_at',
     'display_name' => 'Shipped At',
     'type' => 'text',
     'readonly' => true,
-);
-$structure['fields'][] = array(
+];
+
+$structure['fields'][] = [
     'name' => 'total',
     'display_name' => 'Total',
     'type' => 'float',
@@ -82,7 +91,7 @@ $structure['fields'][] = array(
     },
     'default' => '0',
     'readonly' => true,
-);
+];
 
 $structure = (new Builder($structure))
     ->getStructure();

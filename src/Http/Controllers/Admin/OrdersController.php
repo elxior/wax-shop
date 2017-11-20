@@ -10,21 +10,21 @@ class OrdersController extends BaseController
 {
     public function show($id = 0)
     {
+        $order = ShopService::getOrderById($id);
+
         $page = [
-            'title' => 'Order Details',
+            'title' => "Order #{$order->sequence}",
             'subtitle' => 'order details subtitle',
         ];
 
-        $order = ShopService::getOrderById($id);
 
-        return view('pages.admin.order-details', [
-            'order' => $order->toArray(),
+        return view('shop::pages.admin.order-details', [
+            'order' => $order, // note: not using toArray() because visibility is dialed in for front-end use.
             'page' => $page,
             'structure' => 'orders',
             'id' => $id,
             'errors' => [],
             'notes' => [],
-
         ]);
     }
 }
