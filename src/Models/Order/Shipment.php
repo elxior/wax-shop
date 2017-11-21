@@ -2,11 +2,14 @@
 
 namespace Wax\Shop\Models\Order;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Wax\Shop\Events\OrderChanged\CartContentsChangedEvent;
 use Wax\Shop\Events\OrderChanged\ShippingAddressChangedEvent;
 use Wax\Shop\Events\OrderChanged\ShippingServiceChangedEvent;
 use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Facades\ShopServiceFacade;
+use Wax\Shop\Mail\OrderShipped;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Tax\Contracts\TaxDriverContract;
@@ -292,6 +295,28 @@ class Shipment extends Model
         return $result;
     }
 
+    public function setTrackingNumber(string $trackingNumber)
+    {
+        $now = Carbon::now();
+
+        $this->tracking_number = $trackingNumber;
+        $this->shipped_at = $now;
+        $this->save();
+
+        $order = $this->order->fresh();
+
+        if ($order->shipments()->whereNull('shipped_at')->get()->isEmpty()) {
+            $order->shipped_at = $now;
+            $order->save();
+        }
+
+        // Customer Email
+        if (!empty($order->email)) {
+            Mail::to($order->email)
+                ->send(new OrderShipped($order));
+        }
+    }
+
     public function isAddressSet()
     {
         return !is_null(
@@ -396,6 +421,11 @@ class Shipment extends Model
     public function getRequireCarrierAttribute() : bool
     {
         return $this->items->contains('shipping_enable_rate_lookup', true);
+    }
+
+    public function getEnableTrackingNumberAttribute() : bool
+    {
+        return $this->items->contains('shipping_enable_tracking_number', true);
     }
 
     public function getItemCountAttribute() : int

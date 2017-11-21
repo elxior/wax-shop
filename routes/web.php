@@ -3,12 +3,6 @@
 use Wax\Shop\Services\ShopService;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/admin/shop/product-modifiers/{product}', 'Admin\ProductModifiersController@show')
-    ->middleware('auth.panel')
-    ->name('admin.productModifiers');
-Route::put('/admin/shop/product-modifiers/{product}', 'Admin\ProductModifiersController@update')
-    ->middleware('auth.panel');
-
 Route::group(['prefix' => 'shop'], function () {
     Route::get('/', 'CatalogController@index')->name('catalogIndex');
 
@@ -78,12 +72,35 @@ Route::group(['prefix' => 'shop'], function () {
     Route::get('{slug}', 'CatalogController@show')->name('productDetail');
 });
 
-Route::group(['prefix' => 'admin/cms/coupons', 'middleware' => 'auth.panel', 'as' => 'coupons::'], function () {
-    Route::get('generate', 'Admin\CouponController@showGenerateForm')->name('generate.form');
-    Route::post('generate', 'Admin\CouponController@bulkGenerateCoupons')->name('generate');
+Route::group(['prefix' => 'admin', 'middleware' => 'auth.panel'], function () {
+    /**
+     * Order Manager
+     */
+    Route::get('shop/order/{id}', 'Admin\OrdersController@show')
+        ->name('orderDetails');
+    Route::get('shop/order/{id}/print', 'Admin\OrdersController@print')
+        ->name('orderDetails.print');
+    Route::post('shop/order/{id}/add-tracking/{shipmentId}', 'Admin\OrdersController@addTracking')
+        ->name('orderDetails.addTracking');
 
-    Route::get('export', 'Admin\CouponController@bulkExportCoupons')->name('export');
+    /**
+     * Product Modifiers
+     */
+    Route::get('shop/product-modifiers/{product}', 'Admin\ProductModifiersController@show')
+        ->name('admin.productModifiers');
+    Route::put('shop/product-modifiers/{product}', 'Admin\ProductModifiersController@update');
 
-    Route::get('import', 'Admin\CouponController@showImportForm')->name('import.form');
-    Route::post('import', 'Admin\CouponController@bulkImportCoupons')->name('import');
+    /**
+     * Coupons
+     */
+    Route::group(['prefix' => 'cms/coupons', 'as' => 'coupons::'], function () {
+        Route::get('generate', 'Admin\CouponController@showGenerateForm')->name('generate.form');
+        Route::post('generate', 'Admin\CouponController@bulkGenerateCoupons')->name('generate');
+
+        Route::get('export', 'Admin\CouponController@bulkExportCoupons')->name('export');
+
+        Route::get('import', 'Admin\CouponController@showImportForm')->name('import.form');
+        Route::post('import', 'Admin\CouponController@bulkImportCoupons')->name('import');
+    });
 });
+

@@ -55,6 +55,7 @@ class Item extends Model
         'shipping_flat_rate',
         'shipping_enable_rate_lookup',
         'shipping_disable_free_shipping',
+        'shipping_enable_tracking_number',
     ];
 
     protected $appends = [

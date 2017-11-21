@@ -47,6 +47,7 @@ class CreateProductsTable extends Migration
             $table->boolean('shipping_enable_rate_lookup')->default('1');
             $table->decimal('shipping_flat_rate', 15, 4)->default('0.00');
             $table->boolean('shipping_disable_free_shipping')->default('0');
+            $table->boolean('shipping_enable_tracking_number')->default('1');
             $table->unsignedInteger('category_id')->nullable();
             $table->string('url_slug')->nullable();
             $table->boolean('url_lock')->default('0');

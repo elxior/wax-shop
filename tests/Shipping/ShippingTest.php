@@ -126,4 +126,21 @@ class ShippingTest extends ShopBaseTestCase
 
         $this->assertEquals((14.97 + $rates[0]->amount + $rates[1]->amount), $order->shipping_gross_subtotal);
     }
+
+    public function testProductEnableTrackingDeterminesShipmentEnableTracking()
+    {
+        // shipment initially does not allow a tracking number
+        $order = $this->shopService->getActiveOrder();
+        $this->assertFalse($order->default_shipment->enable_tracking_number);
+
+        // add a non-trackable product, shipment still does not allow tracking number
+        $this->shopService->addOrderItem(factory(Product::class)->create(['shipping_enable_tracking_number' => false])->id);
+        $order->refresh();
+        $this->assertFalse($order->default_shipment->enable_tracking_number);
+
+        // add a trackable product, shipment now allows a tracking number
+        $this->shopService->addOrderItem(factory(Product::class)->create(['shipping_enable_tracking_number' => true])->id);
+        $order->refresh();
+        $this->assertTrue($order->default_shipment->enable_tracking_number);
+    }
 }
