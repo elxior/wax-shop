@@ -519,6 +519,7 @@ class Order extends Model
         }
 
         $this->persistItemData();
+        $this->persistItemOptions();
         $this->persistShipmentMetadata();
         $this->persistOrderMetadata();
 
@@ -527,9 +528,11 @@ class Order extends Model
         return true;
     }
 
+    /**
+     * Sets the attributes on the Order Item to match the underlying Product data via the magic getters.
+     */
     protected function persistItemData()
     {
-        // Set the attributes on the Order Item to match the underlying Product data via the magic getters
         $this->items->each(function ($item) {
             $item->sku = $item->getAttribute('sku');
             $item->name = $item->getAttribute('name');
@@ -537,6 +540,7 @@ class Order extends Model
             $item->shipping_flat_rate = $item->getAttribute('shipping_flat_rate');
             $item->shipping_enable_rate_lookup = $item->getAttribute('shipping_enable_rate_lookup');
             $item->shipping_disable_free_shipping = $item->getAttribute('shipping_disable_free_shipping');
+            $item->shipping_enable_tracking_number = $item->getAttribute('shipping_enable_tracking_number');
             $item->dim_l = $item->getAttribute('dim_l');
             $item->dim_w = $item->getAttribute('dim_w');
             $item->dim_h = $item->getAttribute('dim_h');
@@ -546,6 +550,25 @@ class Order extends Model
             $item->discountable = $item->getAttribute('discountable');
 
             $item->save();
+        });
+    }
+
+    /**
+     * Sets the `option` and `value` fields on each OrderItemOption to the corresponding
+     * Product Option->name/Value->name.
+     */
+    protected function persistItemOptions()
+    {
+        $this->items->each(function ($item) {
+            $product = $item->product;
+            $item->options->each(function ($itemOption) use ($product) {
+                $productOption = $product->options->where('id', $itemOption->option_id)->first();
+                $productOptionValue = $productOption->values->where('id', $itemOption->value_id)->first();
+
+                $itemOption->option = $productOption->name;
+                $itemOption->value = $productOptionValue->name;
+                $itemOption->save();
+            });
         });
     }
 
@@ -578,9 +601,7 @@ class Order extends Model
         }
 
         $this->ip_address = request()->ip();
-
         $this->placed_at = Carbon::now();
-
         $this->searchIndex = $this->toJson();
 
         $this->save();

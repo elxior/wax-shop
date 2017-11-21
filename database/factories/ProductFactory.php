@@ -12,6 +12,16 @@ $factory->define(Wax\Shop\Models\Product::class, function (Faker\Generator $fake
         'sku' => $faker->ean8(),
         'keywords' => collect($faker->words($faker->numberBetween(3, 12)))->implode(', '),
         'taxable' => true,
+        'shipping_flat_rate' => 0,
+        'shipping_enable_rate_lookup' => false,
+        'shipping_disable_free_shipping' => false,
+        'shipping_enable_tracking_number' => true,
+        'dim_l' => $faker->randomFloat(2, 1, 10),
+        'dim_w' => $faker->randomFloat(2, 1, 10),
+        'dim_h' => $faker->randomFloat(2, 1, 10),
+        'weight' => $faker->randomFloat(2, 5, 20),
+        'one_per_user' => false,
+        'discountable' => true,
     ];
 });
 

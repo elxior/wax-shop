@@ -12,15 +12,17 @@
         <li>Tax ({{ $shipment->tax_desc }}}): {{ Currency::format($shipment->tax_amount) }}</li>
     @endif
 
-    <li>
-        <form action="{{ route('shop::orderDetails.addTracking', [
-                            'id' => $shipment->order->id,
-                            'shipmentId' => $shipment->id
-                        ]) }}" method="POST">
-            {!! csrf_field() !!}
-            Tracking number:
-            <input type="text" name="tracking_number" value="{{ $shipment->tracking_number }}">
-            <input type="submit" value="Save">
-        </form>
-    </li>
+    @if ($shipment->enable_tracking_number)
+        <li>
+            <form action="{{ route('shop::orderDetails.addTracking', [
+                                'id' => $shipment->order->id,
+                                'shipmentId' => $shipment->id
+                            ]) }}" method="POST">
+                {!! csrf_field() !!}
+                Tracking number:
+                <input type="text" name="tracking_number" value="{{ $shipment->tracking_number }}">
+                <input type="submit" value="Save">
+            </form>
+        </li>
+    @endif
 </ul>

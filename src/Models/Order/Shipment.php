@@ -423,6 +423,11 @@ class Shipment extends Model
         return $this->items->contains('shipping_enable_rate_lookup', true);
     }
 
+    public function getEnableTrackingNumberAttribute() : bool
+    {
+        return $this->items->contains('shipping_enable_tracking_number', true);
+    }
+
     public function getItemCountAttribute() : int
     {
         return $this->items->count();

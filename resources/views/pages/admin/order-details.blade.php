@@ -41,7 +41,9 @@
 
                 @foreach ($order->shipments as $shipment)
                     <section>
-                        <h3>Shipment {{ $loop->iteration }}</h3>
+                        @if ($order->shipments->count() > 1)
+                            <h3>Shipment {{ $loop->iteration }}</h3>
+                        @endif
                         <p>
                             <strong>Ship To:</strong><br>
                             {!! \Wax\Data::formatAddress($shipment, true) !!}

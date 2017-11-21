@@ -33,6 +33,7 @@ class CreateOrderItemsTable extends Migration
             $table->decimal('shipping_flat_rate', 15, 4)->nullable();
             $table->boolean('shipping_enable_rate_lookup')->nullable();
             $table->boolean('shipping_disable_free_shipping')->nullable();
+            $table->boolean('shipping_enable_tracking_number')->nullable();
             $table->float('dim_l')->nullable();
             $table->float('dim_w')->nullable();
             $table->float('dim_h')->nullable();
