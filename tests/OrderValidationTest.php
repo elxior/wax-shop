@@ -6,7 +6,7 @@ use Tests\Shop\Traits\SetsShippingAddress;
 use Tests\Shop\Support\ShopBaseTestCase;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
-use Wax\Shop\Drivers\Tax\DbDriver;
+use Wax\Shop\Tax\Drivers\DbDriver;
 use Wax\Shop\Services\ShopService;
 
 class OrderValidationTest extends ShopBaseTestCase

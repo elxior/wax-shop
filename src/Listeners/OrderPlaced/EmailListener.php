@@ -14,7 +14,7 @@ class EmailListener
         $order = $event->order();
 
         if (empty($order->email)) {
-            return false;
+            return;
         }
 
         // Customer Email
