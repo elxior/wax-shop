@@ -3,11 +3,8 @@
 use App\Wax\Admin\Cms\Cms;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Wax\Core\Support\ConfigurationDatabase;
 use Wax\Core\Support\Localization\Currency;
 use Wax\Core\Structures\Builder;
-
-    $settings = new ConfigurationDatabase('Shop Settings');
 
     $structure = array(
         'table' => 'products',
@@ -375,7 +372,7 @@ use Wax\Core\Structures\Builder;
         'display_name' => 'Weight',
         'type' => 'float',
         'default' => '0',
-        'notes' => $settings->get('SHOP_WEIGHT_IN_LBS') ? 'pounds' : 'ounces'
+        'notes' => config('wax.shop.products.weight_in_lbs') ? 'pounds' : 'ounces'
     );
 
     $structure['fields'][] = array(

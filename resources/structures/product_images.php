@@ -1,11 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
-use Wax\Core\Support\ConfigurationDatabase;
 use Wax\Shop\Models\Product\Image;
 
-    $shopSettings = new ConfigurationDatabase("Shop Settings");
-    $image_path = $shopSettings->get('SHOP_PRODUCT_IMAGE_PATH');
+    $image_path = '/res/uploads/shop/products/images';
 
     $structure = array(
         'table' => 'product_images',

@@ -3,6 +3,9 @@
  * These configuration values are prefixed with 'wax.shop.', e.g. `config('wax.shop.models.product')`
  */
 return [
+    'products' => [
+        'weight_in_lbs' => true, // Display product weights in lbs. instead of oz.
+    ],
     'ratings' => [
         'min' => 1,
         'max' => 5,
