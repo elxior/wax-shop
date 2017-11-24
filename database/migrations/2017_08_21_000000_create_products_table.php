@@ -24,8 +24,10 @@ class CreateProductsTable extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable();
             $table->unsignedInteger('brand')->nullable()->default('0');
-            $table->string('model', 100);
+            $table->string('model', 100)->nullable();
             $table->string('name', 250);
+            $table->longText('meta_description')->default('');
+            $table->longText('meta_keywords')->default('');
             $table->text('description');
             $table->text('short_description');
             $table->boolean('active')->default('1');
@@ -41,7 +43,6 @@ class CreateProductsTable extends Migration
             $table->boolean('discountable')->default('1');
             $table->boolean('one_per_user')->default('0');
             $table->string('sku', 100)->default('');
-            $table->longText('keywords');
             $table->decimal('rating', 8, 4)->nullable();
             $table->unsignedInteger('rating_count')->default('0');
             $table->boolean('shipping_enable_rate_lookup')->default('1');

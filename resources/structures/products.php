@@ -26,7 +26,7 @@ use Wax\Core\Structures\Builder;
 
             // check if any handlers have postsave methods
             $item = $cms->getRecord($id, false);
-            if (count($item['handlers'])) {
+            if (isset($item['handlers']) && count($item['handlers'])) {
                 $hCms = new Cms('product_handlers');
                 foreach ($item['handlers'] as $handlerId) {
                     $handler = $hCms->getRecord($handlerId);
@@ -295,7 +295,7 @@ use Wax\Core\Structures\Builder;
         'name' => 'sku',
         'display_name' => 'SKU',
         'type' => 'text',
-        'validate' => true,
+        'required' => true,
         'unique' => true
 
     );
