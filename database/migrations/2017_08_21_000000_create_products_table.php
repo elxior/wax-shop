@@ -52,8 +52,6 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('category_id')->nullable();
             $table->string('url_slug')->nullable();
             $table->boolean('url_lock')->default('0');
-            $table->text('meta_description')->nullable();
-            $table->text('meta_keywords')->nullable();
         });
     }
 
