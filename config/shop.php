@@ -48,6 +48,7 @@ return [
             \Wax\Shop\Listeners\OrderPlaced\CouponListener::class,
             \Wax\Shop\Listeners\OrderPlaced\EmailListener::class,
             \Wax\Shop\Listeners\OrderPlaced\InventoryListener::class,
+            \Wax\Shop\Listeners\OrderPlaced\CommitTaxListener::class,
         ],
     ]
 ];
