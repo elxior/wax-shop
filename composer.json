@@ -36,7 +36,7 @@
         "phpunit/phpunit": "~5.0",
         "squizlabs/php_codesniffer": "^2.3",
         "predis/predis": "~1.0",
-        "oohology/wax-app": "dev-feature/integration-test-base-test-case"
+        "oohology/wax-app": "dev-master"
     },
     "autoload": {
         "psr-4": {
