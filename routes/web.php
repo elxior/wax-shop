@@ -7,7 +7,7 @@ Route::group(['prefix' => 'shop'], function () {
     Route::get('/', 'CatalogController@index')->name('catalogIndex');
 
     Route::get('email-test', function (ShopService $shopService) {
-        return view('emails.cart', ['order' => $shopService->getPlacedOrder()->toArray()]);
+        return view('shop::mail.order-placed', ['order' => $shopService->getPlacedOrder()->toArray()]);
     });
 
     Route::group(['prefix' => 'api'], function () {
@@ -58,15 +58,15 @@ Route::group(['prefix' => 'shop'], function () {
     });
 
     Route::get('/cart', function () {
-        return view('modules.Shop.pages.cart');
+        return view('shop::pages.cart');
     });
 
     Route::get('/checkout', function () {
-        return view('modules.Shop.pages.checkout');
+        return view('shop::pages.checkout');
     });
 
     Route::get('/checkout-complete', function () {
-        return view('modules.Shop.pages.checkout-complete');
+        return view('shop::pages.checkout-complete');
     });
 
     Route::get('{slug}', 'CatalogController@show')->name('productDetail');

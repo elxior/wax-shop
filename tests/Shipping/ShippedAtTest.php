@@ -145,7 +145,7 @@ class ShippedAtTest extends ShopBaseTestCase
         $mailable = (new OrderShipped($order))->build();
 
         $this->assertTrue($mailable->hasFrom($this->testMailFrom, config('app.name')));
-        $this->assertEquals('emails.order-shipped', $mailable->view);
+        $this->assertEquals('shop::mail.order-shipped', $mailable->view);
         $this->assertEquals($this->testSubject, $mailable->subject);
     }
 

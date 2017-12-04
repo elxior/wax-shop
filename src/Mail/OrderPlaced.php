@@ -25,6 +25,6 @@ class OrderPlaced extends Mailable
 
         return $this->from($mailSettings->get('WEBSITE_MAILFROM'), config('app.name'))
             ->subject(__('shop::mail.order_placed_subject'))
-            ->view('emails.order-placed', ['order' => $this->order->toArray()]);
+            ->view('shop::mail.order-placed', ['order' => $this->order->toArray()]);
     }
 }

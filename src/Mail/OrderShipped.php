@@ -31,6 +31,6 @@ class OrderShipped extends Mailable
 
         return $this->from($mailSettings->get('WEBSITE_MAILFROM'), config('app.name'))
             ->subject(__('shop::mail.order_shipped_subject'))
-            ->view('emails.order-shipped', ['order' => $this->order->toArray(), 'trackedShipments' => $shipments]);
+            ->view('shop::mail.order-shipped', ['order' => $this->order->toArray(), 'trackedShipments' => $shipments]);
     }
 }
