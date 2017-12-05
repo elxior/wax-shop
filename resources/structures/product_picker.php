@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\DB;
 use Wax\Core\Support\ConfigurationDatabase;
 
-    $image_path = (new ConfigurationDatabase("Shop Settings"))->get('SHOP_PRODUCT_IMAGE_PATH');
+    $image_path = '/res/uploads/shop/products/images';
 
     $structure = array(
         'table' => 'products',
