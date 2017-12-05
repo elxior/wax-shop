@@ -27,7 +27,7 @@
         "php": ">=7.1.0",
         "laravel/framework": "5.4.*",
         "doctrine/dbal": "^2.5",
-        "oohology/wax-cms": "dev-feature/shop-update-prep as 0.10.x-dev",
+        "oohology/wax-cms": "~0.11.0",
         "avalara/avataxclient": "dev-visibility"
     },
     "require-dev": {
