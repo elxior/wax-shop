@@ -19,13 +19,13 @@ class EmailListener
 
         // Customer Email
         Mail::to($order->email)
-            ->send(new OrderPlaced($order));
+            ->queue(new OrderPlaced($order));
 
         // Admin Email
         $mailSettings = app()->makeWith(ConfigurationDatabase::class, ['group' => 'Mail Settings']);
         $mailTo = $this->parseMailTo($mailSettings->get('WEBSITE_MAILTO'));
         Mail::to($mailTo)
-            ->send(new OrderPlaced($order));
+            ->queue(new OrderPlaced($order));
     }
 
     protected function parseMailTo($mailString)

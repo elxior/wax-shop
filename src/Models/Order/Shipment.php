@@ -313,7 +313,7 @@ class Shipment extends Model
         // Customer Email
         if (!empty($order->email)) {
             Mail::to($order->email)
-                ->send(new OrderShipped($order));
+                ->queue(new OrderShipped($order));
         }
     }
 

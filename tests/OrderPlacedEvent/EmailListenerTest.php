@@ -43,7 +43,7 @@ class EmailListenerTest extends ShopBaseTestCase
 
         $this->shopService = app()->make(ShopService::class);
 
-        app()->bind(ConfigurationDatabase::class, function() {
+        app()->bind(ConfigurationDatabase::class, function () {
             $double = \Mockery::mock(ConfigurationDatabase::class);
             $double->shouldReceive('get')
                 ->with('WEBSITE_MAILFROM')
@@ -96,7 +96,7 @@ class EmailListenerTest extends ShopBaseTestCase
             return $mail->hasTo($emailAddress);
         });
 
-        Mail::assertSent(OrderPlaced::class, function ($mail) use ($emailAddress) {
+        Mail::assertSent(OrderPlaced::class, function ($mail) {
             return $mail->hasTo('test1@example.org')
                 && $mail->hasTo('test2@example.org');
         });

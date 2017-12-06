@@ -2,9 +2,10 @@
 
 namespace Wax\Shop\Listeners\OrderPlaced;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Wax\Shop\Events\OrderPlacedEvent;
 
-class CommitTaxListener
+class CommitTaxListener implements ShouldQueue
 {
     public function handle(OrderPlacedEvent $event)
     {
