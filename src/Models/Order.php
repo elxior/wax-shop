@@ -575,7 +575,7 @@ class Order extends Model
     protected function persistShipmentMetadata()
     {
         $this->shipments->each(function ($shipment) {
-            $shipment->sequence = Shipment::max('sequence') + 1;
+            $shipment->sequence =  max(Order::max('sequence') + 1, (int)config('wax.shop.misc.minimum_order_sequence'));
             $shipment->save();
         });
     }
@@ -597,7 +597,7 @@ class Order extends Model
         $this->total = $this->getAttribute('total');
 
         if (empty($this->sequence)) {
-            $this->sequence = Order::max('sequence') + 1;
+            $this->sequence = max(Order::max('sequence') + 1, (int)config('wax.shop.misc.minimum_order_sequence'));
         }
 
         $this->ip_address = request()->ip();

@@ -50,5 +50,8 @@ return [
             \Wax\Shop\Listeners\OrderPlaced\InventoryListener::class,
             \Wax\Shop\Listeners\OrderPlaced\CommitTaxListener::class,
         ],
+    ],
+    'misc' => [
+        'minimum_order_sequence' => 525,
     ]
 ];
