@@ -107,9 +107,8 @@ use Wax\Core\Structures\Builder;
         'group' => 'Inventory',
         'name' => 'inventory',
         'display_name' => 'Inventory',
-        'type' => 'integer',
+        'type' => config('wax.shop.inventory.track') ? 'integer' : 'hidden',
         'default' => '0',
-        'notes' => 'Inv. Tracking: ' . (config('wax.shop.inventory.track') ? 'On' : 'Off')
     );
 
     $structure['fields'][] = array(
@@ -152,7 +151,8 @@ use Wax\Core\Structures\Builder;
     $structure['fields'][] = array(
         'sidebar' => true,
         'name' => 'active',
-        'display_name' => 'Enabled',
+        'display_name' => 'Online',
+        'notes' => 'Enabled',
         'type' => 'boolean',
         'default' => '1'
     );
