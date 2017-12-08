@@ -2,11 +2,18 @@
 
 namespace Wax\Shop\Listeners;
 
-use Wax\Shop\Models\Order;
+use Wax\Shop\Repositories\OrderRepository;
 use Wax\Core\Events\SessionMigrationEvent;
 
 class SessionMigrationListener
 {
+    protected $orderRepo;
+
+    public function __construct(OrderRepository $orderRepo)
+    {
+        $this->orderRepo = $orderRepo;
+    }
+
     /**
      * Handle the event.
      *
@@ -15,7 +22,8 @@ class SessionMigrationListener
      */
     public function handle(SessionMigrationEvent $event)
     {
-        Order::where('session_id', $event->getOldId())
+        $this->orderRepo->getNewOrder()
+            ->where('session_id', $event->getOldId())
             ->update(['session_id' => $event->getNewId()]);
     }
 }
