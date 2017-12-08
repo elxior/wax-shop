@@ -2,12 +2,20 @@
 
 namespace Wax\Shop\Listeners;
 
-use Wax\Shop\Models\Order;
 use App\User;
+use Wax\Shop\Models\Order;
+use Wax\Shop\Repositories\OrderRepository;
 use Illuminate\Auth\Events\Login;
 
 class LoginListener
 {
+    protected $orderRepo;
+
+    public function __construct(OrderRepository $orderRepo)
+    {
+        $this->orderRepo = $orderRepo;
+    }
+
     /**
      * Handle the event.
      *
@@ -28,7 +36,6 @@ class LoginListener
 
             if ($activeOrder->item_count > 0) {
                 $this->getSavedOrders($event)
-                    ->get()
                     ->each
                     ->delete();
             }
@@ -43,14 +50,12 @@ class LoginListener
 
     protected function getSavedOrders(Login $event)
     {
-        return Order::where('user_id', $event->user->id)
-            ->whereNull('placed_at');
+        return $this->orderRepo->getUnplacedOrdersByUserId($event->user->id);
     }
 
     protected function deleteSavedIncompleteOrdersWithEmptyCart(Login $event)
     {
-        Order::where('user_id', $event->user->id)
-            ->whereNull('placed_at')
+        $this->orderRepo->getUnplacedOrdersByUserId($event->user->id)
             ->each(function ($order) {
                 if ($order->item_count === 0) {
                     $order->delete();

@@ -51,6 +51,13 @@ class OrderRepository
         return $order;
     }
 
+    public function getUnplacedOrdersByUserId($userId)
+    {
+        return Order::where('user_id', $userId)
+            ->whereNull('placed_at')
+            ->get();
+    }
+
     protected function create() : Order
     {
         $order = new Order;
