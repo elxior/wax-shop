@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Session;
 
 class OrderRepository
 {
-
     public function getActive() : Order
     {
-        $order = Order::mine()
+        $order = $this->getNewOrder()
+            ->mine()
             ->active()
             ->first() ?? $this->create();
 
@@ -26,7 +26,7 @@ class OrderRepository
 
     public function getPlaced() : ?Order
     {
-        return Order::mine()
+        return $this->getNewOrder()->mine()
             ->placed()
             ->orderBy('placed_at', 'desc')
             ->first();
@@ -34,7 +34,7 @@ class OrderRepository
 
     public function getOrderHistory()
     {
-        return Order::mine()
+        return $this->getNewOrder()->mine()
             ->placed()
             ->orderBy('placed_at', 'desc')
             ->get();
@@ -42,7 +42,7 @@ class OrderRepository
 
     public function getById($orderId) : Order
     {
-        $order = Order::where('id', $orderId)->firstOrFail();
+        $order = $this->getNewOrder()->where('id', $orderId)->firstOrFail();
 
         if (Gate::denies('get-order', $order)) {
             abort(403);
@@ -53,14 +53,25 @@ class OrderRepository
 
     public function getUnplacedOrdersByUserId($userId)
     {
-        return Order::where('user_id', $userId)
+        return $this->getNewOrder()->where('user_id', $userId)
             ->whereNull('placed_at')
             ->get();
     }
 
+    public function getNewOrder()
+    {
+        $orderClass = $this->getOrderClass();
+        return (new $orderClass);
+    }
+
+    public function getOrderClass()
+    {
+        return config('wax.shop.models.order');
+    }
+
     protected function create() : Order
     {
-        $order = new Order;
+        $order = $this->getNewOrder();
         if (Auth::check()) {
             $order->user_id = Auth::user()->id;
         } else {
