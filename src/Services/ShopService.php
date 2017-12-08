@@ -71,9 +71,7 @@ class ShopService
             return false;
         }
 
-        return Order::where('user_id', Auth::user()->id)
-            ->whereNotNull('placed_at')
-            ->get()
+        return $this->orderRepo->getOrderHistory()
             ->filter(function ($order) use ($productId, $options, $customizations) {
                 /* @var Order $order */
                 return $order->hasProduct($productId, $options, $customizations);
