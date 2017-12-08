@@ -22,7 +22,7 @@ class SessionMigrationListener
      */
     public function handle(SessionMigrationEvent $event)
     {
-        $this->orderRepo->getNewOrder()
+        $this->orderRepo->getOrderModel()
             ->where('session_id', $event->getOldId())
             ->update(['session_id' => $event->getNewId()]);
     }

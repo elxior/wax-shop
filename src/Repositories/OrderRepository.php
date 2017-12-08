@@ -11,7 +11,7 @@ class OrderRepository
 {
     public function getActive() : Order
     {
-        $order = $this->getNewOrder()
+        $order = $this->getOrderModel()
             ->mine()
             ->active()
             ->first() ?? $this->create();
@@ -26,7 +26,7 @@ class OrderRepository
 
     public function getPlaced() : ?Order
     {
-        return $this->getNewOrder()->mine()
+        return $this->getOrderModel()->mine()
             ->placed()
             ->orderBy('placed_at', 'desc')
             ->first();
@@ -34,7 +34,7 @@ class OrderRepository
 
     public function getOrderHistory()
     {
-        return $this->getNewOrder()->mine()
+        return $this->getOrderModel()->mine()
             ->placed()
             ->orderBy('placed_at', 'desc')
             ->get();
@@ -42,7 +42,7 @@ class OrderRepository
 
     public function getById($orderId) : Order
     {
-        $order = $this->getNewOrder()->where('id', $orderId)->firstOrFail();
+        $order = $this->getOrderModel()->where('id', $orderId)->firstOrFail();
 
         if (Gate::denies('get-order', $order)) {
             abort(403);
@@ -53,12 +53,12 @@ class OrderRepository
 
     public function getUnplacedOrdersByUserId($userId)
     {
-        return $this->getNewOrder()->where('user_id', $userId)
+        return $this->getOrderModel()->where('user_id', $userId)
             ->whereNull('placed_at')
             ->get();
     }
 
-    public function getNewOrder()
+    public function getOrderModel()
     {
         $orderClass = $this->getOrderClass();
         return (new $orderClass);
@@ -71,7 +71,7 @@ class OrderRepository
 
     protected function create() : Order
     {
-        $order = $this->getNewOrder();
+        $order = $this->getOrderModel();
         if (Auth::check()) {
             $order->user_id = Auth::user()->id;
         } else {
