@@ -21,9 +21,9 @@ class CreateOrdersTable extends Migration
     {
         Schema::create($this->set_schema_table, function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('sequence')->nullable();
-            $table->unsignedInteger('user_id')->nullable();
-            $table->string('session_id', 128)->nullable();
+            $table->unsignedInteger('sequence')->nullable()->index();
+            $table->unsignedInteger('user_id')->nullable()->index();
+            $table->string('session_id', 128)->nullable()->index();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable();
             $table->timestamp('placed_at')->nullable();
@@ -34,9 +34,6 @@ class CreateOrdersTable extends Migration
             $table->string('email')->nullable();
             $table->string('ip_address')->nullable();
             $table->longText('searchIndex')->nullable();
-
-            $table->index(["user_id"], 'orders_user_id');
-            $table->index(["session_id"], 'orders_session_id');
         });
     }
 

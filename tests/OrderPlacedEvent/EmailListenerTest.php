@@ -2,14 +2,12 @@
 
 namespace Tests\Shop\Payment;
 
-
 use Faker\Factory;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Mail;
 use Tests\Shop\Support\ShopBaseTestCase;
 use Tests\Shop\Traits\BuildsPlaceableOrders;
-use Wax\Core\Support\ConfigurationDatabase;
 use Wax\Shop\Events\OrderPlacedEvent;
 use Wax\Shop\Listeners\OrderPlaced\EmailListener;
 use Wax\Shop\Mail\OrderPlaced;
@@ -17,7 +15,7 @@ use Wax\Shop\Services\ShopService;
 
 class EmailListenerTest extends ShopBaseTestCase
 {
-    Use BuildsPlaceableOrders;
+    use BuildsPlaceableOrders;
 
     /* @var ShopService */
     protected $shopService;
@@ -25,8 +23,6 @@ class EmailListenerTest extends ShopBaseTestCase
     /* @var \Faker\Generator */
     protected $faker;
 
-    protected $testMailFrom = 'noreply@example.org';
-    protected $testMailTo = 'test1@example.org, test2@example.org';
     protected $testSubject = 'teh subject';
 
     public function setUp()
@@ -42,19 +38,6 @@ class EmailListenerTest extends ShopBaseTestCase
         Mail::fake();
 
         $this->shopService = app()->make(ShopService::class);
-
-        app()->bind(ConfigurationDatabase::class, function () {
-            $double = \Mockery::mock(ConfigurationDatabase::class);
-            $double->shouldReceive('get')
-                ->with('WEBSITE_MAILFROM')
-                ->andReturn($this->testMailFrom);
-
-            $double->shouldReceive('get')
-                ->with('WEBSITE_MAILTO')
-                ->andReturn($this->testMailTo);
-
-            return $double;
-        });
 
         // Mock the translation for email subject line
         Lang::shouldReceive('getFromJson')

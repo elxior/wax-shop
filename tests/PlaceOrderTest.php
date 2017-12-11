@@ -169,8 +169,7 @@ class PlaceOrderTest extends ShopBaseTestCase
 
         $this->assertEquals(count($options), $item->options->count());
 
-        foreach ($options as $optionId => $valueId)
-        {
+        foreach ($options as $optionId => $valueId) {
             $productOption = $product->options->where('id', $optionId)->first();
             $productOptionValue = $productOption->values->where('id', $valueId)->first();
 
@@ -201,5 +200,24 @@ class PlaceOrderTest extends ShopBaseTestCase
         $this->assertGreaterThan(0, $order->sequence);
         $this->assertNotNull($order->placed_at);
         $this->assertNotEmpty($order->searchIndex);
+    }
+
+    public function testOrderSequenceMinimumValue()
+    {
+        config(['wax.shop.misc.minimum_order_sequence' => 12345]);
+
+        $order = $this->buildPlaceableOrder();
+        $this->assertTrue($order->place());
+        $order->refresh();
+
+        $this->assertEquals(12345, $order->sequence);
+        $this->assertEquals(12345, $order->default_shipment->sequence);
+
+        $order = $this->buildPlaceableOrder();
+        $this->assertTrue($order->place());
+        $order->refresh();
+
+        $this->assertEquals(12346, $order->sequence);
+        $this->assertEquals(12346, $order->default_shipment->sequence);
     }
 }

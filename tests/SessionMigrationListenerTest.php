@@ -5,7 +5,9 @@ namespace Tests\Shop;
 use App\User;
 use Faker\Factory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Tests\Shop\Support\ShopBaseTestCase;
+use Tests\Shop\Traits\BuildsPlaceableOrders;
 use Wax\Core\Eloquent\Models\User\Address;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Product;
@@ -13,6 +15,8 @@ use Wax\Shop\Services\ShopService;
 
 class SessionMigrationListenerTest extends ShopBaseTestCase
 {
+    use BuildsPlaceableOrders;
+
     /* @var ShopService */
     protected $shopService;
 
@@ -22,6 +26,9 @@ class SessionMigrationListenerTest extends ShopBaseTestCase
     public function setUp()
     {
         parent::setUp();
+
+        // testing orders produces emails
+        Mail::fake();
 
         $this->shopService = app()->make(ShopService::class);
         $this->faker = Factory::create();
@@ -52,7 +59,7 @@ class SessionMigrationListenerTest extends ShopBaseTestCase
         $this->assertEquals(1, Order::count());
     }
 
-    public function testAuthenticateUserUpdatesActiveOrder()
+    public function testAuthenticateUpdatesActiveOrder()
     {
         $this->assertNotEmpty($this->shopService->getActiveOrder()->session_id);
         $this->assertEmpty($this->shopService->getActiveOrder()->user_id);
@@ -64,6 +71,56 @@ class SessionMigrationListenerTest extends ShopBaseTestCase
         $this->assertEquals($user->id, $this->shopService->getActiveOrder()->user_id);
 
         $this->assertEquals(1, Order::count());
+    }
+
+    public function testAuthenticateUpdatesMultiplePlacedOrders()
+    {
+        $order1 = $this->buildPlaceableOrder();
+        $this->assertTrue($order1->place());
+
+        $order2 = $this->buildPlaceableOrder();
+        $this->assertTrue($order2->place());
+
+        $order1->refresh();
+        $order2->refresh();
+        $this->assertNotNull($order1->session_id);
+        $this->assertNotNull($order2->session_id);
+
+        $user = factory(User::class)->create();
+        Auth::login($user);
+
+        $order1->refresh();
+        $order2->refresh();
+        $this->assertNull($order1->session_id);
+        $this->assertNull($order2->session_id);
+        $this->assertEquals($user->id, $order1->user_id);
+        $this->assertEquals($user->id, $order2->user_id);
+    }
+
+    public function testAuthenticateWithPlacedAndActiveOrders()
+    {
+        $placedOrder = $this->buildPlaceableOrder();
+        $this->assertTrue($placedOrder->place());
+
+        $activeOrder = $this->shopService->getActiveOrder();
+
+        $user = factory(User::class)->create();
+        Auth::login($user);
+
+        $placedOrder->refresh();
+        $activeOrder->refresh();
+
+        $this->assertNull($placedOrder->session_id);
+        $this->assertNull($activeOrder->session_id);
+        $this->assertEquals($user->id, $placedOrder->user_id);
+        $this->assertEquals($user->id, $activeOrder->user_id);
+
+        $this->assertNotNull($placedOrder->placed_at);
+        $this->assertNull($activeOrder->placed_at);
+
+        // is() fails because getConnectionName is null until the model is retrieved, which fresh() fixes.
+        $activeOrder = $activeOrder->fresh();
+        $this->assertTrue($activeOrder->is($this->shopService->getActiveOrder()));
     }
 
     public function testLogout()
