@@ -142,4 +142,30 @@ class InventoryListenerTest extends ShopBaseTestCase
         $this->assertEquals(9, $item->inventory);
         $this->assertNull($item->modifier->getAttributes()['inventory']);
     }
+
+    public function testBasicInventoryWithoutTracking()
+    {
+        config(['wax.shop.inventory.track' => false]);
+
+        $order = $this->buildPlaceableOrder();
+
+        $product = $order->items->first()->product;
+        $product->inventory = 10;
+        $product->save();
+        $product->refresh();
+
+
+        $this->assertEquals(10, $order->items->first()->inventory);
+        $this->assertEquals(10, $product->inventory);
+        $this->assertEquals(config('wax.shop.inventory.max_cart_quantity'), $product->effective_inventory);
+
+        $order->place();
+
+        $listener = new InventoryListener();
+        $listener->handle(new OrderPlacedEvent($order->fresh()));
+
+        $product->refresh();
+        $this->assertEquals(10, $product->inventory);
+        $this->assertEquals(config('wax.shop.inventory.max_cart_quantity'), $product->effective_inventory);
+    }
 }
