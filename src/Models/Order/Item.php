@@ -137,9 +137,9 @@ class Item extends Model
         return $this->modifier->sku ?? $value ?? $this->product->sku;
     }
 
-    public function getInventoryAttribute($value) : int
+    public function getInventoryAttribute() : int
     {
-        return $this->modifier->inventory ?? $value ?? $this->product->inventory;
+        return $this->modifier->effective_inventory ?? $this->product->effective_inventory;
     }
 
     public function getWeightAttribute($value) : float
