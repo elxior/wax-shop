@@ -155,7 +155,7 @@ class InventoryListenerTest extends ShopBaseTestCase
         $product->refresh();
 
 
-        $this->assertEquals(10, $order->items->first()->inventory);
+        $this->assertEquals(config('wax.shop.inventory.max_cart_quantity'), $order->items->first()->inventory);
         $this->assertEquals(10, $product->inventory);
         $this->assertEquals(config('wax.shop.inventory.max_cart_quantity'), $product->effective_inventory);
 

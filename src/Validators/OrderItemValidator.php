@@ -3,30 +3,71 @@
 namespace Wax\Shop\Validators;
 
 use Wax\Shop\Facades\ShopServiceFacade;
+use Wax\Shop\Models\Order\Item;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Models\Product\OptionModifier;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\MessageBag;
 use Wax\Shop\Repositories\ProductRepository;
 
-class CreateOrderItemValidator extends AbstractValidator
+class OrderItemValidator extends AbstractValidator
 {
+    protected $itemId;
     protected $productId;
     protected $quantity;
     protected $options;
     protected $customizations;
 
-    public function __construct(int $productId, int $quantity, array $options, array $customizations)
+    /**
+     * we're adding somethint to the cart from the request. Set it up!
+     *
+     * @param int   $productId
+     * @param int   $quantity
+     * @param array $options        Should be like [[optionId => optionValueId], [optionId => optionValueId]]
+     * @param array $customizations
+     */
+    public function setRequest(int $productId, int $quantity, array $options, array $customizations)
     {
         $this->productId = $productId;
         $this->quantity = $quantity;
-        $this->options = $options;
+        $this->options = collect($options);
         $this->customizations = $customizations;
+
+        return $this;
+    }
+
+    public function setItemId(int $itemId)
+    {
+        $this->itemId = $itemId;
+
+        return $this;
+    }
+
+    public function setQuantity(int $quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
     }
 
     public function passes() : bool
     {
         $this->messages = new MessageBag;
+
+        if ($this->itemId !== null) {
+            $item = Item::find($this->itemId);
+            
+            if (is_null($item)) {
+                $this->errors()->add('item_id', 'Invalid Cart Item');
+                return false;
+            }
+
+            $options = $item->options->mapWithKeys(function ($option) {
+                return [$option->id => $option->value_id];
+            })->toArray();
+
+            $this->setRequest($item->product_id, $this->quantity ?? $item->quantity, $options, $item->customizations->toArray());
+        }
 
         $product = app()->make(ProductRepository::class)->get($this->productId);
 
@@ -36,6 +77,7 @@ class CreateOrderItemValidator extends AbstractValidator
         }
 
         $this->checkOnePerUser($product)
+        && $this->checkOptionsAgainstProduct($product)
         && $this->checkRequiredOptions($product)
         && $this->checkInventory($product);
 
@@ -59,15 +101,13 @@ class CreateOrderItemValidator extends AbstractValidator
             return false;
         }
 
-        $options = $this->getOptionsFromRequest($product)->toArray();
-
-        $orderHasProduct = ShopServiceFacade::orderHasProduct($product->id, $options, null);
+        $orderHasProduct = ShopServiceFacade::orderHasProduct($product->id, $this->options->toArray(), null);
         if ($orderHasProduct) {
             $this->errors()->add('product_id', 'This product is already in your cart.');
             return false;
         }
 
-        $userOwnsProduct = ShopServiceFacade::userOwnsProduct($product->id, $options, null);
+        $userOwnsProduct = ShopServiceFacade::userOwnsProduct($product->id, $this->options->toArray(), null);
         if ($userOwnsProduct) {
             $this->errors()->add('product_id', 'You have already purchased this product.');
             return false;
@@ -86,7 +126,7 @@ class CreateOrderItemValidator extends AbstractValidator
     {
         $missingOptions = $product->options
             ->where('pivot.required', 1)
-            ->whereNotIn('id', $this->getOptionsFromRequest($product)->filter()->keys());
+            ->whereNotIn('id', $this->options->filter()->keys());
 
         if ($missingOptions->isNotEmpty()) {
             $this->errors()
@@ -178,14 +218,12 @@ class CreateOrderItemValidator extends AbstractValidator
      */
     protected function getProductModifierForRequest(Product $product) : ?OptionModifier
     {
-        $options = $this->getOptionsFromRequest($product);
-
-        if ($options->isEmpty()) {
+        if ($this->options->isEmpty()) {
             return null;
         }
 
         return $product->optionModifiers
-            ->where('values', $options->sort()->implode('-'))
+            ->where('values', $this->options->sort()->implode('-'))
             ->first();
     }
 
@@ -195,10 +233,27 @@ class CreateOrderItemValidator extends AbstractValidator
      * @param Product $product
      * @return Collection
      */
-    protected function getOptionsFromRequest(Product $product) : Collection
+    protected function checkOptionsAgainstProduct(Product $product) : bool
     {
-        return $product->options->mapWithKeys(function ($option) {
-            return [$option->id => (int)($this->options[$option->id] ?? 0)];
-        });
+        if ($this->options->isEmpty()) {
+            return true;
+        }
+
+        $validOptions = $this->options
+            ->filter(function ($optionValueId, $optionId) use ($product) {
+                return $product->options->filter(function ($option) use ($optionId, $optionValueId) {
+                    return $option->id == $optionId
+                        && $option->values->pluck('id')->contains($optionValueId);
+                });
+            })
+            ->isNotEmpty();
+
+        if (!$validOptions) {
+            $this->errors()
+                ->add('options', 'Those options are not valid for this product.');
+            return false;
+        }
+
+        return true;
     }
 }

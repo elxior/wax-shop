@@ -81,6 +81,7 @@ class CartApiTest extends ShopBaseTestCase
                 ['quantity' => 2]
             );
 
+        $responseData = $response->decodeResponseJson();
         $response->assertStatus(200);
         $responseData = $response->decodeResponseJson();
         $this->assertEquals($product->id, $responseData['items'][0]['product_id']);

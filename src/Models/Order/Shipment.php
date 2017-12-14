@@ -17,9 +17,8 @@ use Wax\Shop\Tax\Support\Address;
 use Wax\Shop\Tax\Support\LineItem;
 use Wax\Shop\Tax\Support\Request;
 use Wax\Shop\Tax\Support\Shipping;
-use Wax\Shop\Validators\CreateOrderItemValidator;
 use Wax\Shop\Validators\DeleteOrderItemValidator;
-use Wax\Shop\Validators\OrderItemQuantityValidator;
+use Wax\Shop\Validators\OrderItemValidator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -168,7 +167,8 @@ class Shipment extends Model
             return;
         }
 
-        (new CreateOrderItemValidator($productId, $quantity, $options, $customizations))
+        (new OrderItemValidator())
+            ->setRequest($productId, $quantity, $options, $customizations)
             ->validate();
 
         $item = new Item([
@@ -189,7 +189,9 @@ class Shipment extends Model
 
     public function updateItemQuantity(int $itemId, int $quantity)
     {
-        (new OrderItemQuantityValidator($itemId, $quantity))
+        (new OrderItemValidator())
+            ->setItemId($itemId)
+            ->setQuantity($quantity)
             ->validate();
 
         $item = $this->items->where('id', $itemId)->first();

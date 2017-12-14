@@ -40,8 +40,11 @@ class BundleTest extends ShopBaseTestCase
         $product2->refresh();
         $this->assertNotEmpty($product1->bundles);
         $this->assertNotEmpty($product2->bundles);
-
+try {
         $this->shopService->addOrderItem($product1->id);
+} catch (\Exception $e) {
+    dd($e);
+}
         $this->shopService->addOrderItem($product2->id);
 
         $order = $this->shopService->getActiveOrder();
