@@ -66,7 +66,12 @@ class OrderItemValidator extends AbstractValidator
                 return [$option->id => $option->value_id];
             })->toArray();
 
-            $this->setRequest($item->product_id, $this->quantity ?? $item->quantity, $options, $item->customizations->toArray());
+            $this->setRequest(
+                $item->product_id,
+                $this->quantity ?? $item->quantity,
+                $options,
+                $item->customizations->toArray()
+            );
         }
 
         $product = app()->make(ProductRepository::class)->get($this->productId);
