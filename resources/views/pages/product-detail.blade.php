@@ -12,7 +12,7 @@
         <div class="product-detail__col product-detail__col--content">
             <div class="product-detail__content">
                 <h1 class="product-detail__page-title">
-                    {!! $product['name'] !!}
+                    {{ $product['name'] }}
                 </h1>
                 <div class="product-detail__category">
                     {{ $product['category']['name'] }}
