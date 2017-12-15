@@ -69,27 +69,27 @@ class OrderValidationTest extends ShopBaseTestCase
         $this->assertTrue($this->shopService->getActiveOrder()->validateShipping());
     }
 
-    public function testValidateInventory()
+    public function testValidateItem()
     {
         config(['wax.shop.inventory.track' => true]);
 
         $product = factory(Product::class)->create(['inventory' => 1]);
         $this->shopService->addOrderItem($product->id);
 
-        $this->assertTrue($this->shopService->getActiveOrder()->validateInventory());
+        $this->assertTrue($this->shopService->getActiveOrder()->validateItems());
 
         $product->inventory = 0;
         $product->save();
-        $this->assertFalse($this->shopService->getActiveOrder()->validateInventory());
+        $this->assertFalse($this->shopService->getActiveOrder()->validateItems());
     }
 
-    public function testInventoryValidationWithTrackingDisabled()
+    public function testItemValidationWithTrackingDisabled()
     {
         config(['wax.shop.inventory.track' => false]);
 
         $product = factory(Product::class)->create(['inventory' => 0]);
         $this->shopService->addOrderItem($product->id);
 
-        $this->assertTrue($this->shopService->getActiveOrder()->validateInventory());
+        $this->assertTrue($this->shopService->getActiveOrder()->validateItems());
     }
 }

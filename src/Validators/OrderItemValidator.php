@@ -13,6 +13,7 @@ use Wax\Shop\Repositories\ProductRepository;
 class OrderItemValidator extends AbstractValidator
 {
     protected $itemId;
+    protected $item;
     protected $productId;
     protected $quantity;
     protected $options;
@@ -55,22 +56,22 @@ class OrderItemValidator extends AbstractValidator
         $this->messages = new MessageBag;
 
         if ($this->itemId !== null) {
-            $item = Item::find($this->itemId);
+            $this->item = Item::find($this->itemId);
             
-            if (is_null($item)) {
+            if (is_null($this->item)) {
                 $this->errors()->add('item_id', 'Invalid Cart Item');
                 return false;
             }
 
-            $options = $item->options->mapWithKeys(function ($option) {
+            $options = $this->item->options->mapWithKeys(function ($option) {
                 return [$option->id => $option->value_id];
             })->toArray();
 
             $this->setRequest(
-                $item->product_id,
-                $this->quantity ?? $item->quantity,
+                $this->item->product_id,
+                $this->quantity ?? $this->item->quantity,
                 $options,
-                $item->customizations->toArray()
+                $this->item->customizations->toArray()
             );
         }
 
@@ -171,13 +172,18 @@ class OrderItemValidator extends AbstractValidator
             return false;
         }
 
-        // How many are already in the user's cart?
-        $pendingQuantity = ShopServiceFacade::getActiveOrder()
-            ->items
-            ->filter(function ($item) use ($modifier) {
-                return !is_null($item->modifier) && $item->modifier->is($modifier);
-            })
-            ->sum('quantity');
+        if ($this->itemId) {
+            // this is already in the cart, do don't double the pending quantity
+            $pendingQuantity = $this->quantity - $this->item->quantity;
+        } else {
+            // How many are already in the user's cart?
+            $pendingQuantity = ShopServiceFacade::getActiveOrder()
+                ->items
+                ->filter(function ($item) use ($modifier) {
+                    return !is_null($item->modifier) && $item->modifier->is($modifier);
+                })
+                ->sum('quantity');
+        }
 
         $effectiveInventory = $modifier->effective_inventory - $pendingQuantity;
 
@@ -198,11 +204,16 @@ class OrderItemValidator extends AbstractValidator
      */
     protected function checkBaseProductInventory(Product $product)
     {
-        // How many are already in the user's cart?
-        $pendingQuantity = ShopServiceFacade::getActiveOrder()
-            ->items
-            ->where('product_id', $product->id)
-            ->sum('quantity');
+        if ($this->itemId) {
+            // this is already in the cart, do don't double the pending quantity
+            $pendingQuantity = $this->quantity - $this->item->quantity;
+        } else {
+            // How many are already in the user's cart?
+            $pendingQuantity = ShopServiceFacade::getActiveOrder()
+                ->items
+                ->where('product_id', $product->id)
+                ->sum('quantity');
+        }
 
         $effectiveInventory = $product->effective_inventory - $pendingQuantity;
 
