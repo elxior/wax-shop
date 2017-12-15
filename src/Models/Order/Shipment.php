@@ -167,7 +167,7 @@ class Shipment extends Model
             return;
         }
 
-        (new OrderItemValidator())
+        app()->make(OrderItemValidator::class)
             ->setRequest($productId, $quantity, $options, $customizations)
             ->validate();
 
@@ -189,7 +189,7 @@ class Shipment extends Model
 
     public function updateItemQuantity(int $itemId, int $quantity)
     {
-        (new OrderItemValidator())
+        app()->make(OrderItemValidator::class)
             ->setItemId($itemId)
             ->setQuantity($quantity)
             ->validate();

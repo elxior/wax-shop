@@ -473,7 +473,7 @@ class Order extends Model
     public function validateItems() : bool
     {
         return $this->items->reject(function ($item) {
-            return (new OrderItemValidator())
+            return app()->make(OrderItemValidator::class)
                 ->setItemId($item->id)
                 ->passes();
         })->isEmpty();

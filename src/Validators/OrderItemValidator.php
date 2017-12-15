@@ -15,9 +15,15 @@ class OrderItemValidator extends AbstractValidator
     protected $itemId;
     protected $item;
     protected $productId;
+    protected $product;
     protected $quantity;
     protected $options;
     protected $customizations;
+
+    public function __construct(MessageBag $messages)
+    {
+        $this->messages = $messages;
+    }
 
     /**
      * We're adding something to the cart from the request. Set it up!
@@ -34,12 +40,35 @@ class OrderItemValidator extends AbstractValidator
         $this->options = collect($options);
         $this->customizations = $customizations;
 
+        $this->product = app()->make(ProductRepository::class)->get($this->productId);
+        if (is_null($this->product)) {
+            $this->errors()->add('product_id', 'Invalid Product');
+        }
+
         return $this;
     }
 
     public function setItemId(int $itemId)
     {
         $this->itemId = $itemId;
+        
+        $this->item = Item::find($this->itemId);
+            
+        if (is_null($this->item)) {
+            $this->errors()->add('item_id', 'Invalid Cart Item');
+            return $this;
+        }
+        
+        $options = $this->item->options->mapWithKeys(function ($option) {
+            return [$option->id => $option->value_id];
+        })->toArray();
+
+        $this->setRequest(
+            $this->item->product_id,
+            $this->quantity ?? $this->item->quantity,
+            $options,
+            $this->item->customizations->toArray()
+        );
 
         return $this;
     }
@@ -53,39 +82,14 @@ class OrderItemValidator extends AbstractValidator
 
     public function passes() : bool
     {
-        $this->messages = new MessageBag;
-
-        if ($this->itemId !== null) {
-            $this->item = Item::find($this->itemId);
-            
-            if (is_null($this->item)) {
-                $this->errors()->add('item_id', 'Invalid Cart Item');
-                return false;
-            }
-
-            $options = $this->item->options->mapWithKeys(function ($option) {
-                return [$option->id => $option->value_id];
-            })->toArray();
-
-            $this->setRequest(
-                $this->item->product_id,
-                $this->quantity ?? $this->item->quantity,
-                $options,
-                $this->item->customizations->toArray()
-            );
-        }
-
-        $product = app()->make(ProductRepository::class)->get($this->productId);
-
-        if (is_null($product)) {
-            $this->errors()->add('product_id', 'Invalid Product');
+        if (!$this->messages->isEmpty()) {
             return false;
         }
 
-        $this->checkOnePerUser($product)
-        && $this->checkOptionsAgainstProduct($product)
-        && $this->checkRequiredOptions($product)
-        && $this->checkInventory($product);
+        $this->checkOnePerUser($this->product)
+        && $this->checkOptionsAgainstProduct($this->product)
+        && $this->checkRequiredOptions($this->product)
+        && $this->checkInventory($this->product);
 
         return $this->messages->isEmpty();
     }
