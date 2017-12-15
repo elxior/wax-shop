@@ -31,7 +31,7 @@ class OrderPayableValidator extends AbstractValidator
             $this->errors()->add('general', __('shop::cart.validation_empty'));
         }
 
-        if (!$this->order->validateInventory()) {
+        if (!$this->order->validateItems()) {
             $this->errors()->add('general', __('shop::cart.validation_inventory'));
         }
 

@@ -11,7 +11,7 @@ use Wax\Shop\Models\Order\Coupon as OrderCoupon;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\Shipment;
 use Wax\Shop\Validators\OrderPayableValidator;
-use Wax\Shop\Validators\OrderItemQuantityValidator;
+use Wax\Shop\Validators\OrderItemValidator;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -470,10 +470,11 @@ class Order extends Model
         })->isEmpty();
     }
 
-    public function validateInventory() : bool
+    public function validateItems() : bool
     {
         return $this->items->reject(function ($item) {
-            return (new OrderItemQuantityValidator($item->id, $item->quantity))
+            return app()->make(OrderItemValidator::class)
+                ->setItemId($item->id)
                 ->passes();
         })->isEmpty();
     }
