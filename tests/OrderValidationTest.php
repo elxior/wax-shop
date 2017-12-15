@@ -8,6 +8,7 @@ use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
 use Wax\Shop\Tax\Drivers\DbDriver;
 use Wax\Shop\Services\ShopService;
+use Wax\Shop\Validators\OrderItemValidator;
 
 class OrderValidationTest extends ShopBaseTestCase
 {
@@ -91,5 +92,13 @@ class OrderValidationTest extends ShopBaseTestCase
         $this->shopService->addOrderItem($product->id);
 
         $this->assertTrue($this->shopService->getActiveOrder()->validateItems());
+    }
+
+    public function testMalformedValidationRequest()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Improper usage of Wax\Shop\Validators\OrderItemValidator. You must call `setItem()` or `setRequest()` to initialize.');
+
+        app()->make(OrderItemValidator::class)->validate();
     }
 }
