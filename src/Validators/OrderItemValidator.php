@@ -20,7 +20,7 @@ class OrderItemValidator extends AbstractValidator
     protected $customizations;
 
     /**
-     * we're adding somethint to the cart from the request. Set it up!
+     * We're adding something to the cart from the request. Set it up!
      *
      * @param int   $productId
      * @param int   $quantity
@@ -173,7 +173,7 @@ class OrderItemValidator extends AbstractValidator
         }
 
         if ($this->itemId) {
-            // this is already in the cart, do don't double the pending quantity
+            // this is already in the cart, don't double the pending quantity
             $pendingQuantity = $this->quantity - $this->item->quantity;
         } else {
             // How many are already in the user's cart?
@@ -205,7 +205,7 @@ class OrderItemValidator extends AbstractValidator
     protected function checkBaseProductInventory(Product $product)
     {
         if ($this->itemId) {
-            // this is already in the cart, do don't double the pending quantity
+            // this is already in the cart, don't double the pending quantity
             $pendingQuantity = $this->quantity - $this->item->quantity;
         } else {
             // How many are already in the user's cart?
