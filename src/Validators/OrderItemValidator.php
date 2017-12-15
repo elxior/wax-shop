@@ -87,7 +87,9 @@ class OrderItemValidator extends AbstractValidator
         }
 
         if (!$this->product) {
-            throw new \Exception('Improper usage of Wax\Shop\Validators\OrderItemValidator. You must call `setItem()` or `setRequest()` to initialize.');
+            throw new \Exception(
+                'Improper usage of OrderItemValidator. You must call `setItem()` or `setRequest()` to initialize.'
+            );
         }
 
         $this->checkOnePerUser($this->product)

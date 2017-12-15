@@ -97,7 +97,9 @@ class OrderValidationTest extends ShopBaseTestCase
     public function testMalformedValidationRequest()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Improper usage of Wax\Shop\Validators\OrderItemValidator. You must call `setItem()` or `setRequest()` to initialize.');
+        $this->expectExceptionMessage(
+            'Improper usage of OrderItemValidator. You must call `setItem()` or `setRequest()` to initialize.'
+        );
 
         app()->make(OrderItemValidator::class)->validate();
     }
