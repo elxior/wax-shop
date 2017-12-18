@@ -117,10 +117,13 @@ class OrderItemValidator extends AbstractValidator
             return false;
         }
 
-        $orderHasProduct = ShopServiceFacade::orderHasProduct($product->id, $this->options->toArray(), null);
-        if ($orderHasProduct) {
-            $this->errors()->add('product_id', 'This product is already in your cart.');
-            return false;
+        // don't validate a cart item against itself unless we're upping it's quantity.
+        if (!isset($this->item) || ($this->quantity > $this->item->quantity)) {
+            $orderHasProduct = ShopServiceFacade::orderHasProduct($product->id, $this->options->toArray(), null);
+            if ($orderHasProduct) {
+                $this->errors()->add('product_id', 'This product is already in your cart.');
+                return false;
+            }
         }
 
         $userOwnsProduct = ShopServiceFacade::userOwnsProduct($product->id, $this->options->toArray(), null);
