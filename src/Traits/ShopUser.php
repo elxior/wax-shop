@@ -6,6 +6,7 @@ trait ShopUser
 {
     public function paymentMethods()
     {
-        return $this->hasMany(config('wax.shop.models.payment_method'));
+        return $this->hasMany(config('wax.shop.models.payment_method'))
+            ->orderBy('created_at', 'asc');
     }
 }

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Response;
 use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Models\User\PaymentMethod;
 use Wax\Shop\Payment\Repositories\PaymentMethodRepository;
-use Wax\Shop\Payment\Validators\OrderPaymentParser;
 use Wax\Shop\Services\ShopService;
 
 class PaymentMethodApiController extends Controller
@@ -30,7 +29,7 @@ class PaymentMethodApiController extends Controller
      */
     public function index()
     {
-        return $this->buildListResponse();
+        return Response::json($this->buildListResponse());
     }
 
     /**
@@ -53,7 +52,7 @@ class PaymentMethodApiController extends Controller
             'zip',
         ]));
 
-        return $this->buildListResponse();
+        return Response::json($this->buildListResponse());
     }
 
     /**
@@ -81,7 +80,7 @@ class PaymentMethodApiController extends Controller
             'zip',
         ]), $paymentMethod);
 
-        return $this->buildListResponse();
+        return Response::json($this->buildListResponse());
     }
 
     /**
@@ -98,7 +97,7 @@ class PaymentMethodApiController extends Controller
 
         $this->repo->delete($paymentMethod);
 
-        return $this->buildListResponse();
+        return Response::json($this->buildListResponse());
     }
 
     /**
@@ -106,6 +105,7 @@ class PaymentMethodApiController extends Controller
      *
      * @param PaymentMethod $paymentMethod
      * @return \Illuminate\Http\Response
+     * @throws ValidationException
      */
     public function makePayment(PaymentMethod $paymentMethod)
     {
@@ -132,6 +132,6 @@ class PaymentMethodApiController extends Controller
 
     protected function buildListResponse()
     {
-        return Response::json($this->repo->getAll());
+        return $this->repo->getAll();
     }
 }
