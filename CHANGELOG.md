@@ -1,4 +1,4 @@
-# Change Log - Wax CMS
+# Change Log - Wax Shop
 
 This file's format is based on [Keep a Changelog](http://keepachangelog.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
