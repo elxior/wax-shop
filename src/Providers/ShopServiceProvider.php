@@ -34,6 +34,7 @@ use Wax\Shop\Observers\OrderItemObserver;
 use Wax\Shop\Policies\PaymentMethodPolicy;
 use Wax\Shop\Repositories\ProductRepository;
 use Wax\Shop\Services\ShopService;
+use Wax\Shop\ShopIndexer;
 use Wax\Shop\Tax\Contracts\TaxDriverContract;
 
 class ShopServiceProvider extends ServiceProvider
@@ -70,6 +71,10 @@ class ShopServiceProvider extends ServiceProvider
         $this->app->bind('shop.service', ShopService::class);
 
         $this->app->when(CatalogController::class)
+            ->needs(FilterableRepositoryContract::class)
+            ->give(ProductRepository::class);
+
+        $this->app->when(ShopIndexer::class)
             ->needs(FilterableRepositoryContract::class)
             ->give(ProductRepository::class);
 
