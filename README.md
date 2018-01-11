@@ -28,6 +28,7 @@ App composer.json must include:
         "oohology/wax-shop": "^1.0.0",
         ...
 ```
+Then, you can `composer update wax-shop` and it will install the shop package.
 
 ### Register Service Provider
 In `config/app.php` at end of the _Package Service Providers_ section `Wax\Shop\Providers\ShopServiceProvider::class`  
