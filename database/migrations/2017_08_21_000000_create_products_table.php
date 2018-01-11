@@ -26,8 +26,8 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('brand')->nullable()->default('0');
             $table->string('model', 100)->nullable();
             $table->string('name', 250);
-            $table->longText('meta_description')->default('');
-            $table->longText('meta_keywords')->default('');
+            $table->longText('meta_description')->nullable();
+            $table->longText('meta_keywords')->nullable();
             $table->text('description');
             $table->text('short_description');
             $table->boolean('active')->default('1');
