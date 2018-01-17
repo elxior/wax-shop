@@ -110,7 +110,7 @@ class PaymentMethodApiController extends Controller
     public function makePayment(PaymentMethod $paymentMethod)
     {
         if (Auth::user()->cant('pay', $paymentMethod)) {
-            return response()->json(['_error' => 'There was a problem making the payment.'], 403);
+            return response()->json(['_error' => ['There was a problem making the payment.']], 403);
         }
 
         $payment = $this->shopService->makeStoredPayment($paymentMethod);
@@ -121,7 +121,7 @@ class PaymentMethodApiController extends Controller
     public function setShippingAddress(PaymentMethod $paymentMethod)
     {
         if (Auth::user()->cant('view', $paymentMethod)) {
-            return response()->json(['_error' => 'Your shipping address could not be updated.'], 403);
+            return response()->json(['_error' => ['Your shipping address could not be updated.']], 403);
         }
 
         $order = $this->shopService->getActiveOrder();

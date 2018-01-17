@@ -21,7 +21,7 @@ class CouponApiController extends Controller
     public function store(Request $request)
     {
         if (!$this->shopService->applyCoupon($request->input('code'))) {
-            return response()->json(['code' => 'The code is invalid or does not apply to this order.'], 422);
+            return response()->json(['code' => ['The code is invalid or does not apply to this order.']], 422);
         }
 
         return response()->json($this->shopService->getActiveOrder());
