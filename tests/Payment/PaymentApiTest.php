@@ -60,7 +60,7 @@ class PaymentApiTest extends ShopBaseTestCase
         // the user who owns the PaymentMethod should get a validation error (order is not placeable)
         $response = $this->actingAs($user)
             ->json('POST', route('shop::api.paymentMethods.pay', ['paymentmethod' => $paymentMethod]));
-        $response->assertStatus(200);
+        $response->assertStatus(422);
 
         // a different user should get "Unauthorized"
         $user2 = factory(User::class)->create();
