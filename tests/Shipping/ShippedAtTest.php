@@ -163,7 +163,7 @@ class ShippedAtTest extends ShopBaseTestCase
         $trackingNumber = $this->faker->uuid;
         $order->default_shipment->setTrackingNumber($trackingNumber);
 
-        Mail::assertSent(OrderShipped::class, function ($mail) use ($emailAddress) {
+        Mail::assertQueued(OrderShipped::class, function ($mail) use ($emailAddress) {
             return $mail->hasTo($emailAddress);
         });
     }
