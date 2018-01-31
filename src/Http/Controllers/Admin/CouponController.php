@@ -181,9 +181,9 @@ class CouponController
         ];
 
         if (!empty($request->get('title'))) {
-            $data = Coupon::select($selectedFields)->where('title', $request->get('title'))->get()->toArray();
+            $data = Coupon::withoutGlobalScopes()->select($selectedFields)->where('title', $request->get('title'))->get()->toArray();
         } else {
-            $data = Coupon::select($selectedFields)->get()->toArray();
+            $data = Coupon::withoutGlobalScopes()->select($selectedFields)->get()->toArray();
         }
 
         if ($data === false || count($data) <= 0) {
@@ -201,7 +201,7 @@ class CouponController
             return Redirect::to('admin/cms/coupons');
         }
 
-        fputcsv($out, array_keys($data[1]));
+        fputcsv($out, array_keys(current($data)));
         foreach ($data as $line) {
             fputcsv($out, $line);
         }
