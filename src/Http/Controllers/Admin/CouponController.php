@@ -181,9 +181,16 @@ class CouponController
         ];
 
         if (!empty($request->get('title'))) {
-            $data = Coupon::withoutGlobalScopes()->select($selectedFields)->where('title', $request->get('title'))->get()->toArray();
+            $data = Coupon::withoutGlobalScopes()
+                ->select($selectedFields)
+                ->where('title', $request->get('title'))
+                ->get()
+                ->toArray();
         } else {
-            $data = Coupon::withoutGlobalScopes()->select($selectedFields)->get()->toArray();
+            $data = Coupon::withoutGlobalScopes()
+                ->select($selectedFields)
+                ->get()
+                ->toArray();
         }
 
         if ($data === false || count($data) <= 0) {
