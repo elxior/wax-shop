@@ -60,7 +60,6 @@ class Item extends Model
 
     protected $appends = [
         'brand',
-        'name',
 
         'gross_unit_price',
         'unit_price',
@@ -68,7 +67,6 @@ class Item extends Model
         'subtotal',
 
         'image',
-        'short_description',
         'url',
         'category',
         'bundles',
@@ -76,12 +74,12 @@ class Item extends Model
 
     public function product()
     {
-        return $this->belongsTo(config('wax.shop.models.product'));
+        return $this->belongsTo(config('wax.shop.models.product'))->withoutGlobalScopes();
     }
 
     public function getBundlesAttribute()
     {
-        return $this->product->bundles;
+        return $this->product->bundles ?? null;
     }
 
     public function shipment()
@@ -101,7 +99,7 @@ class Item extends Model
 
     public function getModifierAttribute() : ?OptionModifier
     {
-        if ($this->product->optionModifiers->isEmpty()) {
+        if (is_null($this->product) || $this->product->optionModifiers->isEmpty()) {
             return null;
         }
 
@@ -194,6 +192,10 @@ class Item extends Model
         $value = parent::getAttribute($key);
         if (!is_null($value)) {
             return $value;
+        }
+
+        if ($key === 'product' || is_null($this->product)) {
+            return null;
         }
 
         return $this->product->getAttribute($key);
