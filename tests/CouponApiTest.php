@@ -3,6 +3,7 @@
 namespace Tests\Shop;
 
 use App\User;
+use Illuminate\Support\Facades\Lang;
 use Tests\Shop\Traits\SeedsProducts;
 use Tests\Shop\Support\ShopBaseTestCase;
 use Wax\Shop\Models\Coupon;
@@ -15,12 +16,25 @@ class CouponApiTest extends ShopBaseTestCase
     /* @var ShopService $shop */
     protected $shopService;
 
+    protected $invalidCouponResponse = 'Invalid coupon response string';
+
     public function setUp()
     {
         parent::setUp();
 
         $this->seedProducts();
         $this->shopService = app()->make(ShopService::class);
+
+        Lang::shouldReceive('getFromJson')
+            ->with('shop::coupon.invalid_code', [], null)
+            ->andReturn($this->invalidCouponResponse);
+    }
+
+    public function testInvalidCouponResponse()
+    {
+        $response = $this->json('POST', route('shop::api.coupon.store'), ['code' => 'not-a-code']);
+        $response->assertStatus(422)
+            ->assertJson(['code' => [$this->invalidCouponResponse]]);
     }
 
     public function testApply()

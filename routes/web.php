@@ -49,12 +49,14 @@ Route::group(['prefix' => 'shop'], function () {
         Route::post(
             'paymentmethods/{paymentmethod}/pay',
             'PaymentMethodApiController@makePayment'
-        )->middleware('auth');
+        )->middleware('auth')
+            ->name('api.paymentMethods.pay');
 
         Route::post(
             'paymentmethods/{paymentmethod}/set-shipping-address',
             'PaymentMethodApiController@setShippingAddress'
-        )->middleware('auth');
+        )->middleware('auth')
+            ->name('api.paymentMethods.setShippingAddress');
     });
 
     Route::get('/cart', function () {

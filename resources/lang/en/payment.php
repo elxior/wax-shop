@@ -6,4 +6,7 @@ return [
     'payment_error' => 'There was a problem with your payment: :message',
     'store_payment_exception' => 'There was a problem with your payment information: :message',
     'general_exception' => 'There was a problem with your request: :message',
+
+    'make_payment_unauthorized' => 'There was a problem making the payment.',
+    'set_shipping_address' => 'Your shipping address could not be updated.',
 ];
