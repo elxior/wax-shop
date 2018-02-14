@@ -75,11 +75,11 @@ class EmailListenerTest extends ShopBaseTestCase
         $listener = new EmailListener();
         $listener->handle(new OrderPlacedEvent($order->fresh()));
 
-        Mail::assertSent(OrderPlaced::class, function ($mail) use ($emailAddress) {
+        Mail::assertQueued(OrderPlaced::class, function ($mail) use ($emailAddress) {
             return $mail->hasTo($emailAddress);
         });
 
-        Mail::assertSent(OrderPlaced::class, function ($mail) {
+        Mail::assertQueued(OrderPlaced::class, function ($mail) {
             return $mail->hasTo('test1@example.org')
                 && $mail->hasTo('test2@example.org');
         });
