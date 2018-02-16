@@ -14,6 +14,7 @@ use Wax\Core\Contracts\FilterAggregatorContract;
 use Wax\Core\Contracts\FilterableRepositoryContract;
 use Wax\Core\Events\SessionMigrationEvent;
 use Wax\Admin\Cms\Cms;
+use Wax\Shop\Console\Commands\Install;
 use Wax\Shop\Contracts\OrderChangedEventContract;
 use Wax\Shop\Events\OrderChanged\CartContentsChangedEvent;
 use Wax\Shop\Events\OrderChanged\ShippingAddressChangedEvent;
@@ -89,6 +90,8 @@ class ShopServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->registerConsoleCommands();
+
         $this->registerPolicies();
 
         Cms::registerStructurePath(__DIR__.'/../../resources/structures');
@@ -116,6 +119,15 @@ class ShopServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../resources/coupons/example_coupon_import.csv' => $publicPath
         ], 'public');
+    }
+
+    protected function registerConsoleCommands()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Install::class,
+            ]);
+        }
     }
 
     protected function registerConfig()
