@@ -3,7 +3,7 @@
 ## Installation instructions
 
 ### Start with a working wax app
-Go through the normal process to set up wax, and run the wax installer including any wax modules you want EXCEPT don't run any of the legacy shop installer modules.
+Go through the normal process to set up wax, and run the wax installer including any wax modules you want.
 
 ### Composer install the shop package
 App composer.json must include:  
@@ -24,6 +24,7 @@ Then, you can `composer update wax-shop` and it will install the shop package.
 ### Run the artisan commands  
 `./artisan vendor:publish`  
 `./artisan migrate`
+`./artisan shop:install`
 
 ### Register the shop site-search indexer
 Indexers are registered in the wax-cms:site-search module's config file. You can copy it from `wax-cms/modules/site-search/config/site-search.php` to your app at `config/wax/site-search.php`, then add the shop indexer to the list:

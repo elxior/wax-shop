@@ -36,6 +36,9 @@ class Install extends Command
             'rate' => 6,
             'tax_shipping' => true
         ]);
+
+        $this->info('Build Admin Navigation Breadcrumbs');
+        $this->installer->buildAdminNavigationBreadcrumbs();
     }
 
     protected function createAdminNavigation()
