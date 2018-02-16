@@ -27,8 +27,7 @@
         "php": ">=7.1.0",
         "laravel/framework": "5.5.*",
         "doctrine/dbal": "^2.5",
-        "oohology/wax-cms": "^0.13.0",
-        "avalara/avataxclient": "dev-visibility"
+        "oohology/wax-cms": "^0.13.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -36,7 +35,8 @@
         "phpunit/phpunit": "~5.0",
         "squizlabs/php_codesniffer": "^2.3",
         "predis/predis": "~1.0",
-        "oohology/wax-app": "dev-master"
+        "oohology/wax-app": "dev-master",
+        "avalara/avataxclient": "dev-visibility"
     },
     "autoload": {
         "psr-4": {
