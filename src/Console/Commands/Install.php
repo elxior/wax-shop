@@ -53,8 +53,6 @@ class Install extends Command
         $this->grant('Shop - Orders', $administratorGroups);
         $this->grant('Coupons', $administratorGroups);
         $this->grant('Gift Cards', $administratorGroups);
-
-
     }
 
     protected function createLink($parentName, $linkName, $linkUrl = '', bool $active = true)
@@ -70,6 +68,4 @@ class Install extends Command
             $this->installer->grant($privilegeName, $groupName);
         }
     }
-
-
 }
