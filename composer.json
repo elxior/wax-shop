@@ -44,5 +44,12 @@
             "Tests\\Shop\\": "tests",
             "Tests\\": "vendor/oohology/wax-app/tests/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wax\\Shop\\Providers\\ShopServiceProvider"
+            ]
+        }
     }
 }
