@@ -10,6 +10,7 @@ $structure = [
     'notes' => view('shop::components.admin.coupons.structure_notes'),
     'settings' => [
         'page_title' => 'Coupons',
+        'privilege' => 'Coupons',
         'create_new_text' => 'Create New Coupon',
         'back_link' => 'index.php',
         'back_link_text' => 'main menu',
