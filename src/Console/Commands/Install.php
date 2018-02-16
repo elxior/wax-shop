@@ -5,6 +5,7 @@ namespace Wax\Shop\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Wax\Core\Services\Installer;
+use Wax\Shop\Models\Tax;
 
 class Install extends Command
 {
@@ -29,6 +30,12 @@ class Install extends Command
     {
         $this->createAdminNavigation();
         $this->createPrivileges();
+
+        $this->info('Create Default Tax Zone - "KY 6%"');
+        Tax::updateOrCreate(['zone' => 'KY'], [
+            'rate' => 6,
+            'tax_shipping' => true
+        ]);
     }
 
     protected function createAdminNavigation()
@@ -41,6 +48,7 @@ class Install extends Command
         $this->createLink('Shop', 'Gift Cards', '/admin/cms/gift_cards');
         $this->createLink('Shop', 'Brands', '/admin/cms/product_brands');
         $this->createLink('Shop', 'Categories', '/admin/cms/product_categories');
+        $this->createLink('Shop', 'Tax Table', '/admin/cms/tax');
     }
 
     protected function createPrivileges()
@@ -53,6 +61,7 @@ class Install extends Command
         $this->grant('Shop - Orders', $administratorGroups);
         $this->grant('Coupons', $administratorGroups);
         $this->grant('Gift Cards', $administratorGroups);
+        $this->grant('Tax Table', $administratorGroups);
     }
 
     protected function createLink($parentName, $linkName, $linkUrl = '', bool $active = true)
