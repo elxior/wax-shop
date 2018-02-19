@@ -23,8 +23,8 @@ Then, you can `composer update wax-shop` and it will install the shop package.
 
 ### Run the artisan commands  
 `./artisan vendor:publish`  
-`./artisan migrate`
-`./artisan shop:install`
+`./artisan migrate`  
+`./artisan shop:install`  
 
 ### Register the shop site-search indexer
 Indexers are registered in the wax-cms:site-search module's config file. You can copy it from `wax-cms/modules/site-search/config/site-search.php` to your app at `config/wax/site-search.php`, then add the shop indexer to the list:
