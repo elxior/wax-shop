@@ -9,6 +9,7 @@ $structure = [
     'fields' => [],
     'settings' => [
         'page_title' => 'Orders',
+        'privilege' => 'Shop - Orders',
         'create_new_text' => 'Add Order',
         'allow_add' => false,
         'back_link' => 'index.php',

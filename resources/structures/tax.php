@@ -6,6 +6,7 @@ $structure = [
     'fields' => [],
     'settings' => [
         'page_title' => 'Tax Table',
+        'privilege' => 'Tax Table',
         'create_new_text' => 'Create New Record',
         'back_link' => 'index.php',
         'back_link_text' => 'main menu',

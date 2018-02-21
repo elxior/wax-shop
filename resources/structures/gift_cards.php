@@ -8,6 +8,7 @@ use Wax\Core\Support\Localization\Currency;
         'fields' => array(),
         'settings' => array(
             'page_title' => 'Gift Cards',
+            'privilege' => 'Gift Cards',
             'create_new_text' => 'Create New Gift Card',
             'back_link' => 'index.php',
             'back_link_text' => 'main menu',
