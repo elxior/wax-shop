@@ -12,6 +12,7 @@ use Wax\Shop\Services\ShopService;
 class PaymentMethodRepository
 {
     protected $shopService;
+    protected $user;
 
     public function __construct(ShopService $shopService)
     {
