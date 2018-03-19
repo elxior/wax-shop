@@ -21,12 +21,9 @@ class DummyDriver implements StoredPaymentDriverContract
 {
     protected $user;
 
-    public function __construct()
+    public function setUser(User $user) : StoredPaymentDriverContract
     {
-        if (!Auth::check()) {
-            throw new UnauthorizedException;
-        }
-        $this->user = Auth::user();
+        return $this;
     }
 
     /**

@@ -44,7 +44,7 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
         }
     }
 
-    public function setUser(User $user)
+    public function setUser(User $user) : StoredPaymentDriverContract
     {
         $this->user = $user;
 
