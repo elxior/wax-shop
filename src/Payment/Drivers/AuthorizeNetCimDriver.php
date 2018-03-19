@@ -2,6 +2,7 @@
 
 namespace Wax\Shop\Payment\Drivers;
 
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
@@ -24,11 +25,6 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
 
     public function __construct()
     {
-        if (!Auth::check()) {
-            throw new UnauthorizedException;
-        }
-        $this->user = Auth::user();
-
         if (empty(config('wax.shop.payment.drivers.authorizenet_cim.api_login_id'))
             || empty(config('wax.shop.payment.drivers.authorizenet_cim.transaction_key'))
         ) {
@@ -48,6 +44,25 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
         }
     }
 
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    protected function getUser()
+    {
+        if (is_null($this->user)) {
+            if (!Auth::check()) {
+                throw new \Exception;
+            }
+            $this->user = Auth::user();
+        }
+        
+        return $this->user;
+    }
+
     /**
      * Create a payment profile at the gateway and return a PaymentMethod model.
      *
@@ -58,13 +73,13 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
     public function createCard($data) : PaymentMethod
     {
         $requestData = [
-            'customerId' => $this->user->id,
-            'email' => $this->user->email,
+            'customerId' => $this->getUser()->id,
+            'email' => $this->getUser()->email,
             'card' => $this->prepareCreditCardData($data),
         ];
 
-        if ($this->user->payment_profile_id) {
-            $requestData['customerProfileId'] = $this->user->payment_profile_id;
+        if ($this->getUser()->payment_profile_id) {
+            $requestData['customerProfileId'] = $this->getUser()->payment_profile_id;
         }
 
         try {
@@ -80,8 +95,8 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
             ->validate();
 
         if (!empty($response->getCustomerProfileId())) {
-            $this->user->payment_profile_id = $response->getCustomerProfileId();
-            $this->user->save();
+            $this->getUser()->payment_profile_id = $response->getCustomerProfileId();
+            $this->getUser()->save();
         }
 
         $paymentModel = config('wax.shop.models.payment_method');
@@ -127,8 +142,8 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
     public function deleteCard(PaymentMethod $paymentMethod)
     {
         $requestData = [
-            'customerId' => $this->user->id,
-            'customerProfileId' => $this->user->payment_profile_id,
+            'customerId' => $this->getUser()->id,
+            'customerProfileId' => $this->getUser()->payment_profile_id,
             'customerPaymentProfileId' => $paymentMethod->payment_profile_id,
         ];
 
@@ -264,7 +279,7 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
     protected function buildCardReference(PaymentMethod $paymentMethod)
     {
         return json_encode([
-            'customerProfileId' => $this->user->payment_profile_id,
+            'customerProfileId' => $this->getUser()->payment_profile_id,
             'customerPaymentProfileId' => $paymentMethod->payment_profile_id,
         ]);
     }

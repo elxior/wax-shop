@@ -40,7 +40,7 @@ class PaymentMethodRepository
 
     protected function getDriver() : StoredPaymentDriverContract
     {
-        return app()->make(config('wax.shop.payment.stored_payment_driver'));
+        return app()->make(config('wax.shop.payment.stored_payment_driver'))->setUser($this->getUser());
     }
 
     public function getAll()
@@ -50,7 +50,7 @@ class PaymentMethodRepository
 
     public function create($data) : PaymentMethod
     {
-        $paymentMethod = $this->getDriver()->createCard($data);
+        $paymentMethod = $this->getDriver()->createCard($data, $user);
 
         $this->getUser()->paymentMethods()->save($paymentMethod);
         $this->getUser()->refresh();
