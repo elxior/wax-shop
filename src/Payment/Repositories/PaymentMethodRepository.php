@@ -50,7 +50,7 @@ class PaymentMethodRepository
 
     public function create($data) : PaymentMethod
     {
-        $paymentMethod = $this->getDriver()->createCard($data, $user);
+        $paymentMethod = $this->getDriver()->createCard($data);
 
         $this->getUser()->paymentMethods()->save($paymentMethod);
         $this->getUser()->refresh();
