@@ -5,7 +5,6 @@ namespace Wax\Shop\Payment\Drivers;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\UnauthorizedException;
 use Omnipay\Common\CreditCard;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Omnipay;
