@@ -176,12 +176,29 @@ class CartApiTest extends ShopBaseTestCase
         $response->assertStatus(422);
     }
 
+    public function testAddProductWithInvalidOptions()
+    {
+        $product = $this->products['withOptions'];
+        $options = $product->options->mapWithKeys(function ($option) {
+            return [$option->id => 7777];
+        })->all();
+
+        $response = $this->json('POST', route('shop::api.cart.store'), [
+            'product_id' => $product->id,
+            'quantity' => 1,
+            'options' => $options,
+        ]);
+
+        $response->assertStatus(422);
+    }
+
     public function testAddOnePerUserProductInvalidQuantity()
     {
         $response = $this->json('POST', route('shop::api.cart.store'), [
             'product_id' => $this->products['onePerUser']->id,
             'quantity' => 2
         ]);
+
         $response->assertStatus(422);
     }
 
