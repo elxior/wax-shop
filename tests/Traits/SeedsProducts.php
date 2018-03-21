@@ -3,6 +3,7 @@
 namespace Tests\Shop\Traits;
 
 use Wax\Shop\Models\Product;
+use Wax\Shop\Models\Product\Customization;
 use Wax\Shop\Models\Product\Option;
 use Wax\Shop\Models\Product\OptionValue;
 use Wax\Shop\Services\ShopService;
@@ -18,6 +19,7 @@ trait SeedsProducts
         $this->assertNotNull(Product::find(2));
         $this->assertNotNull(Product::find(3));
         $this->assertNotNull(Product::find(4));
+        $this->assertNotNull(Product::find(5));
 
 
         $this->assertNull(Product::find(10));
@@ -50,6 +52,28 @@ trait SeedsProducts
         $this->seedProductWithOptions($options);
         $this->seedProductOnePerUserWithOptions($options);
         $this->seedProductWithOptionModifiers($options);
+
+        $customizations = collect([
+            [
+                'name' => 'Initials',
+                'type' => 'text',
+                'max' => 5,
+                'required' => true,
+            ],
+            [
+                'name' => 'Age',
+                'type' => 'number',
+                'min' => 12,
+                'required' => false,
+            ]
+        ])->map(function ($customization) {
+            $customization = factory(Customization::class)
+                ->create($customization);
+
+            return $customization;
+        });
+
+        $this->seedProductWithCustomizations($customizations);
     }
 
     protected function seedProductWithOptions($options)
@@ -96,5 +120,16 @@ trait SeedsProducts
             ]);
         });
         $this->products['withOptionModifiers'] = $product;
+    }
+
+    protected function seedProductWithCustomizations($customizations)
+    {
+        $product = factory(Product::class)->create();
+        $customizations->each(function ($customization) use ($product) {
+            $customization->product()->associate($product);
+            $customization->save();
+        });
+
+        $this->products['withCustomizations'] = $product->fresh();
     }
 }
