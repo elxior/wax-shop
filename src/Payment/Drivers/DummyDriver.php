@@ -2,7 +2,7 @@
 
 namespace Wax\Shop\Payment\Drivers;
 
-use App\User;
+use Wax\Core\Eloquent\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;

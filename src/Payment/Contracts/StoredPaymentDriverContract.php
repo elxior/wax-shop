@@ -2,7 +2,7 @@
 
 namespace Wax\Shop\Payment\Contracts;
 
-use App\User;
+use Wax\Core\Eloquent\Models\User;
 use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
