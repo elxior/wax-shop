@@ -51,6 +51,7 @@
         "laravel": {
             "providers": [
                 "Wax\\Shop\\Providers\\ShopServiceProvider"
+                "Wax\\Shop\\Payment\\Providers\\PaymentServiceProvider"
             ]
         }
     }

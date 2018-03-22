@@ -2,6 +2,7 @@
 
 namespace Wax\Shop\Payment\Providers;
 
+use Illuminate\Support\ServiceProvider;
 use Omnipay\AuthorizeNet\CIMGateway;
 use Omnipay\Omnipay;
 use Wax\Shop\Payment\Drivers\AuthorizeNetCimDriver;
