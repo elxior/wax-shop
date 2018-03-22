@@ -2,7 +2,7 @@
 
 namespace Wax\Shop\Payment\Repositories;
 
-use App\User;
+use Wax\Core\Eloquent\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\User\PaymentMethod;

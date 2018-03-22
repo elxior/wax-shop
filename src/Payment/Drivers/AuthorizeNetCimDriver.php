@@ -2,13 +2,13 @@
 
 namespace Wax\Shop\Payment\Drivers;
 
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Omnipay\AuthorizeNet\CIMGateway;
 use Omnipay\Common\CreditCard;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Omnipay;
+use Wax\Core\Eloquent\Models\User;
 use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
