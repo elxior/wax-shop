@@ -5,6 +5,7 @@ namespace Wax\Shop\Payment\Drivers;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Omnipay\AuthorizeNet\CIMGateway;
 use Omnipay\Common\CreditCard;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Omnipay;
@@ -22,25 +23,9 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
     protected $gateway;
     protected $user;
 
-    public function __construct()
+    public function __construct(CIMGateway $gateway)
     {
-        if (empty(config('wax.shop.payment.drivers.authorizenet_cim.api_login_id'))
-            || empty(config('wax.shop.payment.drivers.authorizenet_cim.transaction_key'))
-        ) {
-            throw new \Exception(
-                __('shop::payment.driver_not_configured', ['name' => 'Authorize.net CIM'])
-            );
-        }
-
-        $this->gateway = Omnipay::create('AuthorizeNet_CIM');
-        $this->gateway->setApiLoginId(config('wax.shop.payment.drivers.authorizenet_cim.api_login_id'));
-        $this->gateway->setTransactionKey(config('wax.shop.payment.drivers.authorizenet_cim.transaction_key'));
-
-        if (config('wax.shop.payment.drivers.authorizenet_cim.developer_mode')) {
-            $this->gateway->setDeveloperMode(true);
-        } elseif (config('wax.shop.payment.drivers.authorizenet_cim.test_mode')) {
-            $this->gateway->setTestMode(true);
-        }
+        $this->gateway = $gateway;
     }
 
     public function setUser(User $user) : StoredPaymentDriverContract
