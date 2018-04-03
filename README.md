@@ -19,7 +19,7 @@ App composer.json must include:
         "oohology/wax-shop": "^2.0.0",
         ...
 ```
-Then, you can `composer update wax-shop` and it will install the shop package.
+Then, you can `composer update oohology/wax-shop` and it will install the shop package.
 
 ### Run the artisan commands  
 `./artisan vendor:publish`  
