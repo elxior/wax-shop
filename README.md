@@ -6,7 +6,7 @@
 Go through the normal process to set up wax, and run the wax installer including any wax modules you want.
 
 ### Composer install the shop package
-App composer.json must include:  
+App composer.json must include the `repository` and `require` info for wax-shop. If you are testing a wax-cms branch in a sandbox or otherwise using a non-tagged wax-cms, you will probably also need to add an inline alias on wax-cms so that it can resolve as a tagged release:  
 ```
 "repositories": [
         {
@@ -16,10 +16,11 @@ App composer.json must include:
         ...
     ],
 "require": {
+        "oohology/wax-cms": "dev-bugfix/some-branch as 0.13.4"
         "oohology/wax-shop": "^2.0.0",
         ...
 ```
-Then, you can `composer update wax-shop` and it will install the shop package.
+Then, you can `composer update oohology/wax-shop` and it will install the shop package.
 
 ### Run the artisan commands  
 `./artisan vendor:publish`  
