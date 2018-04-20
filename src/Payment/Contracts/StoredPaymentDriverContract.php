@@ -2,6 +2,7 @@
 
 namespace Wax\Shop\Payment\Contracts;
 
+use Wax\Core\Eloquent\Models\User;
 use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
@@ -47,4 +48,12 @@ interface StoredPaymentDriverContract
      * @return Payment
      */
     public function purchase(Order $order, PaymentMethod $paymentMethod, float $amount) : Payment;
+
+    /**
+     * Set the user to use on all activities through this driver. Return $this for chainability.
+     *
+     * @param User $user
+     * @return $this
+     */
+    public function setUser(User $user) : StoredPaymentDriverContract;
 }

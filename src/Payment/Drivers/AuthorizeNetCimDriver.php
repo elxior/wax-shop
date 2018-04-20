@@ -4,10 +4,11 @@ namespace Wax\Shop\Payment\Drivers;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\UnauthorizedException;
+use Omnipay\AuthorizeNet\CIMGateway;
 use Omnipay\Common\CreditCard;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Omnipay;
+use Wax\Core\Eloquent\Models\User;
 use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
@@ -22,30 +23,28 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
     protected $gateway;
     protected $user;
 
-    public function __construct()
+    public function __construct(CIMGateway $gateway)
     {
-        if (!Auth::check()) {
-            throw new UnauthorizedException;
-        }
-        $this->user = Auth::user();
+        $this->gateway = $gateway;
+    }
 
-        if (empty(config('wax.shop.payment.drivers.authorizenet_cim.api_login_id'))
-            || empty(config('wax.shop.payment.drivers.authorizenet_cim.transaction_key'))
-        ) {
-            throw new \Exception(
-                __('shop::payment.driver_not_configured', ['name' => 'Authorize.net CIM'])
-            );
-        }
+    public function setUser(User $user) : StoredPaymentDriverContract
+    {
+        $this->user = $user;
 
-        $this->gateway = Omnipay::create('AuthorizeNet_CIM');
-        $this->gateway->setApiLoginId(config('wax.shop.payment.drivers.authorizenet_cim.api_login_id'));
-        $this->gateway->setTransactionKey(config('wax.shop.payment.drivers.authorizenet_cim.transaction_key'));
+        return $this;
+    }
 
-        if (config('wax.shop.payment.drivers.authorizenet_cim.developer_mode')) {
-            $this->gateway->setDeveloperMode(true);
-        } elseif (config('wax.shop.payment.drivers.authorizenet_cim.test_mode')) {
-            $this->gateway->setTestMode(true);
+    protected function getUser()
+    {
+        if (is_null($this->user)) {
+            if (!Auth::check()) {
+                throw new \Exception;
+            }
+            $this->user = Auth::user();
         }
+        
+        return $this->user;
     }
 
     /**
@@ -58,13 +57,13 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
     public function createCard($data) : PaymentMethod
     {
         $requestData = [
-            'customerId' => $this->user->id,
-            'email' => $this->user->email,
+            'customerId' => $this->getUser()->id,
+            'email' => $this->getUser()->email,
             'card' => $this->prepareCreditCardData($data),
         ];
 
-        if ($this->user->payment_profile_id) {
-            $requestData['customerProfileId'] = $this->user->payment_profile_id;
+        if ($this->getUser()->payment_profile_id) {
+            $requestData['customerProfileId'] = $this->getUser()->payment_profile_id;
         }
 
         try {
@@ -80,8 +79,8 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
             ->validate();
 
         if (!empty($response->getCustomerProfileId())) {
-            $this->user->payment_profile_id = $response->getCustomerProfileId();
-            $this->user->save();
+            $this->getUser()->payment_profile_id = $response->getCustomerProfileId();
+            $this->getUser()->save();
         }
 
         $paymentModel = config('wax.shop.models.payment_method');
@@ -127,8 +126,8 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
     public function deleteCard(PaymentMethod $paymentMethod)
     {
         $requestData = [
-            'customerId' => $this->user->id,
-            'customerProfileId' => $this->user->payment_profile_id,
+            'customerId' => $this->getUser()->id,
+            'customerProfileId' => $this->getUser()->payment_profile_id,
             'customerPaymentProfileId' => $paymentMethod->payment_profile_id,
         ];
 
@@ -264,7 +263,7 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
     protected function buildCardReference(PaymentMethod $paymentMethod)
     {
         return json_encode([
-            'customerProfileId' => $this->user->payment_profile_id,
+            'customerProfileId' => $this->getUser()->payment_profile_id,
             'customerPaymentProfileId' => $paymentMethod->payment_profile_id,
         ]);
     }
