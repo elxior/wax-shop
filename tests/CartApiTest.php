@@ -176,12 +176,82 @@ class CartApiTest extends ShopBaseTestCase
         $response->assertStatus(422);
     }
 
+    public function testAddProductWithInvalidOptionValues()
+    {
+        $product = $this->products['withOptions'];
+        $options = $product->options->mapWithKeys(function ($option) {
+            return [$option->id => 7777];
+        })->all();
+
+        $response = $this->json('POST', route('shop::api.cart.store'), [
+            'product_id' => $product->id,
+            'quantity' => 1,
+            'options' => $options,
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function testProductWithMissingCustomization()
+    {
+        $product = $this->products['withCustomizations'];
+
+        $response = $this->json('POST', route('shop::api.cart.store'), [
+            'product_id' => $product->id,
+            'quantity' => 1,
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function testProductWithRequiredCustomizations()
+    {
+        $product = $this->products['withCustomizations'];
+
+        $requiredCustomization = $product->customizations
+            ->filter(function ($customization) {
+                return $customization->required;
+            })
+            ->mapWithKeys(function ($customization) {
+                return [$customization->id => 'asdf'];
+            });
+
+        $response = $this->json('POST', route('shop::api.cart.store'), [
+            'product_id' => $product->id,
+            'quantity' => 1,
+            'customizations' => $requiredCustomization,
+        ]);
+
+        $response->assertStatus(200);
+    }
+
+    public function testProductWithInvalidCustomizations()
+    {
+        $product = $this->products['withCustomizations'];
+
+        $requiredCustomization = $product->customizations
+
+            ->mapWithKeys(function ($customization) {
+                $value = $customization->type == 'text' ? 'asdfqwer1234' : 2;
+                return [$customization->id => $value];
+            });
+
+        $response = $this->json('POST', route('shop::api.cart.store'), [
+            'product_id' => $product->id,
+            'quantity' => 1,
+            'customizations' => $requiredCustomization,
+        ]);
+
+        $response->assertStatus(422);
+    }
+
     public function testAddOnePerUserProductInvalidQuantity()
     {
         $response = $this->json('POST', route('shop::api.cart.store'), [
             'product_id' => $this->products['onePerUser']->id,
             'quantity' => 2
         ]);
+
         $response->assertStatus(422);
     }
 

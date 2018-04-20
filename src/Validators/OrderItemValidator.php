@@ -38,7 +38,7 @@ class OrderItemValidator extends AbstractValidator
         $this->productId = $productId;
         $this->quantity = $quantity;
         $this->options = collect($options);
-        $this->customizations = $customizations;
+        $this->customizations = collect($customizations);
 
         $this->product = app()->make(ProductRepository::class)->get($this->productId);
         if (is_null($this->product)) {
@@ -60,14 +60,18 @@ class OrderItemValidator extends AbstractValidator
         }
         
         $options = $this->item->options->mapWithKeys(function ($option) {
-            return [$option->id => $option->value_id];
+            return [$option->option_id => $option->value_id];
+        })->toArray();
+
+        $customizations = $this->item->customizations->mapWithKeys(function ($customization) {
+            return [$customization->customization_id => $customization->value];
         })->toArray();
 
         $this->setRequest(
             $this->item->product_id,
             $this->quantity ?? $this->item->quantity,
             $options,
-            $this->item->customizations->toArray()
+            $customizations
         );
 
         return $this;
@@ -95,6 +99,8 @@ class OrderItemValidator extends AbstractValidator
         $this->checkOnePerUser($this->product)
         && $this->checkOptionsAgainstProduct($this->product)
         && $this->checkRequiredOptions($this->product)
+        && $this->checkCustomizationsAgainstProduct($this->product)
+        && $this->checkRequiredCustomizations($this->product)
         && $this->checkInventory($this->product);
 
         return $this->messages->isEmpty();
@@ -152,6 +158,30 @@ class OrderItemValidator extends AbstractValidator
                 ->add('option', 'Missing required options: '.$missingOptions->pluck('name')->implode(', '));
             return false;
         }
+        return true;
+    }
+
+    /**
+     * Make sure all required customization for the given product have values in the user input.
+     *
+     * @param Product $product
+     * @return bool
+     */
+    protected function checkRequiredCustomizations(Product $product) : bool
+    {
+        $missingCustomizations = $product->customizations
+            ->where('required', 1)
+            ->whereNotIn('id', $this->customizations->filter()->keys());
+
+        if ($missingCustomizations->isNotEmpty()) {
+            $this->errors()
+                ->add(
+                    'customization',
+                    'Missing required customization(s): '.$missingCustomizations->pluck('name')->implode(', ')
+                );
+            return false;
+        }
+
         return true;
     }
 
@@ -268,18 +298,76 @@ class OrderItemValidator extends AbstractValidator
             return true;
         }
 
-        $validOptions = $this->options
-            ->filter(function ($optionValueId, $optionId) use ($product) {
-                return $product->options->filter(function ($option) use ($optionId, $optionValueId) {
-                    return $option->id == $optionId
-                        && $option->values->pluck('id')->contains($optionValueId);
-                });
+        $invalidOptions = $this->options
+            ->reject(function ($optionValueId, $optionId) use ($product) {
+                // reject all the valid option/option-value pairs.
+                $option = $product->options->where('id', $optionId)->first();
+
+                if (!$option) {
+                    return false;
+                }
+
+                return $option->values->pluck('id')->contains($optionValueId);
             })
             ->isNotEmpty();
 
-        if (!$validOptions) {
+        if ($invalidOptions) {
             $this->errors()
                 ->add('options', 'Those options are not valid for this product.');
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Filter the input for customization values that are valid for the given product.
+     *
+     * @param Product $product
+     * @return boolean
+     */
+    protected function checkCustomizationsAgainstProduct(Product $product) : bool
+    {
+        if ($this->customizations->isEmpty()) {
+            return true;
+        }
+
+        $invalidCustomizations = $this->customizations
+            ->reject(function ($value, $customizationId) use ($product) {
+                $productCustomization = $product->customizations->where('id', $customizationId)->first();
+
+                if (!$productCustomization) {
+                    return false;
+                }
+
+                if ($productCustomization->type == 'number') {
+                    if (!empty($productCustomization->min)) {
+                        return $value > $productCustomization->min;
+                    }
+
+                    if (!empty($productCustomization->max)) {
+                        return $value < $productCustomization->max;
+                    }
+                }
+
+                if ($productCustomization->type == 'text' || $productCustomization->type == 'textarea') {
+                    if (!empty($productCustomization->min)) {
+                        return strlen($value) > $productCustomization->min;
+                    }
+
+                    if (!empty($productCustomization->max)) {
+                        return strlen($value) < $productCustomization->max;
+                    }
+                }
+
+                // apparently it's valid
+                return true;
+            })
+            ->isNotEmpty();
+
+        if ($invalidCustomizations) {
+            $this->errors()
+                ->add('customizations', 'Those customizations are not valid for this product.');
             return false;
         }
 

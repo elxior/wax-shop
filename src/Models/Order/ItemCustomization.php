@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ItemCustomization extends Model
 {
     protected $table = 'order_item_customizations';
+    protected $guarded = [];
 
     public function item()
     {

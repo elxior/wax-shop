@@ -184,6 +184,18 @@ class Shipment extends Model
             ]);
         }
 
+        if ($customizations) {
+            $productCustomizations = $item->product->customizations->keyBy('id');
+            foreach ($customizations as $customizationId => $value) {
+                $item->customizations()->create([
+                    'customization_id' => $customizationId,
+                    'value' => $value,
+                    'customization' => $productCustomizations->find($customizationId)->name,
+                    'type' => $productCustomizations->find($customizationId)->type,
+                ]);
+            }
+        }
+
         event(new CartContentsChangedEvent($this->order->fresh()));
     }
 
@@ -241,7 +253,12 @@ class Shipment extends Model
         }
 
         if ($customizations) {
-            /* @TODO */
+            $items = $items->load('customizations')
+                ->filter(function ($item) use ($customizations) {
+                    return $item->customizations->mapWithKeys(function ($customization) {
+                            return [$customization->customization_id => $customization->value];
+                    })->toArray() == $customizations;
+                });
         }
 
         return $items->first();

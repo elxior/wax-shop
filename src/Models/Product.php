@@ -4,6 +4,7 @@ namespace Wax\Shop\Models;
 
 use Wax\Core\Support\Localization\Currency;
 use Wax\Shop\Models\Product\Category;
+use Wax\Shop\Models\Product\Customization;
 use Wax\Shop\Models\Product\Image;
 use Wax\Shop\Models\Product\Option;
 use Wax\Shop\Models\Product\OptionModifier;
@@ -217,5 +218,10 @@ class Product extends Model
     public function getPriceAttribute($value)
     {
         return Currency::round($value);
+    }
+
+    public function customizations()
+    {
+        return $this->hasMany(Customization::class);
     }
 }

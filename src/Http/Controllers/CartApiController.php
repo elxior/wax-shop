@@ -38,7 +38,8 @@ class CartApiController extends Controller
         $this->shopService->addOrderItem(
             $request->input('product_id'),
             $request->input('quantity'),
-            $request->input('options', [])
+            $request->input('options', []),
+            $request->input('customizations', [])
         );
 
         return response()->json($this->shopService->getActiveOrder());
