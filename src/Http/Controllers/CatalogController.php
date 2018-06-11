@@ -16,13 +16,13 @@ class CatalogController extends Controller
 
     public function index()
     {
-        $featured = $this->repo->with(['category.products', 'bundles'])->getAll();
+        $featured = $this->repo->with(['category.products', 'bundles'])->getFeatured();
         $nonFeatured = $this->repo->with(['category.products', 'bundles'])->getForIndex($featured->toArray());
         $categories = $featured->merge($nonFeatured)->pluck('category')->unique()->filter();
 
-        return view('modules.Shop.pages.shop', [
+        return view('shop::pages.catalog', [
             'featuredProducts' => $featured->toArray(),
-            'productsByCategory' => $nonFeatured->toArray(),
+            'nonFeaturedProducts' => $nonFeatured->toArray(),
             'categories' => $categories->toArray()
         ]);
     }
@@ -34,7 +34,7 @@ class CatalogController extends Controller
             abort(404);
         }
 
-        return view('modules.Shop.pages.product-detail', [
+        return view('shop::pages.product-detail', [
             'product' => $product->toArray(),
             'relatedProducts' => $product->relatedProducts->toArray(),
         ]);
