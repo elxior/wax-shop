@@ -215,7 +215,7 @@ class Shipment extends Model
 
     public function deleteItem(int $itemId)
     {
-        (new DeleteOrderItemValidator($itemId))
+        (new DeleteOrderItemValidator($itemId, $this->order))
             ->validate();
 
         $item = $this->items
