@@ -3,9 +3,8 @@
 use Wax\Shop\Services\ShopAdminService;
 use Illuminate\Support\Facades\Auth;
 use Wax\Core\Structures\Builder;
-use Wax\Core\Support\ConfigurationDatabase;
 
-$image_path = '/res/uploads/shop/products/images';
+$imagePath = 'shop/products/images';
 
 $structure = array(
     'table' => 'product_categories',
@@ -77,7 +76,7 @@ $structure['fields'][] = array(
     'name' => 'image',
     'display_name' => 'Image',
     'type' => 'image',
-    'path' => $image_path,
+    'path' => $imagePath,
     'image_x' => 1500,
     'image_y' => 1500,
     //'crop' => ['arX' => 660, 'arY' => 303]
