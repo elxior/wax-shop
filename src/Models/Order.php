@@ -366,9 +366,11 @@ class Order extends Model
             $this->refresh();
         }
 
-        $this->applyBundleDiscounts();
+        $bundlesTouched = $this->applyBundleDiscounts();
 
-        $this->refresh();
+        if ($bundlesTouched > 0) {
+            $this->refresh();
+        }
         event(new CouponChangedEvent($this));
     }
 
@@ -380,7 +382,7 @@ class Order extends Model
             $query->whereIn('products.id', $orderProductIds);
         })->orderBy('percent', 'desc')->get();
 
-        $bundles->filter(function ($bundle) use ($orderProductIds) {
+        $bundlesTouched = $bundles->filter(function ($bundle) use ($orderProductIds) {
             return $bundle->products->count() == $orderProductIds->intersect($bundle->products->pluck('id'))->count();
         })->each(function ($bundle) {
             $items = $this->items
@@ -408,7 +410,9 @@ class Order extends Model
             $orderBundle->save();
 
             $this->refresh();
-        });
+        })->count();
+
+        return $bundlesTouched;
     }
 
     protected function resetDiscounts()
@@ -416,24 +420,34 @@ class Order extends Model
         // trigger individual deletes so the 'deleting' event is caught
         $this->bundles->each->delete();
 
-        $this->shipments->each(function ($shipment) {
+        $wereShipmentsModified = $this->shipments->map(function ($shipment) {
             $shipment->shipping_discount_amount = null;
             $shipment->save();
+            return $shipment->wasChanged();
+        })->reduce(function ($carry, $item) {
+            return $carry || $item;
         });
 
-        $this->items->each(function ($item) {
+        $wereItemsModified = $this->items->map(function ($item) {
             $item->discountable = null;
             $item->discount_amount = null;
             $item->bundle_id = null;
             $item->save();
+            return $item->wasChanged();
+        })->reduce(function ($carry, $item) {
+            return $carry || $item;
         });
 
+        $wasCouponModified = false;
         if ($this->coupon) {
             $this->coupon->calculated_value = null;
             $this->coupon->save();
+            $wasCouponModified = $this->coupon->wasChanged();
         }
 
-        $this->refresh();
+        if ($wereShipmentsModified || $wereItemsModified || $wasCouponModified) {
+            $this->refresh();
+        }
     }
 
     public function validateTax() : bool
