@@ -25,6 +25,12 @@ class CouponApiTest extends ShopBaseTestCase
         $this->seedProducts();
         $this->shopService = app()->make(ShopService::class);
 
+        Lang::shouldReceive('trans')
+            ->andReturn('');
+
+        Lang::shouldReceive('setLocale')
+            ->andReturn('');
+
         Lang::shouldReceive('getFromJson')
             ->with('shop::coupon.invalid_code', [], null)
             ->andReturn($this->invalidCouponResponse);

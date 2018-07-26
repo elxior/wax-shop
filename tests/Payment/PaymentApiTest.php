@@ -38,6 +38,12 @@ class PaymentApiTest extends ShopBaseTestCase
         Lang::shouldReceive('getFromJson')
             ->andReturn('');
 
+        Lang::shouldReceive('trans')
+            ->andReturn('');
+
+        Lang::shouldReceive('setLocale')
+            ->andReturn('');
+
         // mock error response strings
         Lang::shouldReceive('getFromJson')
             ->with('shop::payment.make_payment_unauthorized', [], null)
