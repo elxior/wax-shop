@@ -2,6 +2,18 @@
 
 This file's format is based on [Keep a Changelog](http://keepachangelog.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.0.0 - 2018-07-26
+### Changed
+ - remove wax-cms 0.13.0 compatibility
+ - add mocks for translation calls (!28)
+ - wax-cms 0.14.0 compatibility (!25)
+ - trigger refreshes only when necessary (!24)
+ - bugfix / coupons using the wrong model (!26)
+ - decouple order validation from active order (!23)
+ - feature/cart-customizations (!22)
+ - decouple PaymentMethodRepository from Auth (!21)
+
+
 ## 2.0.1 - 2018-02-23
 ### Added
  - Installer (!20)
