@@ -197,7 +197,7 @@ class CouponTest extends ShopBaseTestCase
         $this->assertEquals([6.66, 6.67, 6.67], $order->items->pluck('subtotal')->toArray());
     }
 
-    public function testIncludeShipping()
+    public function testIncludeShippingWithPercentage()
     {
         $coupon = factory(Coupon::class)
             ->create([
@@ -238,6 +238,137 @@ class CouponTest extends ShopBaseTestCase
         $this->assertEquals(110, $order->gross_total);
         $this->assertEquals(22, $order->coupon_value);
         $this->assertEquals(88, $order->total);
+
+    }
+
+    public function testIncludeShippingWithNotEnoughToCoverAnyShipping()
+    {
+        $coupon = factory(Coupon::class)
+            ->create([
+                'dollars' => 100,
+                'include_shipping' => true
+            ]);
+
+        $this->shopService->addOrderItem(factory(Product::class)->create(['price' => 100])->id);
+        $this->shopService->setShippingService(factory(ShippingRate::class)->create(['amount' => 10]));
+
+        $this->assertTrue($this->shopService->applyCoupon($coupon->code));
+
+        $order = $this->shopService->getActiveOrder();
+
+        // cart item subtotals
+        $this->assertEquals(100, $order->default_shipment->item_gross_subtotal);
+        $this->assertEquals(100, $order->default_shipment->item_discount_amount);
+        $this->assertEquals(0, $order->default_shipment->item_subtotal);
+
+        // shipping subtotals
+        $this->assertEquals(10, $order->default_shipment->shipping_gross_subtotal);
+        $this->assertEquals(0, $order->default_shipment->shipping_discount_amount);
+        $this->assertEquals(10, $order->default_shipment->shipping_subtotal);
+
+        // shipment totals
+        $this->assertEquals(110, $order->default_shipment->gross_total);
+        $this->assertEquals(10, $order->default_shipment->total);
+
+        // order totals
+        $this->assertEquals(100, $order->item_gross_subtotal);
+        $this->assertEquals(100, $order->item_discount_amount);
+        $this->assertEquals(0, $order->item_subtotal);
+
+        $this->assertEquals(10, $order->shipping_gross_subtotal);
+        $this->assertEquals(0, $order->shipping_discount_amount);
+        $this->assertEquals(10, $order->shipping_subtotal);
+
+        $this->assertEquals(110, $order->gross_total);
+        $this->assertEquals(100, $order->coupon_value);
+        $this->assertEquals(10, $order->total);
+
+    }
+
+    public function testIncludeShippingWithDollarEnoughToCoverSomeShipping()
+    {
+        $coupon = factory(Coupon::class)
+            ->create([
+                'dollars' => 105,
+                'include_shipping' => true
+            ]);
+
+        $this->shopService->addOrderItem(factory(Product::class)->create(['price' => 100])->id);
+        $this->shopService->setShippingService(factory(ShippingRate::class)->create(['amount' => 10]));
+
+        $this->assertTrue($this->shopService->applyCoupon($coupon->code));
+
+        $order = $this->shopService->getActiveOrder();
+
+        // cart item subtotals
+        $this->assertEquals(100, $order->default_shipment->item_gross_subtotal);
+        $this->assertEquals(100, $order->default_shipment->item_discount_amount);
+        $this->assertEquals(0, $order->default_shipment->item_subtotal);
+
+        // shipping subtotals
+        $this->assertEquals(10, $order->default_shipment->shipping_gross_subtotal);
+        $this->assertEquals(5, $order->default_shipment->shipping_discount_amount);
+        $this->assertEquals(5, $order->default_shipment->shipping_subtotal);
+
+        // shipment totals
+        $this->assertEquals(110, $order->default_shipment->gross_total);
+        $this->assertEquals(5, $order->default_shipment->total);
+
+        // order totals
+        $this->assertEquals(100, $order->item_gross_subtotal);
+        $this->assertEquals(100, $order->item_discount_amount);
+        $this->assertEquals(0, $order->item_subtotal);
+
+        $this->assertEquals(10, $order->shipping_gross_subtotal);
+        $this->assertEquals(5, $order->shipping_discount_amount);
+        $this->assertEquals(5, $order->shipping_subtotal);
+
+        $this->assertEquals(110, $order->gross_total);
+        $this->assertEquals(105, $order->coupon_value);
+        $this->assertEquals(5, $order->total);
+
+    }
+    public function testIncludeShippingWithDollarEnoughToCoverAllShipping()
+    {
+        $coupon = factory(Coupon::class)
+            ->create([
+                'dollars' => 110,
+                'include_shipping' => true
+            ]);
+
+        $this->shopService->addOrderItem(factory(Product::class)->create(['price' => 100])->id);
+        $this->shopService->setShippingService(factory(ShippingRate::class)->create(['amount' => 10]));
+
+        $this->assertTrue($this->shopService->applyCoupon($coupon->code));
+
+        $order = $this->shopService->getActiveOrder();
+
+        // cart item subtotals
+        $this->assertEquals(100, $order->default_shipment->item_gross_subtotal);
+        $this->assertEquals(100, $order->default_shipment->item_discount_amount);
+        $this->assertEquals(0, $order->default_shipment->item_subtotal);
+
+        // shipping subtotals
+        $this->assertEquals(10, $order->default_shipment->shipping_gross_subtotal);
+        $this->assertEquals(10, $order->default_shipment->shipping_discount_amount);
+        $this->assertEquals(0, $order->default_shipment->shipping_subtotal);
+
+        // shipment totals
+        $this->assertEquals(110, $order->default_shipment->gross_total);
+        $this->assertEquals(0, $order->default_shipment->total);
+
+        // order totals
+        $this->assertEquals(100, $order->item_gross_subtotal);
+        $this->assertEquals(100, $order->item_discount_amount);
+        $this->assertEquals(0, $order->item_subtotal);
+
+        $this->assertEquals(10, $order->shipping_gross_subtotal);
+        $this->assertEquals(10, $order->shipping_discount_amount);
+        $this->assertEquals(0, $order->shipping_subtotal);
+
+        $this->assertEquals(110, $order->gross_total);
+        $this->assertEquals(110, $order->coupon_value);
+        $this->assertEquals(0, $order->total);
 
     }
 }
