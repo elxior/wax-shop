@@ -25,15 +25,15 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "laravel/framework": "5.5.*",
+        "laravel/framework": "5.6.*",
         "doctrine/dbal": "^2.5",
-        "oohology/wax-cms": "^0.14.0",
-        "symfony/event-dispatcher": "^2.8"
+        "oohology/wax-cms": "^0.15.0",
+        "symfony/event-dispatcher": "~4.0"
     },
     "require-dev": {
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "~0.9.1",
-        "phpunit/phpunit": "~5.0",
+        "fzaninotto/faker": "^1.4",
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^7.0",
         "squizlabs/php_codesniffer": "^2.3",
         "predis/predis": "~1.0",
         "oohology/wax-app": "dev-master",
