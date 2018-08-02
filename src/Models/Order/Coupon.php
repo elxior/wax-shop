@@ -118,8 +118,23 @@ class Coupon extends Model
             return false;
         }
 
-        $this->order->shipments->each(function ($shipment) {
-            $shipmentDiscount = round($shipment->shipping_subtotal * ($this->percent / 100), 2);
+        $remainingValue = 0;
+        if ($this->dollars > 0) {
+            $remainingValue = $this->dollars - $this->calculateBaseValue();
+        }
+
+        if ($this->dollars > 0 && $remainingValue === 0) {
+            return false;
+        }
+
+        $this->order->shipments->each(function ($shipment) use ($remainingValue) {
+            if ($this->dollars > 0 && $remainingValue > 0) {
+                $shipmentDiscount = min($remainingValue, $shipment->shipping_subtotal);
+                $remainingValue -= $shipmentDiscount;
+            } else {
+                $shipmentDiscount = round($shipment->shipping_subtotal * ($this->percent / 100), 2);
+            }
+
             $shipment->shipping_discount_amount = $shipmentDiscount;
             $shipment->save();
 
