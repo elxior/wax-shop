@@ -33,12 +33,13 @@
     "require-dev": {
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^7.0",
+        "phpunit/phpunit": "~7.0.0",
         "squizlabs/php_codesniffer": "^2.3",
         "predis/predis": "~1.0",
         "oohology/wax-app": "dev-master",
         "avalara/avataxclient": "dev-visibility",
-        "omnipay/authorizenet": "~2.0"
+        "league/omnipay": "^3.0",
+        "omnipay/authorizenet": "3.x@dev"
     },
     "autoload": {
         "psr-4": {
