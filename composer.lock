@@ -1390,16 +1390,16 @@
         },
         {
             "name": "oohology/wax-cms",
-            "version": "0.15.0",
+            "version": "0.15.1",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.com:oohology/wax-cms.git",
-                "reference": "1b498819a69ea51afe06dde07aaeedea83bd4c03"
+                "reference": "196eae162a2026095283845e26bc91f0cf981b94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/oohology%2Fwax-cms/repository/archive.zip?sha=1b498819a69ea51afe06dde07aaeedea83bd4c03",
-                "reference": "1b498819a69ea51afe06dde07aaeedea83bd4c03",
+                "url": "https://gitlab.com/api/v4/projects/oohology%2Fwax-cms/repository/archive.zip?sha=196eae162a2026095283845e26bc91f0cf981b94",
+                "reference": "196eae162a2026095283845e26bc91f0cf981b94",
                 "shasum": ""
             },
             "require": {
@@ -1470,7 +1470,7 @@
                 }
             ],
             "description": "Wax Cms built on the Laravel Framework",
-            "time": "2018-07-31T20:40:52+00:00"
+            "time": "2018-08-06T14:29:41+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -4207,12 +4207,12 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.com:oohology/wax-app.git",
-                "reference": "5c50ca3482ed8aca7b158c3622611df36d1a2642"
+                "reference": "c3c26f640c0084c639ef31eedea9cb0c7fa67596"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/oohology%2Fwax-app/repository/archive.zip?sha=5c50ca3482ed8aca7b158c3622611df36d1a2642",
-                "reference": "5c50ca3482ed8aca7b158c3622611df36d1a2642",
+                "url": "https://gitlab.com/api/v4/projects/oohology%2Fwax-app/repository/archive.zip?sha=c3c26f640c0084c639ef31eedea9cb0c7fa67596",
+                "reference": "c3c26f640c0084c639ef31eedea9cb0c7fa67596",
                 "shasum": ""
             },
             "require": {
@@ -4268,7 +4268,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2018-07-31T20:29:22+00:00"
+            "time": "2018-08-06T14:50:10+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -4876,16 +4876,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "1.7.6",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "33a7e3c4fda54e912ff6338c48823bd5c0f0b712"
+                "reference": "4ba436b55987b4bf311cb7c6ba82aa528aac0a06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/33a7e3c4fda54e912ff6338c48823bd5c0f0b712",
-                "reference": "33a7e3c4fda54e912ff6338c48823bd5c0f0b712",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/4ba436b55987b4bf311cb7c6ba82aa528aac0a06",
+                "reference": "4ba436b55987b4bf311cb7c6ba82aa528aac0a06",
                 "shasum": ""
             },
             "require": {
@@ -4897,12 +4897,12 @@
             },
             "require-dev": {
                 "phpspec/phpspec": "^2.5|^3.2",
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5"
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5 || ^7.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7.x-dev"
+                    "dev-master": "1.8.x-dev"
                 }
             },
             "autoload": {
@@ -4935,7 +4935,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2018-04-18T13:57:24+00:00"
+            "time": "2018-08-05T17:53:17+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
