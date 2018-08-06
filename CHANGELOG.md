@@ -4,6 +4,7 @@ This file's format is based on [Keep a Changelog](http://keepachangelog.com/). T
 
 ## 3.0.0 - 2018-07-26
 ### Changed
+ - wax-cms 0.15.0 / L5.6 compatibility (!31)
  - fixed-dollar coupons can apply to shipping (!30)
  - remove wax-cms 0.13.0 compatibility
  - add mocks for translation calls (!28)
