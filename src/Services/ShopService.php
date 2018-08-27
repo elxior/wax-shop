@@ -12,6 +12,7 @@ use Wax\Shop\Payment\Validators\OrderPaymentParser;
 use Wax\Shop\Repositories\OrderRepository;
 use Illuminate\Support\Facades\Auth;
 use Wax\Shop\Validators\OrderPayableValidator;
+use Wax\Shop\Validators\OrderPlaceableValidator;
 
 class ShopService
 {
@@ -170,5 +171,21 @@ class ShopService
         $order->place();
 
         return $payment;
+    }
+
+    /**
+     * Place an order. This would be used when the order is completely set up and payments/discounts have been
+     * applied to bring the balance due to $0.00.
+     *
+     * @return bool
+     * @throws ValidationException
+     */
+    public function placeOrder() : bool
+    {
+        $order = $this->getActiveOrder();
+
+        (new OrderPlaceableValidator($order))->validate();
+
+        return $order->place();
     }
 }
