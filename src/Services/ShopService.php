@@ -2,15 +2,17 @@
 
 namespace Wax\Shop\Services;
 
+use Illuminate\Support\Facades\Auth;
+use Omnipay\Common\CreditCard;
 use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\User\PaymentMethod;
+use Wax\Shop\Payment\Contracts\PaymentTypeContract;
 use Wax\Shop\Payment\Repositories\PaymentMethodRepository;
 use Wax\Shop\Payment\Validators\OrderPaymentParser;
 use Wax\Shop\Repositories\OrderRepository;
-use Illuminate\Support\Facades\Auth;
 use Wax\Shop\Validators\OrderPayableValidator;
 
 class ShopService
@@ -144,6 +146,50 @@ class ShopService
     public function validateOrderPlaceable() : bool
     {
         return $this->getActiveOrder()->validatePlaceable();
+    }
+
+    public function applyPayment(PaymentTypeContract $paymentType, $amount = null)
+    {
+        $order = $this->getActiveOrder();
+
+        (new OrderPayableValidator($order))->validate();
+
+        if (!$order->validatePayable()) {
+            return false;
+        }
+
+        if (is_null($amount)) {
+            $amount = $order->balance_due;
+        }
+
+        // don't allow payments GREATER than the balance due
+        $amount = min($amount, $order->balance_due);
+
+        if ($amount <= 0) {
+            throw new \Exception('Invalid payment amount');
+        }
+
+        $payment = $paymentType->authorize($order, $amount);
+        $order->payments()->save($payment);
+
+        // Catch payment errors and convert them to a validation exception/message bag
+        (new OrderPaymentParser($payment))->validate();
+
+        if (!config('wax.shop.payment.prior_auth_capture')) {
+            $order->place();
+        }
+
+        return $payment;
+    }
+
+    public function placeOrder()
+    {
+        //
+    }
+
+    public function processOrder()
+    {
+        //
     }
 
     /**
