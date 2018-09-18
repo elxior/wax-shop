@@ -2,6 +2,13 @@
 
 This file's format is based on [Keep a Changelog](http://keepachangelog.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.1.0 - 2018-09-18
+### Added
+ - Adds /shop/api/place-order endpoint (!32)
+
+### Fixed
+ - make payment model use configurable order model (!29)
+
 ## 3.0.0 - 2018-07-26
 ### Changed
  - wax-cms 0.15.0 / L5.6 compatibility (!31)
