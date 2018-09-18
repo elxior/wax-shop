@@ -78,4 +78,15 @@ class BasicPaymentTest extends ShopBaseTestCase
         $this->assertEquals(0, $order->payment_total);
         $this->assertEquals(10, $order->balance_due);
     }
+
+    public function testFollowsConfiguration()
+    {
+        $orderRelation = (new Payment())->order();
+        $this->assertTrue($orderRelation->getRelated() instanceof \Wax\Shop\Models\Order);
+
+        config('wax.shop.models.order', \Wax\Shop\Product::class);
+
+        $orderRelation = (new Payment())->order();
+        $this->assertTrue($orderRelation->getRelated() instanceof \Wax\Shop\Models\Order);
+    }
 }
