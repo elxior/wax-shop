@@ -57,6 +57,15 @@ Route::group(['prefix' => 'shop'], function () {
             'PaymentMethodApiController@setShippingAddress'
         )->middleware('auth')
             ->name('api.paymentMethods.setShippingAddress');
+
+        /**
+         * Checkout
+         */
+        // if there is no balance due and the order is ready to go, you can place it this way
+        Route::post(
+            'place-order',
+            'CheckoutController@placeOrder'
+        )->name('api.place-order');
     });
 
     Route::get('/cart', function () {
