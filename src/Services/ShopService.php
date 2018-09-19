@@ -183,11 +183,6 @@ class ShopService
         return $payment;
     }
 
-    public function placeOrder()
-    {
-        //
-    }
-
     public function processOrder()
     {
         //
