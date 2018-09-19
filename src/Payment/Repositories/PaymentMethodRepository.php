@@ -6,7 +6,7 @@ use Wax\Core\Eloquent\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\User\PaymentMethod;
-use Wax\Shop\Payment\Contracts\StoredPaymentDriverContract;
+use Wax\Shop\Payment\Contracts\DriverTypes\StoredCreditCardDriverContract;
 use Wax\Shop\Services\ShopService;
 
 class PaymentMethodRepository
@@ -25,7 +25,7 @@ class PaymentMethodRepository
 
         return $this;
     }
-    
+
     protected function getUser()
     {
         if (is_null($this->user)) {
@@ -34,11 +34,11 @@ class PaymentMethodRepository
             }
             $this->user = Auth::user();
         }
-        
+
         return $this->user;
     }
 
-    protected function getDriver() : StoredPaymentDriverContract
+    protected function getDriver() : StoredCreditCardDriverContract
     {
         return app()->make(config('wax.shop.payment.stored_payment_driver'))->setUser($this->getUser());
     }

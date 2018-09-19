@@ -13,12 +13,12 @@ use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\User\PaymentMethod;
-use Wax\Shop\Payment\Contracts\StoredPaymentDriverContract;
+use Wax\Shop\Payment\Contracts\DriverTypes\StoredCreditCardDriverContract;
 use Wax\Shop\Payment\Validators\AuthorizeNetCim\ExceptionParser;
 use Wax\Shop\Payment\Validators\AuthorizeNetCim\PaymentProfileResponseParser;
 use Wax\Shop\Payment\Validators\CreditCardPreValidator;
 
-class AuthorizeNetCimDriver implements StoredPaymentDriverContract
+class AuthorizeNetCimDriver implements StoredCreditCardDriverContract
 {
     protected $gateway;
     protected $user;
@@ -28,7 +28,7 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
         $this->gateway = $gateway;
     }
 
-    public function setUser(User $user) : StoredPaymentDriverContract
+    public function setUser(User $user) : StoredCreditCardDriverContract
     {
         $this->user = $user;
 
@@ -43,7 +43,7 @@ class AuthorizeNetCimDriver implements StoredPaymentDriverContract
             }
             $this->user = Auth::user();
         }
-        
+
         return $this->user;
     }
 
