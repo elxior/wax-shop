@@ -153,8 +153,6 @@ class ShopService
     {
         $order = $this->getActiveOrder();
 
-        (new OrderPayableValidator($order))->validate();
-
         if (!$order->validatePayable()) {
             return false;
         }

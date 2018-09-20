@@ -2,10 +2,9 @@
 
 namespace Wax\Shop\Payment\Contracts\DriverTypes;
 
+use Omnipay\Common\CreditCard;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
-//use Wax\Shop\Payment\Types\CreditCard;
-use Omnipay\Common\CreditCard;
 
 interface CreditCardPaymentDriverContract
 {

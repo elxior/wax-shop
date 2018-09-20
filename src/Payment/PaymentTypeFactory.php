@@ -2,12 +2,17 @@
 
 namespace Wax\Shop\Payment;
 
-class PaymentTypeFactory {
-    static function create($type, $data) {
-        $className = config('payment.types.'.$type);
+use Wax\Shop\Payment\Contracts\PaymentTypeContract;
 
-        $paymentType = new $className($data);
+class PaymentTypeFactory
+{
+    public static function create($type, $data) : PaymentTypeContract
+    {
+        $className = config('wax.shop.payment.types.'.$type);
 
-        return $paymentType;
+        $class = new $className;
+        $class->loadData($data);
+
+        return $class;
     }
 }

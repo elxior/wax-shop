@@ -31,15 +31,13 @@ class CreditCard implements PaymentTypeContract
         return true;
     }
 
-    public function loadData($request)
+    public function loadData($data)
     {
-        $this->validatePaymentDetails($request);
-
-        $name = explode(' ', $request->input('name'));
+        $name = explode(' ', $data['name']);
         $firstname = $name[0];
         $lastname = implode(' ', array_slice($name, 1));
 
-        $expDate = $request->input('expiry');
+        $expDate = $data['expiry'];
         if (strlen($expDate) == 4) {
             $expDate = [
                 substr($expDate, 0, 2),
@@ -50,20 +48,19 @@ class CreditCard implements PaymentTypeContract
         }
 
         $cardData = [
-            'number' => str_replace(' ', '', $request->input('number')),
+            'number' => str_replace(' ', '', $data['number']),
             'expiryMonth' => $expDate[0],
             'expiryYear' => $expDate[1],
-            'cvv' => $request->input('cvc'),
+            'cvv' => $data['cvc'],
             'firstName' => $firstname,
             'lastName' => $lastname,
-            'billingAddress1' => $request->input('billing-address'),
-            'billingPostcode' => $request->input('postal-code'),
+            'billingAddress1' => $data['billing-address'],
+            'billingPostcode' => $data['postal-code'],
             'email' => session()->get('guest-email'),
         ];
 
         $card = new OmnipayCommonCreditCard($cardData);
         (new CreditCardPreValidator($card))->validate();
-
 
         $this->cc = $card;
     }
