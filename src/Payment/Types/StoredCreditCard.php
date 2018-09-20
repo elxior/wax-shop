@@ -27,7 +27,7 @@ class StoredCreditCard implements PaymentTypeContract
 
     public function loadData($data)
     {
-        if($data['id']) {
+        if ($data['id']) {
             $this->paymentMethod = PaymentMethod::find($data['id']);
         } else {
             $this->paymentMethod = $this->paymentMethodRepo->createCard($data);
