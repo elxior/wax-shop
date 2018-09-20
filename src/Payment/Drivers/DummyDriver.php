@@ -13,16 +13,16 @@ use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\User\PaymentMethod;
-use Wax\Shop\Payment\Contracts\StoredPaymentDriverContract;
+use Wax\Shop\Payment\Contracts\DriverTypes\StoredCreditCardDriverContract;
 use Wax\Shop\Payment\Validators\AuthorizeNetCim\ExceptionParser;
 use Wax\Shop\Payment\Validators\AuthorizeNetCim\PaymentProfileResponseParser;
 use Wax\Shop\Payment\Validators\CreditCardPreValidator;
 
-class DummyDriver implements StoredPaymentDriverContract
+class DummyDriver implements StoredCreditCardDriverContract
 {
     protected $user;
 
-    public function setUser(User $user) : StoredPaymentDriverContract
+    public function setUser(User $user) : StoredCreditCardDriverContract
     {
         return $this;
     }
