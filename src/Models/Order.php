@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Wax\Shop\Validators\OrderPlaceableValidator;
+use Wax\Shop\Payment\PaymentTypeFactory;
 
 /**
  * @property Collection|OrderCoupon[] $bundles Bundle discounts applied to the order.
@@ -519,6 +520,20 @@ class Order extends Model
     }
 
     /**
+     * Tests that the order is ready to be `processed`, i.e., has already been placed.
+     *
+     * @return bool
+     */
+    public function validateProcessable() : bool
+    {
+        if (is_null($this->placed_at)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Place the order, i.e. persist all the ephemeral order data (product details, etc), set the `placed_at`
      * flag, and trigger an OrderPlacedEvent event. Structurally- any manipulation of the order itself happens here,
      * whereas side-effects (inventory, emails) happens via listeners.
@@ -539,6 +554,42 @@ class Order extends Model
         $this->persistOrderMetadata();
 
         event(new OrderPlacedEvent($this->fresh()));
+
+        return true;
+    }
+
+    /**
+     * Process the order, i.e. capture any authorized payments and set the `processed_at` flag
+     *
+     * @return bool
+     */
+    public function process() : bool
+    {
+        $this->refresh();
+
+        if (!$this->validateProcessable()) {
+            return false;
+        }
+
+        if ($this->captureAuthorizedPayments()) {
+            $this->processed_at = Carbon::now();
+            $this->save();
+        }
+
+        return true;
+    }
+
+    protected function captureAuthorizedPayments()
+    {
+        foreach ($this->payments as $payment) {
+            if ($payment->response == 'AUTHORIZED') {
+                // attempt to capture, return false on failure
+                $paymentType = PaymentTypeFactory::make($payment->type);
+                if (!$paymentType->capture($payment)) {
+                    return false;
+                }
+            }
+        }
 
         return true;
     }

@@ -15,4 +15,13 @@ class PaymentTypeFactory
 
         return $class;
     }
+
+    public static function make($type) : PaymentTypeContract
+    {
+        $className = config('wax.shop.payment.types.'.$type);
+
+        $class = new $className;
+
+        return $class;
+    }
 }

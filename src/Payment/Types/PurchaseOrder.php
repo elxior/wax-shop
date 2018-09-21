@@ -15,7 +15,7 @@ class PurchaseOrder implements PaymentTypeContract
     public function authorize($order, $amount) : Payment
     {
         return new Payment([
-            'type' => 'PurchaseOrder',
+            'type' => 'purchase_order',
             'authorized_at' => Carbon::now(),
             'account' => $this->po,
             'error' => 'The payment was authorized.',
@@ -30,6 +30,14 @@ class PurchaseOrder implements PaymentTypeContract
 
     public function capture(Payment $payment)
     {
+        if (empty($payment->account)) {
+            return false;
+        }
+
+        $payment->captured_at = Carbon::now();
+        $payment->response = 'CAPTURED';
+        $payment->save();
+
         return true;
     }
 

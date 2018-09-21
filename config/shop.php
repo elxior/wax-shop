@@ -50,6 +50,7 @@ return [
             \Wax\Shop\Listeners\OrderPlaced\EmailListener::class,
             \Wax\Shop\Listeners\OrderPlaced\InventoryListener::class,
             \Wax\Shop\Listeners\OrderPlaced\CommitTaxListener::class,
+            \Wax\Shop\Listeners\OrderPlaced\ProcessOrderListener::class,
         ],
     ],
     'misc' => [
