@@ -2,33 +2,39 @@
 
 namespace Wax\Shop\Payment\Types;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Payment\Contracts\PaymentTypeContract;
 
 class PurchaseOrder implements PaymentTypeContract
 {
+    /* @var string $po */
+    protected $po;
 
-    public function __construct(array $data)
+    public function authorize($order, $amount) : Payment
     {
-        $this->card = $this->create($data);
+        return new Payment([
+            'type' => 'PurchaseOrder',
+            'authorized_at' => Carbon::now(),
+            'account' => $this->po,
+            'error' => 'The payment was authorized.',
+            'response' => 'AUTHORIZED',
+            'amount' => $amount,
+            'firstname' => Auth::user()->firstname,
+            'lastname' => Auth::user()->lastname,
+            'address1' => $order->default_shipment->address1,
+            'zip' => $order->default_shipment->zip,
+        ]);
     }
 
-    protected function getDriver()
-    {
-        return app()->make(config('wax.shop.payment.purchase_order_payment_driver'));
-    }
-
-    public function create($data)
-    {
-        return $this->getDriver()->createPurchaseOrder($data);
-    }
-
-    public function authorize($amount)
+    public function capture(Payment $payment)
     {
         return true;
     }
 
-    public function capture()
+    public function loadData($data)
     {
-        return true;
+        $this->po = $data['po-number'] ?? '';
     }
 }
