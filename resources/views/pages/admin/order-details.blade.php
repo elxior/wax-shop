@@ -63,6 +63,7 @@
                 <div class="edit-container">
                     <label class="cmsFieldLabel">Mark As Shipped</label>
                     <div class="body-container">
+                        @TODO: this isn't hooked up
                         <div class="save">
                             <button class="button" type="button" data-action="save" name="action">Mark</button>
                         </div>
@@ -73,9 +74,13 @@
                     <div class="edit-container">
                         <label class="cmsFieldLabel">Capture pre-authorized payments</label>
                         <div class="body-container">
-                            @TODO: this isn't hooked up
                             <div class="save">
-                                <button class="button" type="button" data-action="save" name="action">Process</button>
+                                <form action="{{ route('shop::orderDetails.capturePayments', [
+                                    'id' => $order->id,
+                                ]) }}" method="POST">
+                                    {{ csrf_field() }}
+                                    <input class="button" type="submit" name="action" value="Process">
+                                </form>
                             </div>
                         </div>
                     </div>

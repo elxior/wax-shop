@@ -174,9 +174,7 @@ class ShopService
         // Catch payment errors and convert them to a validation exception/message bag
         (new OrderPaymentParser($payment))->validate();
 
-        if (!config('wax.shop.payment.prior_auth_capture')) {
-            $order->place();
-        }
+        $order->place();
 
         return $payment;
     }

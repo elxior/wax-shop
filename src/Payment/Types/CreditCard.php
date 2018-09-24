@@ -2,6 +2,7 @@
 
 namespace Wax\Shop\Payment\Types;
 
+use Carbon\Carbon;
 use Omnipay\Common\CreditCard as OmnipayCommonCreditCard;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Payment\Contracts\PaymentTypeContract;
@@ -28,6 +29,14 @@ class CreditCard implements PaymentTypeContract
 
     public function capture(Payment $payment)
     {
+        if (empty($payment->account)) {
+            return false;
+        }
+
+        $payment->captured_at = Carbon::now();
+        $payment->response = 'CAPTURED';
+        $payment->save();
+
         return true;
     }
 

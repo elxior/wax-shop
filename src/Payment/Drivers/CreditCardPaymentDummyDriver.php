@@ -33,7 +33,7 @@ class CreditCardPaymentDummyDriver implements CreditCardPaymentDriverContract
     public function purchase(Order $order, CreditCard $card, float $amount) : Payment
     {
         return new Payment([
-            'type' => 'Dummy',
+            'type' => 'credit_card',
             'authorized_at' => Carbon::now(),
             'captured_at' => Carbon::now(),
             'account' => $card->getNumberMasked(),
@@ -60,7 +60,7 @@ class CreditCardPaymentDummyDriver implements CreditCardPaymentDriverContract
     public function authorize(Order $order, CreditCard $card, float $amount) : Payment
     {
         return new Payment([
-            'type' => 'Dummy',
+            'type' => 'credit_card',
             'authorized_at' => Carbon::now(),
             'account' => $card->getNumberMasked(),
             'error' => 'The payment was authorized.',

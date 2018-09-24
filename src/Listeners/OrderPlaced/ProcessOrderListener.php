@@ -8,8 +8,10 @@ class ProcessOrderListener
 {
     public function handle(OrderPlacedEvent $event)
     {
-        $order = $event->order();
+        if (!config('wax.shop.payment.prior_auth_capture')) {
+            $order = $event->order();
 
-        $order->process();
+            $order->process();
+        }
     }
 }
