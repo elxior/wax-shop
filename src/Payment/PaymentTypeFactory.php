@@ -6,21 +6,15 @@ use Wax\Shop\Payment\Contracts\PaymentTypeContract;
 
 class PaymentTypeFactory
 {
-    public static function create($type, $data) : PaymentTypeContract
+    public static function create($type, $data = null) : PaymentTypeContract
     {
         $className = config('wax.shop.payment.types.'.$type);
 
         $class = new $className;
-        $class->loadData($data);
 
-        return $class;
-    }
-
-    public static function make($type) : PaymentTypeContract
-    {
-        $className = config('wax.shop.payment.types.'.$type);
-
-        $class = new $className;
+        if (!is_null($data)) {
+            $class->loadData($data);
+        }
 
         return $class;
     }

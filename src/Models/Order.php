@@ -584,7 +584,7 @@ class Order extends Model
         foreach ($this->payments as $payment) {
             if ($payment->response == 'AUTHORIZED') {
                 // attempt to capture, return false on failure
-                $paymentType = PaymentTypeFactory::make($payment->type);
+                $paymentType = PaymentTypeFactory::create($payment->type);
                 if (!$paymentType->capture($payment)) {
                     return false;
                 }
