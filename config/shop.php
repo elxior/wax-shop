@@ -34,6 +34,11 @@ return [
             ]
         ],
         'stored_payment_driver' => \Wax\Shop\Payment\Drivers\AuthorizeNetCimDriver::class,
+        'types' => [
+            'credit_card' => \Wax\Shop\Payment\Types\CreditCard::class,
+            'purchase_order' => \Wax\Shop\Payment\Types\PurchaseOrder::class,
+            'stored_credit_card' => \Wax\Shop\Payment\Types\StoredCreditCard::class,
+        ],
     ],
     'tax' => [
         'driver' => \Wax\Shop\Tax\Drivers\DbDriver::class,
