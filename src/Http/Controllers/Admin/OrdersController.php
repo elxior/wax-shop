@@ -71,12 +71,17 @@ class OrdersController extends BaseController
             'title' => "Order Details",
         ];
 
+        $errors = [];
+        if ($order->payments()->authorized()->get()->isEmpty()) {
+            $errors = ['Payments have been captured for this order.'];
+        }
+
         return view('shop::pages.admin.order-details', [
             'order' => $order, // note: not using toArray() because visibility is dialed in for front-end use.
             'page' => $page,
             'structure' => 'orders',
             'id' => $id,
-            'errors' => ['Payments have been captured for this order.'],
+            'errors' => $errors,
             'notes' => [],
         ]);
     }
