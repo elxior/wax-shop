@@ -15,7 +15,7 @@ use Wax\Shop\Payment\Drivers\DummyDriver;
 use Wax\Shop\Payment\PaymentTypeFactory;
 use Wax\Shop\Services\ShopService;
 
-class PlaceOrderTest extends ShopBaseTestCase
+class PlaceGuestOrderTest extends ShopBaseTestCase
 {
     use GeneratesCreditCardPayments,
         BuildsPlaceableOrders,
