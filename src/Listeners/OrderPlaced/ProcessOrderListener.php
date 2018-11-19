@@ -8,7 +8,7 @@ class ProcessOrderListener
 {
     public function handle(OrderPlacedEvent $event)
     {
-        if(!config('wax.shop.payment.auth_capture'))
+        if(!config('wax.shop.payment.auth_capture')) {
             return;
         }
 
