@@ -20,11 +20,10 @@ class CreditCard implements PaymentTypeContract
 
     public function authorize($order, $amount) : Payment
     {
-        if (config('wax.shop.payment.prior_auth_capture')) {
-            return $this->getDriver()->authorize($order, $this->cc, $amount);
-        } else {
+        if (config('wax.shop.payment.auth_capture')) {
             return $this->getDriver()->purchase($order, $this->cc, $amount);
         }
+        return $this->getDriver()->authorize($order, $this->cc, $amount);
     }
 
     public function capture(Payment $payment)

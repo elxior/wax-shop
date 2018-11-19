@@ -25,7 +25,7 @@ return [
         'order' => Wax\Shop\Models\Order::class,
     ],
     'payment' => [
-        'prior_auth_capture' => false,
+        'auth_capture' => true,
         'drivers' => [
             'authorizenet_cim' => [
                 'api_login_id' => env('AUTHORIZE_NET_API_LOGIN_ID'),
