@@ -7,7 +7,7 @@ use Tests\Shop\Support\ShopBaseTestCase;
 use Tests\Shop\Support\Models\User;
 use Tests\Shop\Traits\GeneratesPaymentMethods;
 use Wax\Shop\Models\Product;
-use Wax\Shop\Payment\Drivers\DummyDriver;
+use Wax\Shop\Payment\Drivers\StoredCreditCardDummyDriver;
 use Wax\Shop\Payment\Repositories\PaymentMethodRepository;
 use Wax\Shop\Services\ShopService;
 
@@ -31,7 +31,7 @@ class PaymentMethodRepositoryTest extends ShopBaseTestCase
     {
         parent::setUp();
 
-        config(['wax.shop.payment.stored_payment_driver' => DummyDriver::class]);
+        config(['wax.shop.payment.stored_payment_driver' => StoredCreditCardDummyDriver::class]);
 
         $this->faker = Factory::create();
 
@@ -57,8 +57,8 @@ class PaymentMethodRepositoryTest extends ShopBaseTestCase
         $this->repo->useAddressForShipping($order, $paymentMethod);
 
         $order = $this->shopService->getActiveOrder();
-        $this->assertEquals($data['address'], $order->default_shipment->address1);
-        $this->assertEquals($data['zip'], $order->default_shipment->zip);
+        $this->assertEquals($data['billingAddress1'], $order->default_shipment->address1);
+        $this->assertEquals($data['billingPostcode'], $order->default_shipment->zip);
     }
 
     public function testCreatePaymentMethod()
@@ -72,13 +72,13 @@ class PaymentMethodRepositoryTest extends ShopBaseTestCase
 
         $paymentMethod = $this->repo->getAll()->first();
 
-        $this->assertEquals(substr($data['cardNumber'], -4), substr($paymentMethod->masked_card_number, -4));
-        $this->assertEquals($data['expMonth'], $paymentMethod->expiration_date['month']);
-        $this->assertEquals($data['expYear'], $paymentMethod->expiration_date['year']);
+        $this->assertEquals(substr($data['number'], -4), substr($paymentMethod->masked_card_number, -4));
+        $this->assertEquals($data['expiryMonth'], $paymentMethod->expiration_date['month']);
+        $this->assertEquals($data['expiryYear'], $paymentMethod->expiration_date['year']);
         $this->assertEquals($data['firstName'], $paymentMethod->firstname);
         $this->assertEquals($data['lastName'], $paymentMethod->lastname);
-        $this->assertEquals($data['address'], $paymentMethod->address);
-        $this->assertEquals($data['zip'], $paymentMethod->zip);
+        $this->assertEquals($data['billingAddress1'], $paymentMethod->address);
+        $this->assertEquals($data['billingPostcode'], $paymentMethod->zip);
     }
 
     public function testUpdatePaymentMethod()
@@ -91,7 +91,7 @@ class PaymentMethodRepositoryTest extends ShopBaseTestCase
         $this->assertEquals(1, $this->repo->getAll()->count());
 
         $paymentMethod = $this->repo->getAll()->first();
-        $this->assertEquals(substr($data['cardNumber'], -4), substr($paymentMethod->masked_card_number, -4));
+        $this->assertEquals(substr($data['number'], -4), substr($paymentMethod->masked_card_number, -4));
 
         $newData = $this->generatePaymentMethodData();
         $this->repo->update($newData, $paymentMethod);
@@ -99,13 +99,13 @@ class PaymentMethodRepositoryTest extends ShopBaseTestCase
         $this->assertEquals(1, $this->repo->getAll()->count());
         $paymentMethod = $this->repo->getAll()->first();
 
-        $this->assertEquals(substr($newData['cardNumber'], -4), substr($paymentMethod->masked_card_number, -4));
-        $this->assertEquals($newData['expMonth'], $paymentMethod->expiration_date['month']);
-        $this->assertEquals($newData['expYear'], $paymentMethod->expiration_date['year']);
+        $this->assertEquals(substr($newData['number'], -4), substr($paymentMethod->masked_card_number, -4));
+        $this->assertEquals($newData['expiryMonth'], $paymentMethod->expiration_date['month']);
+        $this->assertEquals($newData['expiryYear'], $paymentMethod->expiration_date['year']);
         $this->assertEquals($newData['firstName'], $paymentMethod->firstname);
         $this->assertEquals($newData['lastName'], $paymentMethod->lastname);
-        $this->assertEquals($newData['address'], $paymentMethod->address);
-        $this->assertEquals($newData['zip'], $paymentMethod->zip);
+        $this->assertEquals($newData['billingAddress1'], $paymentMethod->address);
+        $this->assertEquals($newData['billingPostcode'], $paymentMethod->zip);
     }
 
     public function testDeletePaymentMethod()

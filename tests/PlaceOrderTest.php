@@ -11,7 +11,7 @@ use Tests\Shop\Traits\SeedsProducts;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
-use Wax\Shop\Payment\Drivers\DummyDriver;
+use Wax\Shop\Payment\Drivers\StoredCreditCardDummyDriver;
 use Wax\Shop\Payment\Repositories\PaymentMethodRepository;
 use Wax\Shop\Services\ShopService;
 
@@ -41,7 +41,7 @@ class PlaceOrderTest extends ShopBaseTestCase
         // events are not tested here, but I want them faked to keep things simple.
         Event::fake();
 
-        config(['wax.shop.payment.stored_payment_driver' => DummyDriver::class]);
+        config(['wax.shop.payment.stored_payment_driver' => StoredCreditCardDummyDriver::class]);
 
         $this->shopService = app()->make(ShopService::class);
 

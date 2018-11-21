@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Lang;
 use Tests\Shop\Support\ShopBaseTestCase;
 use Tests\Shop\Support\Models\User;
 use Tests\Shop\Traits\GeneratesPaymentMethods;
-use Wax\Shop\Payment\Drivers\DummyDriver;
+use Wax\Shop\Payment\Drivers\StoredCreditCardDummyDriver;
 use Wax\Shop\Payment\Repositories\PaymentMethodRepository;
 use Wax\Shop\Services\ShopService;
 
@@ -30,7 +30,7 @@ class PaymentApiTest extends ShopBaseTestCase
     {
         parent::setUp();
 
-        config(['wax.shop.payment.stored_payment_driver' => DummyDriver::class]);
+        config(['wax.shop.payment.stored_payment_driver' => StoredCreditCardDummyDriver::class]);
 
         $this->repo = app()->make(PaymentMethodRepository::class);
 

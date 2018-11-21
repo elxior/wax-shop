@@ -4,19 +4,10 @@ namespace Wax\Shop\Payment\Drivers;
 
 use Wax\Core\Eloquent\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\UnauthorizedException;
 use Omnipay\Common\CreditCard;
-use Omnipay\Common\Message\AbstractResponse;
-use Omnipay\Omnipay;
-use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Payment\Contracts\DriverTypes\CreditCardPaymentDriverContract;
-// use Wax\Shop\Payment\Types\CreditCard;
-use Wax\Shop\Payment\Validators\AuthorizeNetCim\ExceptionParser;
-use Wax\Shop\Payment\Validators\AuthorizeNetCim\PaymentProfileResponseParser;
-use Wax\Shop\Payment\Validators\CreditCardPreValidator;
 
 class CreditCardPaymentDummyDriver implements CreditCardPaymentDriverContract
 {

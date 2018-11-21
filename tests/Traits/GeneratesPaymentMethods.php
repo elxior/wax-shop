@@ -14,14 +14,14 @@ trait GeneratesPaymentMethods
             $this->faker = Factory::create();
         }
         return [
-            'cardNumber' => $this->faker->creditCardNumber(),
-            'expMonth' => $this->faker->numberBetween(1, 12),
-            'expYear' => $this->faker->numberBetween(date('y')+1, date('y')+10),
+            'number' => $this->faker->creditCardNumber(),
+            'expiryMonth' => $this->faker->numberBetween(1, 12),
+            'expiryYear' => $this->faker->numberBetween(date('y')+1, date('y')+10),
             'cvc' => $this->faker->numberBetween(100, 999),
             'firstName' => $this->faker->firstName(),
             'lastName' => $this->faker->lastName,
-            'address' => $this->faker->streetAddress,
-            'zip' => $this->faker->postcode,
+            'billingAddress1' => $this->faker->streetAddress,
+            'billingPostcode' => $this->faker->postcode,
         ];
     }
 }

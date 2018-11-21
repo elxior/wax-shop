@@ -45,15 +45,14 @@ class CreditCard implements PaymentTypeContract
         $firstname = $name[0];
         $lastname = implode(' ', array_slice($name, 1));
 
-        $expDate = $data['expiry'];
-        if (strlen($expDate) == 4) {
-            $expDate = [
-                substr($expDate, 0, 2),
-                substr($expDate, -2),
-            ];
-        } else {
-            $expDate = explode(' / ', $expDate);
+        $expDate = str_replace(' ', '', str_replace('/', '', $data['expiry']));
+        if (strlen($expDate) < 4) {
+            $expDate = substr('0000' . $expDate, -4);
         }
+        $expDate = [
+            substr($expDate, 0, 2),
+            substr($expDate, -2),
+        ];
 
         $cardData = [
             'number' => str_replace(' ', '', $data['number']),
