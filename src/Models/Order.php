@@ -574,6 +574,8 @@ class Order extends Model
         if ($this->captureAuthorizedPayments()) {
             $this->processed_at = Carbon::now();
             $this->save();
+
+            event(new OrderProcessedEvent($this->fresh()));
         }
 
         return true;
