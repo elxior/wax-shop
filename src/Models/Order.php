@@ -5,6 +5,7 @@ namespace Wax\Shop\Models;
 use Wax\Core\Support\Localization\Currency;
 use Wax\Shop\Events\OrderChanged\CouponChangedEvent;
 use Wax\Shop\Events\OrderPlacedEvent;
+use Wax\Shop\Events\OrderProcessedEvent;
 use Wax\Shop\Models\Order\Item;
 use Wax\Shop\Models\Order\Bundle as OrderBundle;
 use Wax\Shop\Models\Order\Coupon as OrderCoupon;
