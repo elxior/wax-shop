@@ -576,8 +576,9 @@ class Order extends Model
             $this->processed_at = Carbon::now();
             $this->save();
 
-            event(new OrderProcessedEvent($this->fresh()));
         }
+
+        event(new OrderProcessedEvent($this->fresh()));
 
         return true;
     }
