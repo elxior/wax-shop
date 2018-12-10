@@ -179,11 +179,6 @@ class ShopService
         return $payment;
     }
 
-    public function processOrder()
-    {
-        //
-    }
-
     /**
      * Make a payment using a stored payment / token billing profile. As a side-effect, if the payment causes the order
      * to be 'placeable', the order will be flagged as `placed` and trigger the OrderPlacedEvent event.
