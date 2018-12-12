@@ -44,6 +44,9 @@ class PaymentApiTest extends ShopBaseTestCase
         Lang::shouldReceive('setLocale')
             ->andReturn('');
 
+        Lang::shouldReceive('get')
+            ->andReturn([]);
+
         // mock error response strings
         Lang::shouldReceive('getFromJson')
             ->with('shop::payment.make_payment_unauthorized', [], null)
@@ -52,7 +55,6 @@ class PaymentApiTest extends ShopBaseTestCase
         Lang::shouldReceive('getFromJson')
             ->with('shop::payment.set_shipping_address', [], null)
             ->andReturn($this->setShippingAddressUnauthorizedResponse);
-
     }
 
     public function testMakePaymentUnauthorized()
@@ -102,5 +104,4 @@ class PaymentApiTest extends ShopBaseTestCase
         $response->assertStatus(403)
             ->assertJson(['_error' => [__($this->setShippingAddressUnauthorizedResponse)]]);
     }
-
 }
