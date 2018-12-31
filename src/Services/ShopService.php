@@ -220,4 +220,18 @@ class ShopService
 
         return $order->place();
     }
+
+    /**
+     * Process an already-placed order.  This would be used when the site is configured to do prior auth capture
+     * or to process a pending P.O. order at a later date.
+     *
+     * @return bool
+     * @throws ValidationException
+     */
+    public function processOrder($order) : bool
+    {
+        (new OrderProcessableValidator($order))->validate();
+
+        return $order->process();
+    }
 }
