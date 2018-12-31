@@ -168,7 +168,11 @@ class ShopService
             throw new \Exception('Invalid payment amount');
         }
 
-        $payment = $paymentType->authorize($order, $amount);
+        if (config('wax.shop.payment.auth_capture')) {
+            $payment = $paymentType->purchase($order, $amount);
+        } else {
+            $payment = $paymentType->authorize($order, $amount);
+        }
         $order->payments()->save($payment);
 
         // Catch payment errors and convert them to a validation exception/message bag

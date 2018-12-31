@@ -23,6 +23,11 @@ class StoredCreditCard implements PaymentTypeContract
 
     public function authorize($order, $amount) : Payment
     {
+        return $this->paymentMethodRepo->authorizePayment($order, $this->paymentMethod, $amount = null);
+    }
+
+    public function purchase($order, $amount) : Payment
+    {
         return $this->paymentMethodRepo->makePayment($order, $this->paymentMethod, $amount = null);
     }
 

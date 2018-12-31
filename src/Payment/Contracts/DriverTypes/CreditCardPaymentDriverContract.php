@@ -22,5 +22,5 @@ interface CreditCardPaymentDriverContract
 
     public function authorize(Order $order, CreditCard $card, float $amount) : Payment;
 
-    public function capture(Order $order, CreditCard $card, float $amount) : Payment;
+    public function capture(Order $order, Payment $payment) : Payment;
 }

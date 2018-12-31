@@ -64,8 +64,19 @@ class CreditCardPaymentDummyDriver implements CreditCardPaymentDriverContract
         ]);
     }
 
-    public function capture(Order $order, CreditCard $card, float $amount) : Payment
+    public function capture(Order $order, Payment $payment) : Payment
     {
-        return true;
+        return new Payment([
+            'type' => 'credit_card',
+            'authorized_at' => Carbon::now(),
+            'account' => $payment->account,
+            'error' => 'The payment was captured.',
+            'response' => 'CAPTURED',
+            'amount' => $payment->amount,
+            'firstname' => $payment->firstname,
+            'lastname' => $payment->lastname,
+            'address1' => $payment->address1,
+            'zip' => $payment->zip,
+        ]);
     }
 }

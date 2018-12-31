@@ -14,6 +14,11 @@ class PurchaseOrder implements PaymentTypeContract
 
     public function authorize($order, $amount) : Payment
     {
+        $this->purchase($order, $amount);
+    }
+
+    public function purchase($order, $amount) : Payment
+    {
         return new Payment([
             'type' => 'purchase_order',
             'authorized_at' => Carbon::now(),

@@ -78,6 +78,16 @@ class PaymentMethodRepository
 
     public function makePayment(Order $order, PaymentMethod $paymentMethod, float $amount = null)
     {
+        return $this->handlePaymentType('purchase', $order, $paymentMethod, $amount);
+    }
+
+    public function authorizePayment(Order $order, PaymentMethod $paymentMethod, float $amount = null)
+    {
+        return $this->handlePaymentType('authorize', $order, $paymentMethod, $amount);
+    }
+
+    public function handlePaymentType(string $paymentType, Order $order, PaymentMethod $paymentMethod, float $amount = null)
+    {
         /**
          * Authorization & validation may have already been checked in the controller or elsewhere, but since
          * we're dealing with payments it's worth the overhead to double-check.
@@ -101,7 +111,11 @@ class PaymentMethodRepository
             throw new \Exception('Invalid payment amount');
         }
 
-        $payment = $this->getDriver()->purchase($order, $paymentMethod, $amount);
+        if ($paymentType == 'authorize') {
+            $payment = $this->getDriver()->authorize($order, $paymentMethod, $amount);
+        } else {
+            $payment = $this->getDriver()->purchase($order, $paymentMethod, $amount);
+        }
         $order->payments()->save($payment);
 
         return $payment;
