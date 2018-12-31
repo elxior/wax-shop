@@ -86,8 +86,12 @@ class PaymentMethodRepository
         return $this->handlePaymentType('authorize', $order, $paymentMethod, $amount);
     }
 
-    public function handlePaymentType(string $paymentType, Order $order, PaymentMethod $paymentMethod, float $amount = null)
-    {
+    public function handlePaymentType(
+        string $paymentType,
+        Order $order,
+        PaymentMethod $paymentMethod,
+        float $amount = null
+    ) {
         /**
          * Authorization & validation may have already been checked in the controller or elsewhere, but since
          * we're dealing with payments it's worth the overhead to double-check.
