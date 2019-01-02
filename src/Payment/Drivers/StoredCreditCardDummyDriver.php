@@ -4,7 +4,6 @@ namespace Wax\Shop\Payment\Drivers;
 
 use Wax\Core\Eloquent\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
 use Omnipay\Common\CreditCard;
 use Omnipay\Common\Message\AbstractResponse;
@@ -13,16 +12,16 @@ use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\User\PaymentMethod;
-use Wax\Shop\Payment\Contracts\StoredPaymentDriverContract;
+use Wax\Shop\Payment\Contracts\DriverTypes\StoredCreditCardDriverContract;
 use Wax\Shop\Payment\Validators\AuthorizeNetCim\ExceptionParser;
 use Wax\Shop\Payment\Validators\AuthorizeNetCim\PaymentProfileResponseParser;
 use Wax\Shop\Payment\Validators\CreditCardPreValidator;
 
-class DummyDriver implements StoredPaymentDriverContract
+class StoredCreditCardDummyDriver implements StoredCreditCardDriverContract
 {
     protected $user;
 
-    public function setUser(User $user) : StoredPaymentDriverContract
+    public function setUser(User $user) : StoredCreditCardDriverContract
     {
         return $this;
     }
@@ -38,12 +37,12 @@ class DummyDriver implements StoredPaymentDriverContract
     {
         $paymentModel = config('wax.shop.models.payment_method');
         return new $paymentModel([
-            'masked_card_number' => substr($data['cardNumber'], -4),
-            'expiration_date' => $data['expMonth'].'/'.$data['expYear'],
+            'masked_card_number' => substr($data['number'], -4),
+            'expiration_date' => $data['expiryMonth'].'/'.$data['expiryYear'],
             'firstname' => $data['firstName'],
             'lastname' => $data['lastName'],
-            'address' => $data['address'],
-            'zip' => $data['zip'],
+            'address' => $data['billingAddress1'],
+            'zip' => $data['billingPostcode'],
         ]);
     }
 
@@ -59,12 +58,12 @@ class DummyDriver implements StoredPaymentDriverContract
     public function updateCard($data, PaymentMethod $paymentModel) : PaymentMethod
     {
         $paymentModel->fill([
-            'masked_card_number' => substr($data['cardNumber'], -4),
-            'expiration_date' => $data['expMonth'].'/'.$data['expYear'],
+            'masked_card_number' => substr($data['number'], -4),
+            'expiration_date' => $data['expiryMonth'].'/'.$data['expiryYear'],
             'firstname' => $data['firstName'],
             'lastname' => $data['lastName'],
-            'address' => $data['address'],
-            'zip' => $data['zip'],
+            'address' => $data['billingAddress1'],
+            'zip' => $data['billingPostcode'],
         ]);
 
         $paymentModel->save();

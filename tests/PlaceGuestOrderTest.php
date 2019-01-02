@@ -6,26 +6,23 @@ use Illuminate\Support\Facades\Event;
 use Tests\Shop\Support\Models\User;
 use Tests\Shop\Support\ShopBaseTestCase;
 use Tests\Shop\Traits\BuildsPlaceableOrders;
-use Tests\Shop\Traits\GeneratesPaymentMethods;
+use Tests\Shop\Traits\GeneratesCreditCardPayments;
 use Tests\Shop\Traits\SeedsProducts;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\Product;
-use Wax\Shop\Payment\Drivers\StoredCreditCardDummyDriver;
-use Wax\Shop\Payment\Repositories\PaymentMethodRepository;
+use Wax\Shop\Payment\Drivers\CreditCardPaymentDummyDriver;
+use Wax\Shop\Payment\PaymentTypeFactory;
 use Wax\Shop\Services\ShopService;
 
-class PlaceOrderTest extends ShopBaseTestCase
+class PlaceGuestOrderTest extends ShopBaseTestCase
 {
-    use GeneratesPaymentMethods,
+    use GeneratesCreditCardPayments,
         BuildsPlaceableOrders,
         SeedsProducts;
 
     /* @var ShopService $shop */
     protected $shopService;
-
-    /* @var PaymentMethodRepository */
-    protected $storedPaymentRepo;
 
     /* @var User */
     protected $user;
@@ -41,11 +38,9 @@ class PlaceOrderTest extends ShopBaseTestCase
         // events are not tested here, but I want them faked to keep things simple.
         Event::fake();
 
-        config(['wax.shop.payment.stored_payment_driver' => StoredCreditCardDummyDriver::class]);
+        config(['wax.shop.payment.credit_card_payment_driver' => CreditCardPaymentDummyDriver::class]);
 
         $this->shopService = app()->make(ShopService::class);
-
-        $this->storedPaymentRepo = app()->make(PaymentMethodRepository::class);
 
         $this->product = factory(Product::class)->create(['price' => 10]);
 
@@ -76,9 +71,11 @@ class PlaceOrderTest extends ShopBaseTestCase
         $order = $this->shopService->getActiveOrder();
 
         // make the payment
-        $data = $this->generatePaymentMethodData();
-        $paymentMethod = $this->storedPaymentRepo->create($data);
-        $this->shopService->makeStoredPayment($paymentMethod);
+        $data = $this->generateCreditCardPaymentData();
+
+        $card = PaymentTypeFactory::create('credit_card', $data);
+
+        $payment = $this->shopService->applyPayment($card);
 
         $placedOrder = $this->shopService->getPlacedOrder();
         $this->assertNotNull($placedOrder);

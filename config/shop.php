@@ -25,6 +25,7 @@ return [
         'order' => Wax\Shop\Models\Order::class,
     ],
     'payment' => [
+        'auth_capture' => true,
         'drivers' => [
             'authorizenet_cim' => [
                 'api_login_id' => env('AUTHORIZE_NET_API_LOGIN_ID'),
@@ -34,6 +35,12 @@ return [
             ]
         ],
         'stored_payment_driver' => \Wax\Shop\Payment\Drivers\AuthorizeNetCimDriver::class,
+        'credit_card_payment_driver' => \Wax\Shop\Payment\Drivers\CreditCardPaymentDummyDriver::class,
+        'types' => [
+            'credit_card' => \Wax\Shop\Payment\Types\CreditCard::class,
+            'purchase_order' => \Wax\Shop\Payment\Types\PurchaseOrder::class,
+            'stored_credit_card' => \Wax\Shop\Payment\Types\StoredCreditCard::class,
+        ],
     ],
     'tax' => [
         'driver' => \Wax\Shop\Tax\Drivers\DbDriver::class,
@@ -50,6 +57,7 @@ return [
             \Wax\Shop\Listeners\OrderPlaced\EmailListener::class,
             \Wax\Shop\Listeners\OrderPlaced\InventoryListener::class,
             \Wax\Shop\Listeners\OrderPlaced\CommitTaxListener::class,
+            \Wax\Shop\Listeners\OrderPlaced\ProcessOrderListener::class,
         ],
     ],
     'misc' => [

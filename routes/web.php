@@ -93,6 +93,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth.panel'], function () {
         ->name('orderDetails.print');
     Route::post('shop/order/{id}/add-tracking/{shipmentId}', 'Admin\OrdersController@addTracking')
         ->name('orderDetails.addTracking');
+    Route::post('shop/order/{id}/capture-payments', 'Admin\OrdersController@capturePayments')
+        ->name('orderDetails.capturePayments');
 
     /**
      * Product Modifiers

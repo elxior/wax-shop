@@ -36,7 +36,8 @@ trait BuildsPlaceableOrders
 
         // pay the balance due (simple cash-like payment)
         $order->payments()->save(factory(Payment::class)->create([
-            'amount' => $order->balance_due
+            'amount' => $order->balance_due,
+            'type' => 'credit_card'
         ]));
 
         return $order->fresh();

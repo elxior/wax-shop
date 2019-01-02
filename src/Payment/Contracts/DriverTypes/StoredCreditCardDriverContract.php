@@ -1,6 +1,6 @@
 <?php
 
-namespace Wax\Shop\Payment\Contracts;
+namespace Wax\Shop\Payment\Contracts\DriverTypes;
 
 use Wax\Core\Eloquent\Models\User;
 use Wax\Shop\Exceptions\ValidationException;
@@ -8,7 +8,7 @@ use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\User\PaymentMethod;
 
-interface StoredPaymentDriverContract
+interface StoredCreditCardDriverContract
 {
     /**
      * Create a payment profile at the gateway and return a PaymentMethod model.
@@ -55,5 +55,5 @@ interface StoredPaymentDriverContract
      * @param User $user
      * @return $this
      */
-    public function setUser(User $user) : StoredPaymentDriverContract;
+    public function setUser(User $user) : StoredCreditCardDriverContract;
 }

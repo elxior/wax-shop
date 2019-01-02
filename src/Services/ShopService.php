@@ -2,15 +2,17 @@
 
 namespace Wax\Shop\Services;
 
+use Illuminate\Support\Facades\Auth;
+use Omnipay\Common\CreditCard;
 use Wax\Shop\Exceptions\ValidationException;
 use Wax\Shop\Models\Order;
 use Wax\Shop\Models\Order\Payment;
 use Wax\Shop\Models\Order\ShippingRate;
 use Wax\Shop\Models\User\PaymentMethod;
+use Wax\Shop\Payment\Contracts\PaymentTypeContract;
 use Wax\Shop\Payment\Repositories\PaymentMethodRepository;
 use Wax\Shop\Payment\Validators\OrderPaymentParser;
 use Wax\Shop\Repositories\OrderRepository;
-use Illuminate\Support\Facades\Auth;
 use Wax\Shop\Validators\OrderPayableValidator;
 use Wax\Shop\Validators\OrderPlaceableValidator;
 
@@ -147,6 +149,40 @@ class ShopService
         return $this->getActiveOrder()->validatePlaceable();
     }
 
+    public function applyPayment(PaymentTypeContract $paymentType, $amount = null)
+    {
+        $order = $this->getActiveOrder();
+
+        if (!$order->validatePayable()) {
+            return false;
+        }
+
+        if (is_null($amount)) {
+            $amount = $order->balance_due;
+        }
+
+        // don't allow payments GREATER than the balance due
+        $amount = min($amount, $order->balance_due);
+
+        if ($amount <= 0) {
+            throw new \Exception('Invalid payment amount');
+        }
+
+        if (config('wax.shop.payment.auth_capture')) {
+            $payment = $paymentType->purchase($order, $amount);
+        } else {
+            $payment = $paymentType->authorize($order, $amount);
+        }
+        $order->payments()->save($payment);
+
+        // Catch payment errors and convert them to a validation exception/message bag
+        (new OrderPaymentParser($payment))->validate();
+
+        $order->place();
+
+        return $payment;
+    }
+
     /**
      * Make a payment using a stored payment / token billing profile. As a side-effect, if the payment causes the order
      * to be 'placeable', the order will be flagged as `placed` and trigger the OrderPlacedEvent event.
@@ -187,5 +223,19 @@ class ShopService
         (new OrderPlaceableValidator($order))->validate();
 
         return $order->place();
+    }
+
+    /**
+     * Process an already-placed order.  This would be used when the site is configured to do prior auth capture
+     * or to process a pending P.O. order at a later date.
+     *
+     * @return bool
+     * @throws ValidationException
+     */
+    public function processOrder($order) : bool
+    {
+        (new OrderProcessableValidator($order))->validate();
+
+        return $order->process();
     }
 }
