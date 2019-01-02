@@ -19,6 +19,11 @@ class Request
     /* @var Collection */
     protected $lineItems;
 
+    public function __construct()
+    {
+        $this->lineItems = collect();
+    }
+
     /**
      * Set a unique id for the order.
      *
@@ -74,10 +79,6 @@ class Request
      */
     public function addLineItem(LineItem $lineItem)
     {
-        if (!($this->lineItems instanceof Collection)) {
-            $this->lineItems = collect();
-        }
-
         $this->lineItems->push($lineItem);
         return $this;
     }
