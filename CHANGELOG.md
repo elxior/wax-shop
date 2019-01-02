@@ -2,8 +2,12 @@
 
 This file's format is based on [Keep a Changelog](http://keepachangelog.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
-## Pending
+## 3.2.0 - 2019-01-02
+### Added
+ - support for one-time payments (!33)
+
 ### Fixed
+ - test mock of Lang::get (!35)
  - make tax request throw correct exception when no line items (!34)
 
 ## 3.1.0 - 2018-09-18
