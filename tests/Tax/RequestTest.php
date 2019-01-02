@@ -47,4 +47,13 @@ class RequestTest extends TestCase
         $this->assertEquals(3, $lineItems->count());
         $this->assertInstanceOf(LineItem::class, $lineItems->first());
     }
+
+    public function testNoLineItemsException()
+    {
+        $request = (new Request);
+
+        $this->expectExceptionMessage('No line items have been added to the tax request');
+
+        $lineItems = $request->getLineItems();
+    }
 }

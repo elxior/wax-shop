@@ -28,6 +28,9 @@ class CouponApiTest extends ShopBaseTestCase
         Lang::shouldReceive('trans')
             ->andReturn('');
 
+        Lang::shouldReceive('get')
+            ->andReturn([]);
+
         Lang::shouldReceive('setLocale')
             ->andReturn('');
 
