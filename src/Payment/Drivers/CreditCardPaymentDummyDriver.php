@@ -68,7 +68,7 @@ class CreditCardPaymentDummyDriver implements CreditCardPaymentDriverContract
     {
         return new Payment([
             'type' => 'credit_card',
-            'authorized_at' => Carbon::now(),
+            'captured_at' => Carbon::now(),
             'account' => $payment->account,
             'error' => 'The payment was captured.',
             'response' => 'CAPTURED',
