@@ -9,6 +9,7 @@ class Request
 {
     protected $requestId;
     protected $customerId;
+    protected $exemptionNumber;
 
     /* @var Address */
     protected $address;
@@ -45,6 +46,18 @@ class Request
     public function setCustomerId(string $customerId)
     {
         $this->customerId = $customerId;
+        return $this;
+    }
+
+    /**
+     * Set an exemption number for the order.
+     *
+     * @param string $exemptionNumber customer's tax exempt number
+     * @return self
+     */
+    public function setExemptionNumber(string $exemptionNumber)
+    {
+        $this->exemptionNumber = $exemptionNumber;
         return $this;
     }
 
@@ -99,6 +112,16 @@ class Request
     public function getCustomerId() : string
     {
         return $this->customerId ?? '0';
+    }
+
+    /**
+     * Get the exemption number for the order.
+     *
+     * @return null|string
+     */
+    public function getExemptionNumber() : string
+    {
+        return $this->exemptionNumber ?? '';
     }
 
     /**

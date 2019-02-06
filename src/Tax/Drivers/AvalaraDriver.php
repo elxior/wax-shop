@@ -44,6 +44,10 @@ class AvalaraDriver implements TaxDriverContract
             $request->getCustomerId()
         );
 
+        if (strlen($request->getExemptionNumber())) {
+            $builder->withExemptionNo($request->getExemptionNumber());
+        }
+
         $transaction = $this->buildTransaction($builder, $request);
 
         $result = $transaction->create();
@@ -160,6 +164,10 @@ class AvalaraDriver implements TaxDriverContract
             DocumentType::C_SALESINVOICE,
             $request->getCustomerId()
         );
+
+        if (strlen($request->getExemptionNumber())) {
+            $builder->withExemptionNo($request->getExemptionNumber());
+        }
 
         $transaction = $this->buildTransaction($builder, $request)
             ->withCommit();
