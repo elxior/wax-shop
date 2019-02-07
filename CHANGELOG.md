@@ -2,6 +2,10 @@
 
 This file's format is based on [Keep a Changelog](http://keepachangelog.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.3.0 - 2019-02-07
+### Added
+ - tax exeption handling in Avalara driver (!36)
+
 ## 3.2.0 - 2019-01-02
 ### Added
  - support for one-time payments (!33)
