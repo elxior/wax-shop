@@ -44,7 +44,9 @@ class StoredCreditCard implements PaymentTypeContract
 
         $data['expiry'] = str_replace(' ', '', $data['expiry']);
         if (strpos($data['expiry'], '/') === false) {
-            $data['expiry'] = substr($data['expiry'], 0, 2) . '/' . substr($data['expiry'], -1 * (strlen($data['expiry']) - 2));
+            $data['expiry'] =
+                substr($data['expiry'], 0, 2) . '/' .
+                substr($data['expiry'], -1 * (strlen($data['expiry']) - 2));
         }
         $expDate = array_map(function ($n) use ($data) {
             return preg_replace("/[^0-9]/", "", substr('00' . $n, -2));
