@@ -36,32 +36,35 @@ class StoredCreditCard implements PaymentTypeContract
         return true;
     }
 
+    public function getCardData($data)
+    {
+        $name = explode(' ', $data['name']);
+        $firstname = $name[0];
+        $lastname = implode(' ', array_slice($name, 1));
+
+        $data['expiry'] = str_replace(' ', '', $data['expiry']);
+        if (strpos($data['expiry'], '/') === false) {
+            $data['expiry'] = substr($data['expiry'], 0, 2) . '/' . substr($data['expiry'], -1 * (strlen($data['expiry']) - 2));
+        }
+        $expDate = array_map(function ($n) use ($data) {
+            return preg_replace("/[^0-9]/", "", substr('00' . $n, -2));
+        }, explode('/', $data['expiry']));
+
+        return [
+            'number' => str_replace(' ', '', $data['number']),
+            'expiryMonth' => $expDate[0],
+            'expiryYear' => $expDate[1],
+            'cvv' => $data['cvc'],
+            'firstName' => $firstname,
+            'lastName' => $lastname,
+            'billingAddress1' => $data['billing-address'],
+            'billingPostcode' => $data['postal-code'],
+        ];
+    }
+
     public function loadData($data)
     {
         if (empty($data['id'])) {
-            $name = explode(' ', $data['name']);
-            $firstname = $name[0];
-            $lastname = implode(' ', array_slice($name, 1));
-
-            $data['expiry'] = str_replace(' ', '', $data['expiry']);
-            if (strpos($data['expiry'], '/') === false) {
-                $data['expiry'] = substr($data['expiry'], 0, 2) . '/' . substr($data['expiry'], -1 * (strlen($data['expiry']) - 2));
-            }
-            $expDate = array_map(function ($n) use ($data) {
-                return preg_replace("/[^0-9]/", "", substr('00' . $n, -2));
-            }, explode('/', $data['expiry']));
-
-            $cardData = [
-                'number' => str_replace(' ', '', $data['number']),
-                'expiryMonth' => $expDate[0],
-                'expiryYear' => $expDate[1],
-                'cvv' => $data['cvc'],
-                'firstName' => $firstname,
-                'lastName' => $lastname,
-                'billingAddress1' => $data['billing-address'],
-                'billingPostcode' => $data['postal-code'],
-            ];
-
             if (!empty($data['payment-method']) && $data['payment-method'] == 'replace') {
                 $current = $this->paymentMethodRepo->getAll()->first();
                 if (!is_null($current)) {
@@ -69,7 +72,7 @@ class StoredCreditCard implements PaymentTypeContract
                 }
             }
 
-            $this->paymentMethod = $this->paymentMethodRepo->create($cardData);
+            $this->paymentMethod = $this->paymentMethodRepo->create($this->getCardData($data));
         } else {
             $this->paymentMethod = PaymentMethod::find($data['id']);
         }
