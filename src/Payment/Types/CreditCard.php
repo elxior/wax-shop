@@ -41,22 +41,23 @@ class CreditCard implements PaymentTypeContract
         return true;
     }
 
-    public function loadData($data)
+    public function getCardData($data)
     {
         $name = explode(' ', $data['name']);
         $firstname = $name[0];
         $lastname = implode(' ', array_slice($name, 1));
 
-        $expDate = str_replace(' ', '', str_replace('/', '', $data['expiry']));
-        if (strlen($expDate) < 4) {
-            $expDate = substr('0000' . $expDate, -4);
+        $data['expiry'] = str_replace(' ', '', $data['expiry']);
+        if (strpos($data['expiry'], '/') === false) {
+            $data['expiry'] =
+                substr($data['expiry'], 0, 2) . '/' .
+                substr($data['expiry'], -1 * (strlen($data['expiry']) - 2));
         }
-        $expDate = [
-            substr($expDate, 0, 2),
-            substr($expDate, -2),
-        ];
+        $expDate = array_map(function ($n) use ($data) {
+            return preg_replace("/[^0-9]/", "", substr('00' . $n, -2));
+        }, explode('/', $data['expiry']));
 
-        $cardData = [
+        return [
             'number' => str_replace(' ', '', $data['number']),
             'expiryMonth' => $expDate[0],
             'expiryYear' => $expDate[1],
@@ -67,8 +68,11 @@ class CreditCard implements PaymentTypeContract
             'billingPostcode' => $data['postal-code'],
             'email' => session()->get('guest-email'),
         ];
+    }
 
-        $card = new OmnipayCommonCreditCard($cardData);
+    public function loadData($data)
+    {
+        $card = new OmnipayCommonCreditCard($this->getCardData($data));
         (new CreditCardPreValidator($card))->validate();
 
         $this->cc = $card;
