@@ -57,11 +57,11 @@ class ShopServiceProvider extends ServiceProvider
             }
         );
 
-        $taxEnvironment = config('wax.shop.tax.avalara.environment');
+        $taxEnvironment = (config('wax.shop.tax.avalara.environment') == 'production' ? 'production' : 'sandbox');
         $this->app->bind(
             AvaTaxClient::class,
             function ($app) use ($taxEnvironment) {
-                return (new AvaTaxClient('Wax', '1.0', 'localhost', ($taxEnvironment == 'production' ? 'production' : 'sandbox')))
+                return (new AvaTaxClient('Wax', '1.0', 'localhost', $taxEnvironment))
                     ->withSecurity(
                         config('wax.shop.tax.avalara.account_id'),
                         config('wax.shop.tax.avalara.license_key')
