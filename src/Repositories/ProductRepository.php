@@ -2,6 +2,7 @@
 
 namespace Wax\Shop\Repositories;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Wax\Core\Repositories\BaseFilterableRepository;
 use Wax\Core\Contracts\FilterableRepositoryContract;
@@ -13,7 +14,7 @@ class ProductRepository extends BaseFilterableRepository
         return $this->getQuery()->featured()->take(2)->get();
     }
 
-    public function getForIndex(array $excludeAsFeatured = [])
+    public function getForIndex(array $excludeAsFeatured = []): Collection
     {
         $results = $this
             ->getQuery()
