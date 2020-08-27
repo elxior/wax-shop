@@ -36,7 +36,7 @@
         "phpunit/phpunit": "~7.0.0",
         "squizlabs/php_codesniffer": "^2.3",
         "predis/predis": "~1.0",
-        "oohology/wax-app": "dev-master",
+        "oohology/wax-app": "dev-1.x",
         "avalara/avataxclient": "dev-visibility",
         "league/omnipay": "^3.0",
         "omnipay/authorizenet": "3.x@dev"
