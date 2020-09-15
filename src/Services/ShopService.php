@@ -15,6 +15,7 @@ use Wax\Shop\Payment\Validators\OrderPaymentParser;
 use Wax\Shop\Repositories\OrderRepository;
 use Wax\Shop\Validators\OrderPayableValidator;
 use Wax\Shop\Validators\OrderPlaceableValidator;
+use Wax\Shop\Validators\OrderProcessableValidator;
 
 class ShopService
 {
