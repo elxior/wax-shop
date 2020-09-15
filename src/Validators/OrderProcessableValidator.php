@@ -20,7 +20,7 @@ class OrderProcessableValidator extends AbstractValidator
     {
         $this->messages = new MessageBag;
 
-        if (get_class($order) != config('wax.shop.models.order')) {
+        if (get_class($this->order) != config('wax.shop.models.order')) {
             $this->errors()->add('general', __('shop::order.validation_incompatible_class'));
         }
         if (is_null($this->order->placed_at)) {
