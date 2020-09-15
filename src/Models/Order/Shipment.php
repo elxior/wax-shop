@@ -123,7 +123,7 @@ class Shipment extends Model
 
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(config('wax.shop.models.order'));
     }
 
     public function items()
