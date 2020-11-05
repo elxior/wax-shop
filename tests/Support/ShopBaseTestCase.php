@@ -13,7 +13,7 @@ class ShopBaseTestCase extends WaxAppTestCase
     protected $testMailFrom = 'noreply@example.org';
     protected $testMailTo = 'test1@example.org, test2@example.org';
 
-    public function setUp()
+    public function setUp(): void
     {
         // Make sure ShopServiceProvider is before PagesServiceProvider in the list BEFORE the providers boot
         $this->registerBeforeBootstrappingCallback(RegisterProviders::class, function () {
